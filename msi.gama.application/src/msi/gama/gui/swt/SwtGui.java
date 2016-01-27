@@ -1271,6 +1271,7 @@ public class SwtGui implements IGui {
 			// TODO so waitForViewsToBeClosed only with mono controller
 			if ( GAMA.getControllers().size() == 0 ) {
 				OutputSynchronizer.waitForViewsToBeClosed();
+				System.out.println("closing experiments");
 			}
 			// end-hqnghi
 		} else {

@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Headless
 Bundle-SymbolicName: msi.gama.headless;singleton:=true
 Bundle-Version: 1.0.0.0
+Eclipse-BundleShape: dir
 Bundle-Activator: msi.gama.headless.runtime.Activator
 Require-Bundle: com.ibm.icu;bundle-version="4.4.2",
  msi.gama.core;bundle-version="1.6.1",

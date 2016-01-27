@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Gama Modelling Language
 Bundle-Vendor: MSI
-Bundle-Version: 1.4.2
+Bundle-Version: 1.7.0.qualifier
 Bundle-SymbolicName: msi.gama.lang.gaml; singleton:=true
 Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.xtext.util,
@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.xtext.xbase.lib,
  msi.gama.processor,
  org.eclipse.xtext.ide
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: msi.gama.lang.gaml,
  msi.gama.lang.gaml.formatting,
  msi.gama.lang.gaml.gaml,

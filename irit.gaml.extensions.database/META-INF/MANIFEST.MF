@@ -7,6 +7,15 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: msi.gama.processor;bundle-version="1.4.0",
  msi.gama.ext;bundle-version="1.0.0",
  msi.gama.core;bundle-version="1.6.0"
-Export-Package: irit.gaml.extensions.database.skills,
- irit.gaml.extensions.database.species
+Export-Package: irit.gaml.extensions.database.skills;
+  uses:="msi.gama.database.geosql,
+   msi.gama.util.matrix,
+   msi.gama.runtime,
+   msi.gama.util,
+   msi.gaml.skills",
+ irit.gaml.extensions.database.species;
+  uses:="msi.gama.metamodel.agent,
+   msi.gama.metamodel.population,
+   msi.gama.runtime,
+   msi.gama.util"
 Bundle-ActivationPolicy: lazy

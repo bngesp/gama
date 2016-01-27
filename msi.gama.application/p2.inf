@@ -1,3 +1,4 @@
 instructions.configure=\
   addRepository(type:0,location:https${#58}//gama-platform.googlecode.com/svn/update_site/);\
-  addRepository(type:1,location:https${#58}//gama-platform.googlecode.com/svn/update_site/);
+  addRepository(type:1,location:https${#58}//gama-platform.googlecode.com/svn/update_site/);\
+  org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/eclipsec.exe);

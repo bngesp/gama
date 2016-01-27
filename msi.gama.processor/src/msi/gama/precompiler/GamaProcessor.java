@@ -28,6 +28,7 @@ import msi.gama.precompiler.GamlAnnotations.*;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class GamaProcessor extends AbstractProcessor {
 
+	
 	class Pair {
 
 		String key, value;
@@ -925,6 +926,10 @@ public class GamaProcessor extends AbstractProcessor {
 			Writer writer = new OutputStreamWriter(output, Charset.forName("UTF-8"));
 			return writer;
 		} catch (Exception e) {
+			System.out.println("resource already !");
+			System.out.println(e.getCause());
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 			processingEnv.getMessager().printMessage(Kind.ERROR, e.getMessage());
 		}
 		return null;

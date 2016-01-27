@@ -26,7 +26,7 @@ public class Category implements IElement {
 		idCategory = id;
 	}
 	
-	@Override
+	
 	public Element getElementDOM() {
 		Element eltCat = doc.createElement(XMLElements.CATEGORY);
 		eltCat.setAttribute("id", idCategory);

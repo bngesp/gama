@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
 Bundle-Name: GamaApplication
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.ui.console,
  msi.gama.core;bundle-version="1.0.0",
+ msi.gama.ext;bundle-version="1.0.0",
  org.eclipse.ui.navigator,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -18,8 +19,7 @@ Require-Bundle: org.eclipse.ui.console,
  org.eclipse.equinox.p2.metadata.repository,
  org.eclipse.ui.editors;bundle-version="3.8.0",
  msi.gama.processor;bundle-version="1.4.0",
- org.eclipse.ui.navigator.resources;bundle-version="3.4.400",
- msi.gama.ext;bundle-version="1.0.0"
+ org.eclipse.ui.navigator.resources;bundle-version="3.4.400"
 Bundle-Vendor: UMMISCO
 Bundle-Version: 1.7.0.qualifier
 Bundle-ManifestVersion: 2

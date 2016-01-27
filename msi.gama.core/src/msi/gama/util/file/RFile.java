@@ -82,17 +82,20 @@ public class RFile extends GamaFile<GamaMap<String, IList>, IList, String, IList
 
 			String RPath = GamaPreferences.LIB_R.value(scope).getPath();
 			caller.setRscriptExecutable(RPath);
-
-			double[] vectorParam = new double[param.length(scope)];
-
+			// Make params String
+			//double[] vectorParam = new double[param.length(scope)];
+			//
+			String[] vectorParam = new String[param.length(scope)];
 			int k = 0;
 			for ( Object o : param.iterable(scope) ) {
-				vectorParam[k++] = Cast.asFloat(scope, o);
+				//vectorParam[k++] = Cast.asFloat(scope, o);
+				vectorParam[k++] = Cast.asString(scope, o);
 			}
 
 			RCode c = new RCode();
 			// Adding the parameters
-			c.addDoubleArray("vectorParam", vectorParam);
+			//c.addDoubleArray("vectorParam", vectorParam);
+			c.addStringArray("vectorParam", vectorParam);
 
 			// Adding the codes in file
 			List<String> R_statements = new ArrayList<String>();
@@ -126,17 +129,19 @@ public class RFile extends GamaFile<GamaMap<String, IList>, IList, String, IList
 
 			String var = computeVariable(R_statements.get(R_statements.size() - 1).toString());
 			caller.runAndReturnResult(var);
-
+			System.out.println("the result string is "+var);
 			// DEBUG:
-			// java.lang.System.out.println("Name: '" + R_statements.length(scope) + "'");
+			// java.lang.System.out.println("Name: '" + R_statements.size() + "'");
 			if ( DEBUG ) {
 				GuiUtils.debug("Stats.R_compute_param.R_statements.length: '" + R_statements.size() + "'");
 			}
 
 			for ( String name : caller.getParser().getNames() ) {
 				String[] results = null;
+				//caller.getParser().getAs
 				results = caller.getParser().getAsStringArray(name);
-				// java.lang.System.out.println("Name: '" + name + "'");
+				GuiUtils.debug("Name "+name);
+				java.lang.System.out.println("Name: '" + name + "'");
 				if ( DEBUG ) {
 					GuiUtils.debug("Stats.R_compute_param.caller.Name: '" + name + "' length: " + results.length +
 						" - Value: " + results.toString());
@@ -205,6 +210,9 @@ public class RFile extends GamaFile<GamaMap<String, IList>, IList, String, IList
 			GamaMap<String, IList> result = GamaMapFactory.create(Types.STRING, Types.LIST);
 
 			String var = computeVariable(R_statements.get(R_statements.size() - 1).toString());
+			if ( DEBUG ) {
+				GuiUtils.debug("var name" +  var);
+			}
 			caller.runAndReturnResult(var);
 			for ( String name : caller.getParser().getNames() ) {
 				Object[] results = null;

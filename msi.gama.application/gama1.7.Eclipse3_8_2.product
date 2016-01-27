@@ -4,7 +4,7 @@
 <product name="Gama" uid="msi.gama.application.product" id="msi.gama.application.product" application="msi.gama.application.GamaApplication" version="1.6.1" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/msi.gama.application/icons/launcher_icons/icon205.png"/>
+      <image path="icons/launcher_icons/icon205.png"/>
       <text>
          GAMA - V1.6.1
 Generic Agent-based Modelling Architecture
@@ -27,7 +27,7 @@ openFile
       </programArgs>
       <vmArgs>-server
 -Xverify:none
--Xms256m -Xmx2048m
+-Xms256m -Xmx1048m
 -Xmn128m
 -Xss2m
 -XX:+UseParallelGC
@@ -41,7 +41,7 @@ openFile
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/msi.gama.application/icons/launcher_icons/icon16.png" i32="/msi.gama.application/icons/launcher_icons/icon32.png" i48="/msi.gama.application/icons/launcher_icons/icon48.png" i64="/msi.gama.application/icons/launcher_icons/icon64.png" i128="/msi.gama.application/icons/launcher_icons/icon128.png"/>
+   <windowImages i16="icons/launcher_icons/icon16.png" i32="icons/launcher_icons/icon32.png" i48="icons/launcher_icons/icon48.png" i64="icons/launcher_icons/icon64.png" i128="icons/launcher_icons/icon128.png"/>
 
    <splash
       location="msi.gama.application"
@@ -49,11 +49,11 @@ openFile
       startupMessageRect="30,203,541,16"
       startupForegroundColor="5376A1" />
    <launcher name="Gama">
-      <linux icon="/msi.gama.application/icons/launcher_icons/icon.xpm"/>
-      <macosx icon="/msi.gama.application/icons/launcher_icons/icon.icns"/>
+      <linux icon="icons/launcher_icons/icon.xpm"/>
+      <macosx icon="icons/launcher_icons/icon.icns"/>
       <solaris/>
       <win useIco="true">
-         <ico path="/msi.gama.application/icons/launcher_icons/icon.ico"/>
+         <ico path="icons/launcher_icons/icon.ico"/>
          <bmp
             winSmallHigh="/msi.gama.application/icons/launcher_icons/icon-16x16x32b.bmp"
             winSmallLow="/msi.gama.application/icons/launcher_icons/icon-16x16x8b.bmp"
@@ -63,7 +63,6 @@ openFile
             winLargeLow="/msi.gama.application/icons/launcher_icons/icon-48x48x8b.bmp"/>
       </win>
    </launcher>
-
 
    <vm>
       <macos include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</macos>
@@ -255,7 +254,7 @@ openFile
    </plugins>
 
    <features>
-      <feature id="ummisco.gama.feature.jogl2.product" version="1.6.1.qualifier"/>
+      <feature id="ummisco.gama.feature.jogl2.product"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
       <feature id="org.eclipse.equinox.p2.extras.feature"/>
       <feature id="org.eclipse.equinox.p2.rcp.feature"/>
@@ -270,12 +269,17 @@ openFile
       <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.rcp" version="4.5.1.v20150904-0015"/>
+      <feature id="ummisco.gama.feature.models"/>
+      <feature id="ummisco.gama.feature.dependencies"/>
+      <feature id="ummisco.gama.feature.opengl.jogl2"/>
+      <feature id="ummisco.gama.feature.core"/>
+      <feature id="org.eclipse.xtext.runtime"/>
    </features>
 
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
-      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="5" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <property name="version" value="1.7" />

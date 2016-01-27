@@ -44,8 +44,7 @@ public class Operands implements IElement {
 		listOperand.add(op);
 	}
 	
-	@Override
-	public Element getElementDOM() {
+	public Element getElementDOM(){
 		org.w3c.dom.Element operandsElt = doc.createElement(XMLElements.OPERANDS);
 		
 		operandsElt.setAttribute(XMLElements.ATT_OPERANDS_CLASS, classe);  

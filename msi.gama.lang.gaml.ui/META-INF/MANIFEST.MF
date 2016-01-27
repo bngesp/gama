@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Gama Modelling Language UI
 Bundle-Vendor: MSI
-Bundle-Version: 1.4.2
+Bundle-Version: 1.7.0.qualifier
 Bundle-SymbolicName: msi.gama.lang.gaml.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: msi.gama.lang.gaml;visibility:=reexport,
@@ -10,11 +10,11 @@ Require-Bundle: msi.gama.lang.gaml;visibility:=reexport,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.builder,
  org.eclipse.xtext.ui.codetemplates.ui,
- msi.gama.core;bundle-version="1.0.0",
- msi.gama.application;bundle-version="1.6.0",
+ msi.gama.core,
+ msi.gama.application,
  org.antlr.runtime,
- ummisco.gaml.editbox;bundle-version="0.0.22";visibility:=reexport,
- msi.gama.processor;bundle-version="1.4.0",
+ ummisco.gaml.editbox;visibility:=reexport,
+ msi.gama.processor,
  org.eclipse.ui.ide;bundle-version="3.8.2",
  org.eclipse.compare;bundle-version="3.5.301",
  org.eclipse.ui.editors,
@@ -23,7 +23,7 @@ Require-Bundle: msi.gama.lang.gaml;visibility:=reexport,
 Import-Package: org.apache.commons.lang;version="2.6.0",
  org.apache.log4j,
  org.eclipse.xtext.ide.editor.syntaxcoloring
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: msi.gama.lang.gaml.ui,
  msi.gama.lang.gaml.ui.contentassist,
  msi.gama.lang.gaml.ui.contentassist.antlr,

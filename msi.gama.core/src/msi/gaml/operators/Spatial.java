@@ -2857,7 +2857,7 @@ public abstract class Spatial {
 
 				boolean done = false;
 
-				@Override
+				
 				public void filter(final CoordinateSequence seq, final int i) {
 					if ( i == index ) {
 						seq.getCoordinate(i).setOrdinate(2, z);
@@ -2865,12 +2865,12 @@ public abstract class Spatial {
 					}
 				}
 
-				@Override
+				
 				public boolean isDone() {
 					return done;
 				}
 
-				@Override
+				
 				public boolean isGeometryChanged() {
 					return done;
 				}
@@ -2894,19 +2894,17 @@ public abstract class Spatial {
 			final Double[] zs = (Double[]) coords.listValue(scope, Types.FLOAT, false).toArray(new Double[0]);
 			g.apply(new CoordinateSequenceFilter() {
 
-				@Override
 				public void filter(final CoordinateSequence seq, final int i) {
 					if ( i <= zs.length - 1 ) {
 						seq.getCoordinate(i).z = zs[i];
 					}
 				}
 
-				@Override
+				
 				public boolean isDone() {
 					return false;
 				}
 
-				@Override
 				public boolean isGeometryChanged() {
 					return true;
 				}
