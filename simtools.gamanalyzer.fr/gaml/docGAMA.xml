@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<doc>
+<constantsCategories/>
+<constants/>
+<operatorsCategories>
+<category id="Iterator operators"/>
+</operatorsCategories>
+<operators/>
+<skills/>
+<architectures/>
+<speciess>
+<species id="cluster_builder" name="cluster_builder">
+<actions>
+<action name="clustering_xmeans" returnType="list&lt;list&lt;agent&gt;&gt;">
+<args>
+<arg name="agents" optional="false" type="list"/>
+<arg name="attributes" optional="false" type="list"/>
+<arg name="bin_value" optional="true" type="float">
+<documentation>
+<result>value that represents true in the new attributes</result>
+</documentation>
+</arg>
+<arg name="cut_off_factor" optional="true" type="float">
+<documentation>
+<result>the cut-off factor to use</result>
+</documentation>
+</arg>
+<arg name="distance_f" optional="true" type="string">
+<documentation>
+<result>The distance function to use. 4 possible distance functions: euclidean (by default) ; 'chebyshev', 'manhattan' or 'levenshtein'</result>
+</documentation>
+</arg>
+<arg name="max_iterations" optional="true" type="int">
+<documentation>
+<result>the maximum number of iterations to perform</result>
+</documentation>
+</arg>
+<arg name="max_kmeans" optional="true" type="int">
+<documentation>
+<result>the maximum number of iterations to perform in KMeans</result>
+</documentation>
+</arg>
+<arg name="max_kmeans_for_children" optional="true" type="int">
+<documentation>
+<result>the maximum number of iterations KMeans that is performed on the child centers</result>
+</documentation>
+</arg>
+<arg name="max_num_clusters" optional="true" type="int">
+<documentation>
+<result>the maximum number of clusters</result>
+</documentation>
+</arg>
+<arg name="min_num_clusters" optional="true" type="int">
+<documentation>
+<result>the maximum number of clusters</result>
+</documentation>
+</arg>
+<arg name="seed" optional="true" type="int">
+<documentation>
+<result>random number seed to be used</result>
+</documentation>
+</arg>
+</args>
+</action>
+<action name="clustering_simple_kmeans" returnType="list&lt;list&lt;agent&gt;&gt;">
+<args>
+<arg name="agents" optional="false" type="list"/>
+<arg name="attributes" optional="false" type="list"/>
+<arg name="distance_f" optional="true" type=""/>
+<arg name="dont_replace_missing_values" optional="true" type=""/>
+<arg name="max_iterations" optional="true" type=""/>
+<arg name="num_clusters" optional="true" type=""/>
+<arg name="preserve_instances_order" optional="true" type=""/>
+<arg name="seed" optional="true" type=""/>
+</args>
+</action>
+<action name="clustering_em" returnType="list&lt;list&lt;agent&gt;&gt;">
+<args/>
+</action>
+<action name="clustering_farthestFirst" returnType="list&lt;list&lt;agent&gt;&gt;">
+<args/>
+</action>
+<action name="clustering_DBScan" returnType="list&lt;list&lt;agent&gt;&gt;">
+<args/>
+</action>
+<action name="clustering_cobweb" returnType="list&lt;list&lt;agent&gt;&gt;">
+<args/>
+</action>
+</actions>
+</species>
+<species id="agent_group_follower" name="agent_group_follower">
+<actions>
+<action name="analyse_cluster" returnType="void">
+<args>
+<arg name="species_to_analyse" optional="false" type="string"/>
+</args>
+</action>
+<action name="at_cycle" returnType="list">
+<args>
+<arg name="with_matrix" optional="false" type="string"/>
+<arg name="with_var" optional="false" type="string"/>
+</args>
+</action>
+<action name="at_var" returnType="list">
+<args>
+<arg name="with_matrix" optional="false" type="string"/>
+<arg name="with_var" optional="false" type="string"/>
+</args>
+</action>
+<action name="distrib_legend" returnType="list">
+<args>
+<arg name="with_var" optional="false" type="string"/>
+</args>
+</action>
+</actions>
+</species>
+<species id="AgGroupAnalizer" name="AgGroupAnalizer">
+<actions>
+<action name="creation_cluster" returnType="void">
+<args/>
+</action>
+</actions>
+</species>
+</speciess>
+<insideStatementKinds/>
+<insideStatementSymbols>
+<insideStatementSymbol symbol="experiment"/>
+</insideStatementSymbols>
+<statementsKinds>
+<kind symbol="Single statement"/>
+</statementsKinds>
+<statements>
+<statement id="analyse" kind="Single statement" name="analyse">
+<facets>
+<facet name="species_to_analyse" omissible="true" optional="false" type="any type in [string, string]"/>
+<facet name="with_constraint" omissible="false" optional="false" type="any type in [string, string]"/>
+</facets>
+<inside>
+<symbols>
+<symbol>experiment</symbol>
+</symbols>
+<kinds/>
+</inside>
+</statement>
+</statements>
+</doc>
+

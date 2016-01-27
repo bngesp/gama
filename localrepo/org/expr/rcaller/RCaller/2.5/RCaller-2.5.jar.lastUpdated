@@ -1,0 +1,13 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Dec 10 11:42:29 ICT 2015
+https\://oss.sonatype.org/service/local/staging/deploy/maven2/.error=Could not transfer artifact org.expr.rcaller\:RCaller\:jar\:2.5 from/to sonatype-nexus-snapshots (https\://oss.sonatype.org/service/local/staging/deploy/maven2/)\: Not authorized , ReasonPhrase\:Unauthorized.
+@default-https\://oss.sonatype.org/service/local/staging/deploy/maven2/.lastUpdated=1449722547635
+http\://logicaldoc.sourceforge.net/maven/.lastUpdated=1449722546604
+http\://logicaldoc.sourceforge.net/maven/.error=
+http\://download.osgeo.org/webdav/geotools/.error=
+http\://maven.geo-solutions.it/.error=
+file\://C\:\\Users\\AITBABRAM\\git\\gama\ maven\\msi.gama.processor/../localrepo/.lastUpdated=1449722549525
+http\://download.osgeo.org/webdav/geotools/.lastUpdated=1449722545274
+http\://repository.pentaho.org/artifactory/repo/.lastUpdated=1449722549486
+http\://maven.geo-solutions.it/.lastUpdated=1449722546050
+http\://repository.pentaho.org/artifactory/repo/.error=

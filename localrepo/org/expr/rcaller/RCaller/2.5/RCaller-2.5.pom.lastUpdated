@@ -1,0 +1,17 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Dec 10 11:42:24 ICT 2015
+https\://oss.sonatype.org/service/local/staging/deploy/maven2/.error=Could not transfer artifact org.expr.rcaller\:RCaller\:pom\:2.5 from/to sonatype-nexus-snapshots (https\://oss.sonatype.org/service/local/staging/deploy/maven2/)\: Not authorized , ReasonPhrase\:Unauthorized.
+@default-https\://oss.sonatype.org/service/local/staging/deploy/maven2/.lastUpdated=1449722544463
+http\://logicaldoc.sourceforge.net/maven/.lastUpdated=1449722518092
+http\://logicaldoc.sourceforge.net/maven/.error=
+http\://repo.maven.apache.org/maven2/.lastUpdated=1449722521637
+http\://download.osgeo.org/webdav/geotools/.error=
+file\://C\:\\Users\\AITBABRAM\\git\\gama\ maven\\msi.gama.processor../localrepo/.error=Could not transfer artifact org.expr.rcaller\:RCaller\:pom\:2.5 from/to my-local-repo (file\://C\:\\Users\\AITBABRAM\\git\\gama maven\\msi.gama.processor../localrepo/)\: Repository path C\:\\Users\\AITBABRAM\\git\\gama maven\\msi.gama.processor..\\localrepo does not exist, and cannot be created.
+http\://repo.maven.apache.org/maven2/.error=
+@default-file\://C\:\\Users\\AITBABRAM\\git\\gama\ maven\\msi.gama.processor../localrepo/.lastUpdated=1449722520771
+http\://maven.geo-solutions.it/.error=
+file\://C\:\\Users\\AITBABRAM\\git\\gama\ maven\\msi.gama.processor/../localrepo/.lastUpdated=1449722544519
+http\://repository.pentaho.org/artifactory/repo/.lastUpdated=1449722520758
+http\://download.osgeo.org/webdav/geotools/.lastUpdated=1449722516642
+http\://repository.pentaho.org/artifactory/repo/.error=
+http\://maven.geo-solutions.it/.lastUpdated=1449722517326
