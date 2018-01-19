@@ -3,26 +3,26 @@
  */
 package msi.gama.lang.gaml.ui.internal;
 
+import com.google.common.collect.Maps;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import java.util.Collections;
 import java.util.Map;
-
+import msi.gama.lang.gaml.GamlRuntimeModule;
+import msi.gama.lang.gaml.ui.GamlUiModule;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.shared.SharedStateModule;
 import org.eclipse.xtext.util.Modules2;
 import org.osgi.framework.BundleContext;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
 /**
  * This class was generated. Customizations should only happen in a newly
  * introduced subclass. 
  */
 public class GamlActivator extends AbstractUIPlugin {
-	
+
 	public static final String MSI_GAMA_LANG_GAML_GAML = "msi.gama.lang.gaml.Gaml";
 	
 	private static final Logger logger = Logger.getLogger(GamlActivator.class);
@@ -71,20 +71,18 @@ public class GamlActivator extends AbstractUIPlugin {
 			throw new RuntimeException("Failed to create injector for " + language, e);
 		}
 	}
-
+	
 	protected Module getRuntimeModule(String grammar) {
 		if (MSI_GAMA_LANG_GAML_GAML.equals(grammar)) {
-			return new msi.gama.lang.gaml.GamlRuntimeModule();
+			return new GamlRuntimeModule();
 		}
-		
 		throw new IllegalArgumentException(grammar);
 	}
 	
 	protected Module getUiModule(String grammar) {
 		if (MSI_GAMA_LANG_GAML_GAML.equals(grammar)) {
-			return new msi.gama.lang.gaml.ui.GamlUiModule(this);
+			return new GamlUiModule(this);
 		}
-		
 		throw new IllegalArgumentException(grammar);
 	}
 	

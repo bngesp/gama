@@ -109,7 +109,6 @@ public class GamlUiModule extends msi.gama.lang.gaml.ui.AbstractGamlUiModule {
 		binder.bind(IEncodingProvider.class).annotatedWith(DispatchingProvider.Ui.class).to(GamlEncodingProvider.class);
 	}
 
-	@Override
 	public Class<? extends org.eclipse.xtext.ui.editor.contentassist.antlr.ParserBasedContentAssistContextFactory.StatefulFactory>
 			bindParserBasedContentAssistContextFactory$StatefulFactory() {
 		return msi.gama.lang.gaml.ui.contentassist.ContentAssistContextFactory.class;

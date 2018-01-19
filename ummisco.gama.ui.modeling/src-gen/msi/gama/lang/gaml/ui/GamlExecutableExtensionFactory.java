@@ -3,12 +3,10 @@
  */
 package msi.gama.lang.gaml.ui;
 
+import com.google.inject.Injector;
 import org.eclipse.xtext.ui.guice.AbstractGuiceAwareExecutableExtensionFactory;
 import org.osgi.framework.Bundle;
-
-import com.google.inject.Injector;
-
-import msi.gama.lang.gaml.ui.internal.GamlActivator;
+import ummisco.gama.ui.modeling.internal.ModelingActivator;
 
 /**
  * This class was generated. Customizations should only happen in a newly
@@ -18,12 +16,12 @@ public class GamlExecutableExtensionFactory extends AbstractGuiceAwareExecutable
 
 	@Override
 	protected Bundle getBundle() {
-		return GamlActivator.getInstance().getBundle();
+		return ModelingActivator.getInstance().getBundle();
 	}
 	
 	@Override
 	protected Injector getInjector() {
-		return GamlActivator.getInstance().getInjector(GamlActivator.MSI_GAMA_LANG_GAML_GAML);
+		return ModelingActivator.getInstance().getInjector(ModelingActivator.MSI_GAMA_LANG_GAML_GAML);
 	}
 	
 }
