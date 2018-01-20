@@ -28,7 +28,8 @@ Require-Bundle: msi.gama.lang.gaml;visibility:=reexport,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.ui.workbench,
  org.eclipse.xtend.lib;resolution:=optional,
- org.eclipse.xtext.xbase.lib
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtext.common.types.ui;bundle-version="2.12.0"
 Import-Package: gnu.trove.map.hash,
  org.apache.commons.lang;version="2.6.0",
  org.apache.log4j,
@@ -57,4 +58,4 @@ Export-Package: msi.gama.lang.gaml.ide,
  ummisco.gama.ui.modeling.internal,
  ummisco.gama.ui.perspective,
  ummisco.gama.ui.views
-Bundle-Activator: msi.gama.lang.gaml.ui.internal.GamlActivator
+Bundle-Activator: ummisco.gama.ui.modeling.internal.ModelingActivator

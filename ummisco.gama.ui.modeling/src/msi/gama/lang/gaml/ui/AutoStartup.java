@@ -128,9 +128,9 @@ public class AutoStartup implements IStartup {
 
 	@Override
 	public void earlyStartup() {
-		GamlRuntimeModule.staticInitialize();
-		GamlEditorBindings.install();
-		GamlReferenceSearch.install();
+//		GamlRuntimeModule.staticInitialize();
+//		GamlEditorBindings.install();
+//		GamlReferenceSearch.install();
 	}
 
 }
