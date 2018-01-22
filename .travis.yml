@@ -23,9 +23,6 @@ script:
 - bash ./compile.sh		
 after_success:
 - bash ./validate_and_test.sh	
-- echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- export SSHPASS=$USER_PWD 
-- bash ./publish.sh
 branches:
   only:
     - master
