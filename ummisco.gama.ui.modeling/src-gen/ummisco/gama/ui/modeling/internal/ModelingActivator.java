@@ -10,7 +10,6 @@ import com.google.inject.Module;
 import java.util.Collections;
 import java.util.Map;
 import msi.gama.lang.gaml.GamlRuntimeModule;
-import msi.gama.lang.gaml.ide.GamlIdeModule;
 import msi.gama.lang.gaml.ui.GamlUiModule;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -24,6 +23,7 @@ import org.osgi.framework.BundleContext;
  */
 public class ModelingActivator extends AbstractUIPlugin {
 
+	public static final String PLUGIN_ID = "ummisco.gama.ui.modeling";
 	public static final String MSI_GAMA_LANG_GAML_GAML = "msi.gama.lang.gaml.Gaml";
 	
 	private static final Logger logger = Logger.getLogger(ModelingActivator.class);
@@ -61,11 +61,10 @@ public class ModelingActivator extends AbstractUIPlugin {
 	
 	protected Injector createInjector(String language) {
 		try {
-			Module ideModule = getIdeModule(language);
 			Module runtimeModule = getRuntimeModule(language);
 			Module sharedStateModule = getSharedStateModule();
 			Module uiModule = getUiModule(language);
-			Module mergedModule = Modules2.mixin(ideModule,runtimeModule, sharedStateModule, uiModule);
+			Module mergedModule = Modules2.mixin(runtimeModule, sharedStateModule, uiModule);
 			return Guice.createInjector(mergedModule);
 		} catch (Exception e) {
 			logger.error("Failed to create injector for " + language);
@@ -80,17 +79,10 @@ public class ModelingActivator extends AbstractUIPlugin {
 		}
 		throw new IllegalArgumentException(grammar);
 	}
-
+	
 	protected Module getUiModule(String grammar) {
 		if (MSI_GAMA_LANG_GAML_GAML.equals(grammar)) {
 			return new GamlUiModule(this);
-		}
-		throw new IllegalArgumentException(grammar);
-	}
-
-	protected Module getIdeModule(String grammar) {
-		if (MSI_GAMA_LANG_GAML_GAML.equals(grammar)) {
-			return new GamlIdeModule();
 		}
 		throw new IllegalArgumentException(grammar);
 	}
@@ -98,5 +90,6 @@ public class ModelingActivator extends AbstractUIPlugin {
 	protected Module getSharedStateModule() {
 		return new SharedStateModule();
 	}
+	
 	
 }

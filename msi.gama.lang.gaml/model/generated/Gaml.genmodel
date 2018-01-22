@@ -5,7 +5,7 @@
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" complianceLevel="6.0"
     copyrightFields="false" runtimeVersion="2.13">
   <genPackages prefix="Gaml" basePackage="msi.gama.lang.gaml" disposableProviderFactory="true"
-      fileExtensions="gaml" ecorePackage="Gaml.ecore#/">
+      fileExtensions="gaml,experiment" ecorePackage="Gaml.ecore#/">
     <genClasses ecoreClass="Gaml.ecore#//Entry"/>
     <genClasses ecoreClass="Gaml.ecore#//StandaloneBlock">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Gaml.ecore#//StandaloneBlock/block"/>

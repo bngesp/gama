@@ -77,10 +77,10 @@ public class OpenActionProvider extends CommonActionProvider {
 		if (ss == null || ss.size() != 1) { return; }
 		final Object o = ss.getFirstElement();
 		// first try IResource
-		IAdaptable openable = (IAdaptable) CloseResourceAction.getAdapter(o, IResource.class);
+		IAdaptable openable = CloseResourceAction.getAdapter(o, IResource.class);
 		// otherwise try ResourceMapping
 		if (openable == null) {
-			openable = (IAdaptable) CloseResourceAction.getAdapter(o, ResourceMapping.class);
+			openable = CloseResourceAction.getAdapter(o, ResourceMapping.class);
 		} else if (((IResource) openable).getType() != IResource.FILE) {
 			openable = null;
 		}

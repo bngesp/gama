@@ -221,7 +221,7 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
 		
 		//// must be named importURI
-		// Pragma:
+		//Pragma:
 		//	'@' name=ID;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -1608,9 +1608,8 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		///**
 		// * DISPLAYS
 		// */ //S_Monitor:
-		// //	key="monitor" (firstFacet="name:")? name=(Valid_ID|STRING) facets+=Facet ";"
-		// //;
-		//
+		////	key="monitor" (firstFacet="name:")? name=(Valid_ID|STRING) facets+=Facet ";"
+		////;
 		//S_Display:
 		//	key="display" firstFacet="name:"? name=(Valid_ID | STRING) facets+=Facet* block=displayBlock;
 		@Override public ParserRule getRule() { return rule; }
@@ -1692,28 +1691,24 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cS_1Expr_Facets_BlockOrEndParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		
 		////
-		// //ExperimentBlock returns Block:
-		// //	{Block} '{' (statements+=Statement)* '}'
-		// //;
-		//
+		////ExperimentBlock returns Block:
+		////	{Block} '{' (statements+=Statement)* '}'
+		////;
 		////experimentStatement returns Statement:
-		// //	Statement | S_Output
-		// //;
-		// //
-		// //
-		// //S_Output returns Statement:
-		//
+		////	Statement | S_Output
+		////;
+		////
+		////
+		////S_Output returns Statement:
 		////	key=("output"|"permanent") (facets+=Facet)* block=outputBlock?
-		// //;
-		// //outputBlock returns Block:
-		//
+		////;
+		////outputBlock returns Block:
 		////	{Block} '{' (statements += outputStatement)* '}'
-		// //;
-		// //outputStatement returns Statement:
-		//
+		////;
+		////outputStatement returns Statement:
 		////	Statement | S_Display 
-		// //;
-		// displayStatement Statement:
+		////;
+		//displayStatement Statement:
 		//	speciesOrGridDisplayStatement | S_1Expr_Facets_BlockOrEnd;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -1863,13 +1858,14 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//_1Expr_Facets_BlockOrEnd_Key:
 		//	_LayerKey | "ask" | "release" | "capture" | "create" | "write" | "error" | "warn" | "exception" | "save" | "assert" |
-		//	"inspect" | "browse" | "draw" | "using" | "switch" | "put" | "add" | "remove" | "match" | "match_between" |
-		//	"match_one" | "parameter" | "status" | "highlight" | "focus_on";
+		//	"inspect" | "browse" |
+		//	"draw" | "using" | "switch" | "put" | "add" | "remove" | "match" | "match_between" | "match_one" | "parameter" |
+		//	"status" | "highlight" | "focus_on";
 		@Override public ParserRule getRule() { return rule; }
 		
 		//_LayerKey | "ask" | "release" | "capture" | "create" | "write" | "error" | "warn" | "exception" | "save" | "assert" |
-		//"inspect" | "browse" | "draw" | "using" | "switch" | "put" | "add" | "remove" | "match" | "match_between" |
-		//"match_one" | "parameter" | "status" | "highlight" | "focus_on"
+		//"inspect" | "browse" | "draw" | "using" | "switch" | "put" | "add" | "remove" | "match" | "match_between" | "match_one"
+		//| "parameter" | "status" | "highlight" | "focus_on"
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//_LayerKey
@@ -2966,7 +2962,9 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cIfFalseOrParserRuleCall_1_3_1_0 = (RuleCall)cIfFalseAssignment_1_3_1.eContents().get(0);
 		
 		//If Expression:
-		//	Or ({If.left=current} op='?' right=Or (':' ifFalse=Or))?;
+		//	Or ({If.left=current} op='?'
+		//	right=Or (':'
+		//	ifFalse=Or))?;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//Or ({If.left=current} op='?' right=Or (':' ifFalse=Or))?
@@ -3017,7 +3015,8 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRightAndParserRuleCall_1_2_0 = (RuleCall)cRightAssignment_1_2.eContents().get(0);
 		
 		//Or Expression:
-		//	And ({Expression.left=current} op='or' right=And)*;
+		//	And ({Expression.left=current} op='or'
+		//	right=And)*;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//And ({Expression.left=current} op='or' right=And)*
@@ -3056,7 +3055,8 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRightCastParserRuleCall_1_2_0 = (RuleCall)cRightAssignment_1_2.eContents().get(0);
 		
 		//And Expression:
-		//	Cast ({Expression.left=current} op='and' right=Cast)*;
+		//	Cast ({Expression.left=current} op='and'
+		//	right=Cast)*;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//Cast ({Expression.left=current} op='and' right=Cast)*
@@ -3420,7 +3420,7 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRightUnitRefParserRuleCall_1_1_0 = (RuleCall)cRightAssignment_1_1.eContents().get(0);
 		
 		//// NEW: Units are now expressed using the "°" symbol
-		// Unit Expression:
+		//Unit Expression:
 		//	Unary (({Unit.left=current} op=('°' | "#")) right=UnitRef)?;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -3577,11 +3577,9 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cNamed_expSTRINGTerminalRuleCall_1_1_2_1_0 = (RuleCall)cNamed_expAssignment_1_1_2_1.eContents().get(0);
 		
 		////Access returns Expression:
-		//
 		////	Primary ({Access.left = current} ((op='[' args=ExpressionList? ']') | (op="." right=AbstractRef)))*
-		// //;
-		// Access
-		//Expression:
+		////;
+		//Access Expression:
 		//	Primary ({Access.left=current} (op='[' args=ExpressionList? ']' | op="." right=AbstractRef | op="."
 		//	named_exp=STRING))*;
 		@Override public ParserRule getRule() { return rule; }
@@ -3686,8 +3684,11 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_5_6 = (Keyword)cGroup_5.eContents().get(6);
 		
 		//Primary Expression:
-		//	TerminalExpression | AbstractRef | '(' ExpressionList ')' | '(' {Parameters} params=ParameterList? ')' | '[' {Array}
-		//	exprs=ExpressionList? ']' | '{' {Point} left=Expression op=',' right=Expression (',' z=Expression)? '}';
+		//	TerminalExpression | AbstractRef |
+		//	'(' ExpressionList ')' |
+		//	'(' {Parameters} params=ParameterList? ')' |
+		//	'[' {Array} exprs=ExpressionList? ']' |
+		//	'{' {Point} left=Expression op=',' right=Expression (',' z=Expression)? '}';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//TerminalExpression | AbstractRef | '(' ExpressionList ')' | '(' {Parameters} params=ParameterList? ')' | '[' {Array}
@@ -4451,7 +4452,7 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
 		
 		//// Fake Definitions produced by the global scope provider
-		// UnitFakeDefinition:
+		//UnitFakeDefinition:
 		//	'**unit*' name=ID;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -5065,7 +5066,7 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//// must be named importURI
-	// Pragma:
+	//Pragma:
 	//	'@' name=ID;
 	public PragmaElements getPragmaAccess() {
 		return pPragma;
@@ -5343,9 +5344,8 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	///**
 	// * DISPLAYS
 	// */ //S_Monitor:
-	// //	key="monitor" (firstFacet="name:")? name=(Valid_ID|STRING) facets+=Facet ";"
-	// //;
-	//
+	////	key="monitor" (firstFacet="name:")? name=(Valid_ID|STRING) facets+=Facet ";"
+	////;
 	//S_Display:
 	//	key="display" firstFacet="name:"? name=(Valid_ID | STRING) facets+=Facet* block=displayBlock;
 	public S_DisplayElements getS_DisplayAccess() {
@@ -5367,28 +5367,24 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	////
-	// //ExperimentBlock returns Block:
-	// //	{Block} '{' (statements+=Statement)* '}'
-	// //;
-	//
+	////ExperimentBlock returns Block:
+	////	{Block} '{' (statements+=Statement)* '}'
+	////;
 	////experimentStatement returns Statement:
-	// //	Statement | S_Output
-	// //;
-	// //
-	// //
-	// //S_Output returns Statement:
-	//
+	////	Statement | S_Output
+	////;
+	////
+	////
+	////S_Output returns Statement:
 	////	key=("output"|"permanent") (facets+=Facet)* block=outputBlock?
-	// //;
-	// //outputBlock returns Block:
-	//
+	////;
+	////outputBlock returns Block:
 	////	{Block} '{' (statements += outputStatement)* '}'
-	// //;
-	// //outputStatement returns Statement:
-	//
+	////;
+	////outputStatement returns Statement:
 	////	Statement | S_Display 
-	// //;
-	// displayStatement Statement:
+	////;
+	//displayStatement Statement:
 	//	speciesOrGridDisplayStatement | S_1Expr_Facets_BlockOrEnd;
 	public DisplayStatementElements getDisplayStatementAccess() {
 		return pDisplayStatement;
@@ -5452,8 +5448,9 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//_1Expr_Facets_BlockOrEnd_Key:
 	//	_LayerKey | "ask" | "release" | "capture" | "create" | "write" | "error" | "warn" | "exception" | "save" | "assert" |
-	//	"inspect" | "browse" | "draw" | "using" | "switch" | "put" | "add" | "remove" | "match" | "match_between" |
-	//	"match_one" | "parameter" | "status" | "highlight" | "focus_on";
+	//	"inspect" | "browse" |
+	//	"draw" | "using" | "switch" | "put" | "add" | "remove" | "match" | "match_between" | "match_one" | "parameter" |
+	//	"status" | "highlight" | "focus_on";
 	public _1Expr_Facets_BlockOrEnd_KeyElements get_1Expr_Facets_BlockOrEnd_KeyAccess() {
 		return p_1Expr_Facets_BlockOrEnd_Key;
 	}
@@ -5734,7 +5731,9 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//If Expression:
-	//	Or ({If.left=current} op='?' right=Or (':' ifFalse=Or))?;
+	//	Or ({If.left=current} op='?'
+	//	right=Or (':'
+	//	ifFalse=Or))?;
 	public IfElements getIfAccess() {
 		return pIf;
 	}
@@ -5744,7 +5743,8 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Or Expression:
-	//	And ({Expression.left=current} op='or' right=And)*;
+	//	And ({Expression.left=current} op='or'
+	//	right=And)*;
 	public OrElements getOrAccess() {
 		return pOr;
 	}
@@ -5754,7 +5754,8 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//And Expression:
-	//	Cast ({Expression.left=current} op='and' right=Cast)*;
+	//	Cast ({Expression.left=current} op='and'
+	//	right=Cast)*;
 	public AndElements getAndAccess() {
 		return pAnd;
 	}
@@ -5824,7 +5825,7 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//// NEW: Units are now expressed using the "°" symbol
-	// Unit Expression:
+	//Unit Expression:
 	//	Unary (({Unit.left=current} op=('°' | "#")) right=UnitRef)?;
 	public UnitElements getUnitAccess() {
 		return pUnit;
@@ -5845,11 +5846,9 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	////Access returns Expression:
-	//
 	////	Primary ({Access.left = current} ((op='[' args=ExpressionList? ']') | (op="." right=AbstractRef)))*
-	// //;
-	// Access
-	//Expression:
+	////;
+	//Access Expression:
 	//	Primary ({Access.left=current} (op='[' args=ExpressionList? ']' | op="." right=AbstractRef | op="."
 	//	named_exp=STRING))*;
 	public AccessElements getAccessAccess() {
@@ -5861,8 +5860,11 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Primary Expression:
-	//	TerminalExpression | AbstractRef | '(' ExpressionList ')' | '(' {Parameters} params=ParameterList? ')' | '[' {Array}
-	//	exprs=ExpressionList? ']' | '{' {Point} left=Expression op=',' right=Expression (',' z=Expression)? '}';
+	//	TerminalExpression | AbstractRef |
+	//	'(' ExpressionList ')' |
+	//	'(' {Parameters} params=ParameterList? ')' |
+	//	'[' {Array} exprs=ExpressionList? ']' |
+	//	'{' {Point} left=Expression op=',' right=Expression (',' z=Expression)? '}';
 	public PrimaryElements getPrimaryAccess() {
 		return pPrimary;
 	}
@@ -6053,7 +6055,7 @@ public class GamlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//// Fake Definitions produced by the global scope provider
-	// UnitFakeDefinition:
+	//UnitFakeDefinition:
 	//	'**unit*' name=ID;
 	public UnitFakeDefinitionElements getUnitFakeDefinitionAccess() {
 		return pUnitFakeDefinition;

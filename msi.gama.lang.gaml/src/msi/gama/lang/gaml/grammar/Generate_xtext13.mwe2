@@ -3,25 +3,17 @@ module msi.gama.lang.gaml.GenerateGaml
 import org.eclipse.emf.mwe.utils.*
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.ui.generator.*
+import java.util.*
 
-var rootPath = ".."
 var baseName = "msi.gama.lang.gaml"
-var grammarURI = "classpath:/msi/gama/lang/gaml/grammar/Gaml1.6v2.xtext"
-var file.extensions = "gaml,experiment"
-var projectName = "msi.gama.lang.gaml"
-var uiProjectName = "ummisco.gama.ui.modeling"//var runtimeProject = "../${projectName}"
+var uiProjectName = "ummisco.gama.ui.modeling"
 var runtimeProject = baseName
-//var uiRuntimeProject = "../${uiProjectName}"
 var ideProjectName = "${uiProjectName}"
-var eclipseProjectName = uiProjectName
-var eclipseProjectPath = uiProjectName
-var ideaProjectName = uiProjectName
-var ideaProjectPath = uiProjectName
 
 Workflow {
 	bean = StandaloneSetup {
 		scanClassPath = true
-		platformUri = "${runtimeProject}/.."
+		platformUri = "../${runtimeProject}/.."
 	}
 
 	component = DirectoryCleaner {
@@ -38,7 +30,11 @@ Workflow {
 				baseName = "msi.gama.lang.gaml"
 				rootPath = ".."
 				runtime = {
+
 					name = runtimeProject
+				}
+				runtimeTest = {
+					enabled = false
 				}
 				eclipsePlugin = {
 					enabled = true
@@ -48,63 +44,45 @@ Workflow {
 					enabled = true
 					name = ideProjectName
 				}
+				eclipsePluginTest = {
+					enabled = false
+				}
 				createEclipseMetaData = true
 			}
 			code = {
+				preferXtendStubs = false
 				encoding = 'UTF-8'
 			}
 		}
-		//		language = StandardLanguage {
-		//			name = "msi.gama.lang.gaml.grammar.Gaml1_6v2"
-		//		}
 		language = StandardLanguage {
-			name = "msi.gama.lang.gaml.Gaml"//			name = "msi.gama.lang.gaml.grammar.Gaml1_6v2"
-			fileExtensions = "gaml"// Java API to access grammar elements (required by several other fragments)
-
-			//			referencedResource = "platform:/resource/msi.gama.lang.gaml/model/generated/Gaml.genmodel"
-			//			fragment = grammarAccess.GrammarAccessFragment2 {}
-			//			fragment = ecore.EMFGeneratorFragment2 {}
-			//			fragment = serializer.SerializerFragment2 {}
-			//			fragment = resourceFactory.ResourceFactoryFragment2 {}
-			//			fragment = parser.antlr.XtextAntlrGeneratorFragment2 {}
-			//			fragment = validation.ValidatorFragment2 {}
-			//			fragment = scoping.ImportNamespacesScopingFragment2 {}
-			//			fragment = exporting.QualifiedNamesFragment2 {}
-			//			fragment = builder.BuilderIntegrationFragment2 {}
-			//			fragment = generator.GeneratorFragment2 {}
-			//			fragment = formatting.Formatter2Fragment2 {}
-			//			fragment = ui.labeling.LabelProviderFragment2 {}
-			//			fragment = ui.outline.QuickOutlineFragment2 {}
-			//			fragment = ui.outline.OutlineTreeProviderFragment2 {}
-			//			fragment = ui.quickfix.QuickfixProviderFragment2 {}
-			//			fragment = ui.contentAssist.ContentAssistFragment2 {}
-			//			fragment = junit.Junit4Fragment2 {}
-			//			fragment = ui.refactoring.RefactorElementNameFragment2 {}
-			//			fragment = types.TypesGeneratorFragment2 {}
-			//			fragment = xbase.XtypeGeneratorFragment2 {}
-			//			fragment = xbase.XbaseGeneratorFragment2 {}
-			//			fragment = ui.templates.CodetemplatesGeneratorFragment2 {}
-			//			fragment = ui.compare.CompareFragment2 {}
-			//			fragment = idea.parser.antlr.XtextAntlrIDEAGeneratorFragment {}
+			name = "msi.gama.lang.gaml.Gaml"
+			fileExtensions = "gaml,experiment"
+			validator = {
+				generateXtendStub = false
+			}
+			generator = {
+				generateXtendMain = false
+				generateXtendStub = false
+			}
+			contentAssist = {
+				generateXtendStub = false
+			}
+			formatter = {
+				generateXtendStub = false
+			}
+			junitSupport = {
+				generateXtendStub = false
+			}
+			labelProvider = {
+				generateXtendStub = false
+			}
+			scopeProvider = {
+				generateXtendStub = false
+			}
+			serializer = {
+				generateXtendStub = false
+			}
 		}
 
-		//		pathRtProject = runtimeProject
-		//		pathUiProject = uiRuntimeProject// pathTestProject = "${runtimeProject}.tests"
-		//		projectNameRt = projectName
-		//		projectNameUi = uiProjectName
-		//		language = auto-inject {
-		//			uri = grammarURI
-		//			fileExtensions = file.extensions
-		//
-		//			// Java API to access grammar elements (required by several other fragments)
-		//			fragment = grammarAccess.GrammarAccessFragment auto-inject {}
-		//
-		//			// generates Java API for the generated EPackages
-		//			fragment = ecore.EMFGeneratorFragment auto-inject {}
-		//
-		//			// Serializer 2.0
-		//		fragment = serializer.SerializerFragment auto-inject {
-		//			generateXtendStub = false
-		//		}
 	}
 }
