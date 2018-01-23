@@ -73,7 +73,8 @@ public class WorkspaceModelsManager {
 	public final static String TEST_NATURE = "msi.gama.application.testNature";
 	public final static String BUILTIN_NATURE = "msi.gama.application.builtinNature";
 
-	public static QualifiedName BUILTIN_PROPERTY = new QualifiedName("gama.builtin", "models");
+	public static final QualifiedName BUILTIN_PROPERTY = new QualifiedName("gama.builtin", "models");
+	public static String BUILTIN_VERSION = null;
 
 	public final static WorkspaceModelsManager instance = new WorkspaceModelsManager();
 
@@ -116,7 +117,7 @@ public class WorkspaceModelsManager {
 					try {
 						Thread.sleep(100);
 						System.out
-							.println(Thread.currentThread().getName() + ": waiting for the GUI to become available");
+						.println(Thread.currentThread().getName() + ": waiting for the GUI to become available");
 					} catch (final InterruptedException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
@@ -192,13 +193,14 @@ public class WorkspaceModelsManager {
 			if ( projectFileBean != null ) {
 				/* parcours des fils pour trouver le dot file et creer le lien vers le projet */
 				final File[] children = projectFileBean.listFiles();
-				if ( children != null )
-					for ( int i = 0; i < children.length; i++ ) {
-						if ( children[i].getName().equals(".project") ) {
-							dotFile = children[i];
+				if ( children != null ) {
+					for ( final File element : children ) {
+						if ( element.getName().equals(".project") ) {
+							dotFile = element;
 							break;
 						}
 					}
+				}
 			}
 		}
 
@@ -235,7 +237,7 @@ public class WorkspaceModelsManager {
 										"Existing project",
 										"A project with the same name already exists in the workspace. The model '" +
 											modelFile.getAbsolutePath() +
-											" will be imported as part of the 'Unclassified models' project.");
+										" will be imported as part of the 'Unclassified models' project.");
 									createUnclassifiedModelsProjectAndAdd(originalPath);
 									return;
 								}
@@ -352,7 +354,7 @@ public class WorkspaceModelsManager {
 			e.printStackTrace();
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Error in creation",
 				"The file " + (iFile == null ? location.lastSegment() : iFile.getFullPath().lastSegment()) +
-					" cannot be created because of the following exception " + e.getMessage());
+				" cannot be created because of the following exception " + e.getMessage());
 			return null;
 		}
 	}
@@ -410,13 +412,15 @@ public class WorkspaceModelsManager {
 		System.out.println("Synchronous link of models library...");
 		final Multimap<Bundle, String> pluginsWithModels = GamaBundleLoader.getPluginsWithModels();
 		for ( final Bundle plugin : pluginsWithModels.keySet() ) {
-			for ( final String entry : pluginsWithModels.get(plugin) )
+			for ( final String entry : pluginsWithModels.get(plugin) ) {
 				linkModelsToWorkspace(plugin, entry, false);
+			}
 		}
 		final Multimap<Bundle, String> pluginsWithTests = GamaBundleLoader.getPluginsWithTests();
 		for ( final Bundle plugin : pluginsWithTests.keySet() ) {
-			for ( final String entry : pluginsWithTests.get(plugin) )
+			for ( final String entry : pluginsWithTests.get(plugin) ) {
 				linkModelsToWorkspace(plugin, entry, true);
+			}
 		}
 	}
 
@@ -445,8 +449,9 @@ public class WorkspaceModelsManager {
 		findProjects(modelsRep, foundProjects);
 		importBuiltInProjects(bundle, core, tests, foundProjects);
 
-		if ( core )
+		if ( core ) {
 			stampWorkspaceFromModels();
+		}
 
 	}
 
@@ -458,10 +463,11 @@ public class WorkspaceModelsManager {
 		if ( dotFile == null ) { return; } // not a directory
 		if ( dotFile.length == 0 ) { // no .project file
 			final File[] files = folder.listFiles();
-			if ( files != null )
+			if ( files != null ) {
 				for ( final File f : folder.listFiles() ) {
 					findProjects(f, found);
 				}
+			}
 			return;
 		}
 		found.put(folder, new Path(dotFile[0].getAbsolutePath()));
@@ -543,6 +549,13 @@ public class WorkspaceModelsManager {
 		return projectHandle[0];
 	}
 
+	static public String GET_BUILT_IN_GAMA_VERSION() {
+		if (BUILTIN_VERSION == null) {
+			BUILTIN_VERSION =  Platform.getProduct().getDefiningBundle().getVersion().toString();
+		}
+		return BUILTIN_VERSION;
+	}
+
 	static public void setValuesProjectDescription(final IProject proj, final boolean builtin, final boolean inPlugin,
 		final boolean inTests, final Bundle bundle) {
 		/* Modify the project description */
@@ -552,12 +565,13 @@ public class WorkspaceModelsManager {
 			final List<String> ids = new ArrayList<>();
 			ids.add(XTEXT_NATURE);
 			ids.add(GAMA_NATURE);
-			if ( inTests )
+			if ( inTests ) {
 				ids.add(TEST_NATURE);
-			else if ( inPlugin )
+			} else if ( inPlugin ) {
 				ids.add(PLUGIN_NATURE);
-			else if ( builtin )
+			} else if ( builtin ) {
 				ids.add(BUILTIN_NATURE);
+			}
 			desc = proj.getDescription();
 			desc.setNatureIds(ids.toArray(new String[0]));
 			// Addition of a special nature to the project.
@@ -574,7 +588,7 @@ public class WorkspaceModelsManager {
 			proj.setDescription(desc, IResource.FORCE, null);
 			// Addition of a special persistent property to indicate that the project is built-in
 			if ( builtin ) {
-				proj.setPersistentProperty(BUILTIN_PROPERTY, WorkspacePreferences.BUILTIN_VERSION);
+				proj.setPersistentProperty(BUILTIN_PROPERTY, GET_BUILT_IN_GAMA_VERSION());
 			}
 		} catch (final CoreException e) {
 			e.printStackTrace();

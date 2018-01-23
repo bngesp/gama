@@ -35,7 +35,6 @@ public class WorkspacePreferences {
 	static boolean applyPrefs;
 	public static final String WS_IDENTIFIER = ".gama_application_workspace";
 	public static final String MODEL_IDENTIFIER = getCurrentGamaStampString();
-	public static String BUILTIN_VERSION = Platform.getProduct().getDefiningBundle().getVersion().toString();
 
 	public static String getSelectedWorkspaceRootLocation() {
 		return selectedWorkspaceRootLocation;
@@ -59,7 +58,7 @@ public class WorkspacePreferences {
 
 			final long time = modelsRep.lastModified();
 			gamaStamp = ".built_in_models_" + time;
-			System.out.println(">GAMA version " + BUILTIN_VERSION + " loading...");
+			System.out.println(">GAMA version " + WorkspaceModelsManager.GET_BUILT_IN_GAMA_VERSION() + " loading...");
 			System.out.println(">GAMA models library version: " + gamaStamp);
 		} catch (final IOException | URISyntaxException e) {
 			e.printStackTrace();
