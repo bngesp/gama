@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.preferences.IExportedPreferences;
 import org.eclipse.core.runtime.preferences.IPreferenceFilter;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.preferences.PreferenceFilterEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -79,7 +80,7 @@ public class WorkspacePreferences {
 			}
 
 			@Override
-			public Map getMapping(final String scope) {
+			public Map<String, PreferenceFilterEntry[]> getMapping(final String scope) {
 				return null;
 			}
 		};
@@ -99,11 +100,9 @@ public class WorkspacePreferences {
 		final IPreferencesService service = Platform.getPreferencesService();
 		IExportedPreferences prefs;
 
-		try {
-			final FileInputStream input = new FileInputStream(new File(targetDirectory + "/.gama.epf"));
+		try (FileInputStream input = new FileInputStream(new File(targetDirectory + "/.gama.epf"))){
 			prefs = service.readPreferences(input);
 			service.applyPreferences(prefs, WorkspacePreferences.getPreferenceFilters());
-			input.close();
 		} catch (final IOException e) {} catch (final CoreException e) {}
 		WorkspacePreferences.setApplyPrefs(false);
 
@@ -132,11 +131,11 @@ public class WorkspacePreferences {
 			if ( askCreate ) {
 				final boolean create =
 					MessageDialog
-						.openQuestion(Display.getDefault().getActiveShell(), "New Directory",
-							workspaceLocation +
-								" does not exist. Would you like to create a new workspace here" + (cloning
-									? ", copy the projects and preferences of an existing workspace into it, " : "") +
-								" and proceeed ?");
+					.openQuestion(Display.getDefault().getActiveShell(), "New Directory",
+						workspaceLocation +
+						" does not exist. Would you like to create a new workspace here" + (cloning
+							? ", copy the projects and preferences of an existing workspace into it, " : "") +
+						" and proceeed ?");
 				if ( create ) {
 					try {
 						f.mkdirs();
@@ -176,7 +175,7 @@ public class WorkspacePreferences {
 			if ( !wsTest.exists() ) {
 				final boolean create = MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "New Workspace",
 					"The directory '" + wsTest.getAbsolutePath() +
-						"' exists but is not identified as a GAMA workspace. \n\nWould you like to use it anyway ?");
+					"' exists but is not identified as a GAMA workspace. \n\nWould you like to use it anyway ?");
 				if ( create ) {
 					try {
 						f.mkdirs();

@@ -82,7 +82,7 @@ import ummisco.gama.ui.views.toolbar.IToolbarDecoratedView;
  * A simple image viewer editor.
  */
 public class ImageViewer extends EditorPart
-		implements IReusableEditor, IToolbarDecoratedView.Zoomable, IToolbarDecoratedView.Colorizable {
+implements IReusableEditor, IToolbarDecoratedView.Zoomable, IToolbarDecoratedView.Colorizable {
 
 	GamaToolbar2 toolbar;
 	private Image image;
@@ -545,8 +545,8 @@ public class ImageViewer extends EditorPart
 					if (!status.isOK()) {
 						final IStatus fstatus = status;
 						getSite().getShell().getDisplay()
-								.asyncExec(() -> ErrorDialog.openError(getSite().getShell(), "Error Saving",
-										MessageFormat.format("Failed to save {0}", dest.getFullPath()), fstatus));
+						.asyncExec(() -> ErrorDialog.openError(getSite().getShell(), "Error Saving",
+								MessageFormat.format("Failed to save {0}", dest.getFullPath()), fstatus));
 					}
 					return Status.OK_STATUS;
 				}
@@ -555,8 +555,8 @@ public class ImageViewer extends EditorPart
 			writeJob.setUser(false);
 			writeJob.schedule();
 
-			final BufferedInputStream in = new BufferedInputStream(pin);
-			try {
+
+			try (final BufferedInputStream in = new BufferedInputStream(pin)) {
 				// try reading one byte to make sure that loader.save() actually
 				// worked before we destroy or create a file.
 				in.mark(1);
@@ -571,9 +571,7 @@ public class ImageViewer extends EditorPart
 						dest.create(in, true, new SubProgressMonitor(monitor, 500));
 					}
 				}
-			} finally {
-				in.close();
-			}
+			} 
 		} finally {
 			monitor.done();
 		}
@@ -622,7 +620,8 @@ public class ImageViewer extends EditorPart
 	 * passed in value is larger than the {@link #getMaxZoomFactor() max zoom factor}, the max zoom factor will used
 	 * instead.
 	 */
-	public void setZoomFactor(double newZoom) {
+	public void setZoomFactor(final double z) {
+		double newZoom = z;
 		// don't go bigger than the maz zoom
 		newZoom = Math.min(newZoom, maxZoomFactor);
 		if (zoomFactor != newZoom && newZoom > 0.0d) {

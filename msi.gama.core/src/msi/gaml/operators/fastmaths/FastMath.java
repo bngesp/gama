@@ -106,7 +106,8 @@ public final class FastMath extends CmnFastMath {
 	 *            Angle in radians.
 	 * @return Angle sine.
 	 */
-	public static double sin(double angle) {
+	public static double sin(final double a) {
+		double angle = a;
 		if (USE_JDK_MATH) { return Math.sin(angle); }
 		boolean negateResult = false;
 		if (angle < 0.0) {
@@ -162,7 +163,8 @@ public final class FastMath extends CmnFastMath {
 	 *            Angle in radians.
 	 * @return Angle cosine.
 	 */
-	public static double cos(double angle) {
+	public static double cos(final double a) {
+		double angle = a;
 		if (USE_JDK_MATH) { return Math.cos(angle); }
 		angle = Math.abs(angle);
 		if (angle > SIN_COS_MAX_VALUE_FOR_INT_MODULO) {
@@ -216,7 +218,8 @@ public final class FastMath extends CmnFastMath {
 	 *            (out) Angle cosine.
 	 * @return Angle sine.
 	 */
-	public static double sinAndCos(double angle, final DoubleWrapper cosine) {
+	public static double sinAndCos(final double a, final DoubleWrapper cosine) {
+		double angle = a;
 		if (USE_JDK_MATH) {
 			cosine.value = Math.cos(angle);
 			return Math.sin(angle);
@@ -291,7 +294,7 @@ public final class FastMath extends CmnFastMath {
 		// Making sure index is within tables range.
 		// index modulo PI, i.e. 2*(virtual tab size minus one).
 		index &= 2 * (TAN_VIRTUAL_TABS_SIZE - 1) - 1; // index %
-														// (2*(TAN_VIRTUAL_TABS_SIZE-1))
+		// (2*(TAN_VIRTUAL_TABS_SIZE-1))
 		// Here, index is in [0,2*(TAN_VIRTUAL_TABS_SIZE-1)-1], i.e. indicates
 		// an angle in [0,PI[.
 		if (index > TAN_VIRTUAL_TABS_SIZE - 1) {
@@ -305,8 +308,8 @@ public final class FastMath extends CmnFastMath {
 					+ delta * (MyTTan.tanDer1DivF1Tab[index] + delta * (MyTTan.tanDer2DivF2Tab[index]
 							+ delta * (MyTTan.tanDer3DivF3Tab[index] + delta * MyTTan.tanDer4DivF4Tab[index])));
 		} else { // angle in
-					// ]TAN_MAX_VALUE_FOR_TABS,TAN_MAX_VALUE_FOR_INT_MODULO], or
-					// angle is NaN
+			// ]TAN_MAX_VALUE_FOR_TABS,TAN_MAX_VALUE_FOR_INT_MODULO], or
+			// angle is NaN
 			// Using tan(angle) == 1/tan(PI/2-angle) formula: changing angle
 			// (index and delta), and inverting.
 			index = TAN_VIRTUAL_TABS_SIZE - 1 - index;
@@ -1301,7 +1304,7 @@ public final class FastMath extends CmnFastMath {
 					if (power == powerAsInt) {
 						powerInfo = (powerAsInt & 1) == 0 ? 1 : -1;
 					} else { // power is not an integer (and not NaN, due to
-								// test against Integer.MAX_VALUE)
+						// test against Integer.MAX_VALUE)
 						powerInfo = 0;
 					}
 				} else {
@@ -1544,7 +1547,7 @@ public final class FastMath extends CmnFastMath {
 			}
 		} else {
 			if (!(value < Double.POSITIVE_INFINITY)) { // value is +Infinity, or
-														// value is NaN
+				// value is NaN
 				return value;
 			}
 			// Making sure value is normal.
@@ -1767,11 +1770,11 @@ public final class FastMath extends CmnFastMath {
 			// A bit faster than using casts.
 			final int bits = Float.floatToRawIntBits(value);
 			final int anteCommaBits = bits & 0xFF800000 >> exponent;
-			if (value < 0.0f && anteCommaBits != bits) {
-				return Float.intBitsToFloat(anteCommaBits) - 1.0f;
-			} else {
-				return Float.intBitsToFloat(anteCommaBits);
-			}
+		if (value < 0.0f && anteCommaBits != bits) {
+			return Float.intBitsToFloat(anteCommaBits) - 1.0f;
+		} else {
+			return Float.intBitsToFloat(anteCommaBits);
+		}
 		} else {
 			// +-Infinity, NaN, or a mathematical integer.
 			return value;
@@ -1798,7 +1801,7 @@ public final class FastMath extends CmnFastMath {
 						return anteCommaDigits;
 					}
 				} else { // value is +-0.0 (not NaN due to test against
-							// Integer.MAX_VALUE)
+					// Integer.MAX_VALUE)
 					return value;
 				}
 			} else if (valueAbs < TWO_POW_52) {
@@ -1877,22 +1880,22 @@ public final class FastMath extends CmnFastMath {
 		// (http://mail.openjdk.java.net/pipermail/core-libs-dev/2013-August/020247.html).
 		final int bits = Float.floatToRawIntBits(value);
 		final int biasedExp = bits >> 23 & 0xFF;
-		// Shift to get rid of bits past comma except first one: will need to
-		// 1-shift to the right to end up with correct magnitude.
-		final int shift = 23 - 1 + MAX_FLOAT_EXPONENT - biasedExp;
-		if ((shift & -32) == 0) {
-			// shift in [0,31], so unbiased exp in [-9,22].
-			int extendedMantissa = 0x00800000 | bits & 0x007FFFFF;
-			if (bits < 0) {
-				extendedMantissa = -extendedMantissa;
-			}
-			// If value is positive and first bit past comma is 0, rounding
-			// to lower integer, else to upper one, which is what "+1" and
-			// then ">>1" do.
-			return (extendedMantissa >> shift) + 1 >> 1;
-		} else {
-			return (int) value;
-		}
+				// Shift to get rid of bits past comma except first one: will need to
+				// 1-shift to the right to end up with correct magnitude.
+				final int shift = 23 - 1 + MAX_FLOAT_EXPONENT - biasedExp;
+				if ((shift & -32) == 0) {
+					// shift in [0,31], so unbiased exp in [-9,22].
+					int extendedMantissa = 0x00800000 | bits & 0x007FFFFF;
+					if (bits < 0) {
+						extendedMantissa = -extendedMantissa;
+					}
+					// If value is positive and first bit past comma is 0, rounding
+					// to lower integer, else to upper one, which is what "+1" and
+					// then ">>1" do.
+					return (extendedMantissa >> shift) + 1 >> 1;
+				} else {
+					return (int) value;
+				}
 	}
 
 	/**
@@ -1946,7 +1949,7 @@ public final class FastMath extends CmnFastMath {
 				value = value + TWO_POW_23_F - TWO_POW_23_F;
 				return sign * (int) value;
 			} else if (value < Integer.MAX_VALUE) { // <= doesn't work because
-													// of float precision
+				// of float precision
 				// value is in [-Integer.MAX_VALUE,Integer.MAX_VALUE]
 				return sign * (int) value;
 			}
@@ -2120,7 +2123,8 @@ public final class FastMath extends CmnFastMath {
 	 *            Angle in radians.
 	 * @return The same angle, in radians, but in [0,2*PI].
 	 */
-	public static double normalizeZeroTwoPi(double angle) {
+	public static double normalizeZeroTwoPi(final double a) {
+		double angle = a;
 		// Not modifying values in output range.
 		if (angle >= 0.0 && angle <= 2 * Math.PI) { return angle; }
 		angle = remainderTwoPi(angle);
@@ -2676,7 +2680,8 @@ public final class FastMath extends CmnFastMath {
 	 * @return Bits of double corresponding to remainder of (angle % (PI/2)), in [-PI/4,PI/4], with quadrant encoded in
 	 *         exponent bits.
 	 */
-	private static long remainderPiO2(double angle) {
+	private static long remainderPiO2(final double a) {
+		double angle = a;
 		if (USE_JDK_MATH) { return jdkRemainderPiO2(angle, false); }
 		boolean negateResult = false;
 		if (angle < 0.0) {
@@ -2718,7 +2723,8 @@ public final class FastMath extends CmnFastMath {
 	 *            Angle in radians.
 	 * @return Remainder of (angle % (2*PI)), in [-PI,PI].
 	 */
-	private static double remainderTwoPiFast(double angle) {
+	private static double remainderTwoPiFast(final double a) {
+		double angle = a;
 		if (USE_JDK_MATH) { return jdkRemainderTwoPi(angle); }
 		boolean negateResult = false;
 		if (angle < 0.0) {
@@ -2768,7 +2774,8 @@ public final class FastMath extends CmnFastMath {
 	 *            Angle in radians.
 	 * @return Remainder of (angle % PI), in [-PI/2,PI/2].
 	 */
-	private static double remainderPiFast(double angle) {
+	private static double remainderPiFast(final double a) {
+		double angle = a;
 		if (USE_JDK_MATH) { return jdkRemainderPi(angle); }
 		boolean negateResult = false;
 		if (angle < 0.0) {

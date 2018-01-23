@@ -68,7 +68,7 @@ public class RefreshHandler implements IRefreshHandler {
 
 	@Override
 	public void refreshNavigator() {
-		getNavigator().getCommonViewer().refresh();
+		WorkbenchHelper.run( ()->getNavigator().getCommonViewer().refresh());
 	}
 
 	protected void refreshResource(final IResource resource, final IProgressMonitor monitor) throws CoreException {
@@ -76,8 +76,8 @@ public class RefreshHandler implements IRefreshHandler {
 			checkLocationDeleted((IProject) resource);
 		} else if (resource.getType() == IResource.ROOT) {
 			final IProject[] projects = ((IWorkspaceRoot) resource).getProjects();
-			for (int i = 0; i < projects.length; i++) {
-				checkLocationDeleted(projects[i]);
+			for (final IProject project : projects) {
+				checkLocationDeleted(project);
 			}
 		}
 		resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
@@ -89,82 +89,84 @@ public class RefreshHandler implements IRefreshHandler {
 		errorStatus[0] = Status.OK_STATUS;
 		final List<? extends IResource> resources =
 				list == null || list.isEmpty() ? Arrays.asList(ResourcesPlugin.getWorkspace().getRoot()) : list;
-		final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
-			@Override
-			public void execute(final IProgressMonitor monitor) {
-				final Iterator<? extends IResource> resourcesEnum = resources.iterator();
-				try {
-					while (resourcesEnum.hasNext()) {
+				final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
+					@Override
+					public void execute(final IProgressMonitor monitor) {
+						final Iterator<? extends IResource> resourcesEnum = resources.iterator();
 						try {
-							final IResource resource = resourcesEnum.next();
-							refreshResource(resource, monitor);
+							while (resourcesEnum.hasNext()) {
+								try {
+									final IResource resource = resourcesEnum.next();
+									refreshResource(resource, monitor);
+									if (monitor != null) {
+										monitor.worked(1);
+									}
+								} catch (final CoreException e) {}
+								if (monitor != null && monitor.isCanceled()) { throw new OperationCanceledException(); }
+							}
+						} finally {
 							if (monitor != null)
-								monitor.worked(1);
-						} catch (final CoreException e) {}
-						if (monitor.isCanceled()) { throw new OperationCanceledException(); }
+							monitor.done();
+						}
 					}
-				} finally {
-					monitor.done();
-				}
-			}
-		};
-		final WorkspaceJob job = new WorkspaceJob("Refreshing the GAMA Workspace") {
+				};
+				final WorkspaceJob job = new WorkspaceJob("Refreshing the GAMA Workspace") {
 
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+					@Override
+					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
 
-				try {
-					ResourceManager.block();
-					monitor.beginTask("Refreshing GAMA Workspace: updating the library of models", 100);
-					WorkspaceModelsManager.loadModelsLibrary();
-					monitor.beginTask("Refreshing GAMA Workspace: recreating files metadata", 1000);
-					for (final IResource r : resources) {
-						r.accept(proxy -> {
-							final IFileMetaDataProvider provider = GAMA.getGui().getMetaDataProvider();
-							final IResource file = proxy.requestResource();
-							provider.storeMetaData(file, null, true);
-							provider.getMetaData(file, false, true);
-							monitor.worked(1);
-							return true;
-						}, IResource.NONE);
-
-					}
-					monitor.beginTask("Refreshing GAMA Workspace: refreshing resources", resources.size());
-					op.run(monitor);
-					monitor.beginTask("Refreshing GAMA Workspace: deleting virtual folders caches", 1);
-					NavigatorRoot.INSTANCE.resetVirtualFolders(NavigatorRoot.INSTANCE.mapper);
-					monitor.beginTask("Refreshing GAMA Workspace: refreshing the navigator", 1);
-					final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-					refreshNavigator();
-					monitor.beginTask("Refreshing GAMA Workspace: rebuilding models", 100);
-					try {
-
-						workspace.build(IncrementalProjectBuilder.CLEAN_BUILD, new ProgressMonitorWrapper(monitor) {
-
-							@Override
-							public void done() {
-								super.done();
-								refreshNavigator();
+						try {
+							ResourceManager.block();
+							monitor.beginTask("Refreshing GAMA Workspace: updating the library of models", 100);
+							WorkspaceModelsManager.loadModelsLibrary();
+							monitor.beginTask("Refreshing GAMA Workspace: recreating files metadata", 1000);
+							for (final IResource r : resources) {
+								r.accept(proxy -> {
+									final IFileMetaDataProvider provider = GAMA.getGui().getMetaDataProvider();
+									final IResource file = proxy.requestResource();
+									provider.storeMetaData(file, null, true);
+									provider.getMetaData(file, false, true);
+									monitor.worked(1);
+									return true;
+								}, IResource.NONE);
 
 							}
+							monitor.beginTask("Refreshing GAMA Workspace: refreshing resources", resources.size());
+							op.run(monitor);
+							monitor.beginTask("Refreshing GAMA Workspace: deleting virtual folders caches", 1);
+							NavigatorRoot.INSTANCE.resetVirtualFolders(NavigatorRoot.INSTANCE.mapper);
+							monitor.beginTask("Refreshing GAMA Workspace: refreshing the navigator", 1);
+							final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+							refreshNavigator();
+							monitor.beginTask("Refreshing GAMA Workspace: rebuilding models", 100);
+							try {
 
-						});
+								workspace.build(IncrementalProjectBuilder.CLEAN_BUILD, new ProgressMonitorWrapper(monitor) {
 
-					} catch (final CoreException ex) {
-						ex.printStackTrace();
+									@Override
+									public void done() {
+										super.done();
+										refreshNavigator();
+
+									}
+
+								});
+
+							} catch (final CoreException ex) {
+								ex.printStackTrace();
+							}
+						} catch (final Exception e) {
+							return Status.CANCEL_STATUS;
+						} finally {
+							ResourceManager.unblock(monitor);
+							monitor.done();
+						}
+						return errorStatus[0];
 					}
-				} catch (final Exception e) {
-					return Status.CANCEL_STATUS;
-				} finally {
-					ResourceManager.unblock(monitor);
-					monitor.done();
-				}
-				return errorStatus[0];
-			}
 
-		};
-		job.setUser(true);
-		job.schedule();
+				};
+				job.setUser(true);
+				job.schedule();
 	}
 
 	void checkLocationDeleted(final IProject project) throws CoreException {
