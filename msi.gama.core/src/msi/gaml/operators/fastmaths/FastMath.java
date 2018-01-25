@@ -325,7 +325,9 @@ public final class FastMath extends CmnFastMath {
 	 *            Value in [-1,1].
 	 * @return Value arcsine, in radians, in [-PI/2,PI/2].
 	 */
-	public static double asin(double value) {
+	public static double asin(final double v) {
+		double value = v;
+
 		if (USE_JDK_MATH) { return Math.asin(value); }
 		boolean negateResult = false;
 		if (value < 0.0) {
@@ -413,7 +415,8 @@ public final class FastMath extends CmnFastMath {
 	 *            A double value.
 	 * @return Value arctangent, in radians, in [-PI/2,PI/2].
 	 */
-	public static double atan(double value) {
+	public static double atan(final double v) {
+		double value = v;
 		if (USE_JDK_MATH) { return Math.atan(value); }
 		boolean negateResult = false;
 		if (value < 0.0) {
@@ -616,7 +619,9 @@ public final class FastMath extends CmnFastMath {
 	 *            A double value.
 	 * @return Value hyperbolic sine.
 	 */
-	public static double sinh(double value) {
+	public static double sinh(final double v) {
+		double value = v;
+
 		if (USE_JDK_MATH) { return Math.sinh(value); }
 		// sinh(x) = (exp(x)-exp(-x))/2
 		double h;
@@ -658,7 +663,9 @@ public final class FastMath extends CmnFastMath {
 	 *            A double value.
 	 * @return Value hyperbolic cosine.
 	 */
-	public static double cosh(double value) {
+	public static double cosh(final double v) {
+		double value = v;
+
 		if (USE_JDK_MATH) { return Math.cosh(value); }
 		// cosh(x) = (exp(x)+exp(-x))/2
 		if (value < 0.0) {
@@ -803,7 +810,8 @@ public final class FastMath extends CmnFastMath {
 	 *            A double value.
 	 * @return Value hyperbolic tangent.
 	 */
-	public static double tanh(double value) {
+	public static double tanh(final double v) {
+		double value = v;
 		if (USE_JDK_MATH) { return Math.tanh(value); }
 		// tanh(x) = sinh(x)/cosh(x)
 		// = (exp(x)-exp(-x))/(exp(x)+exp(-x))
@@ -1530,8 +1538,9 @@ public final class FastMath extends CmnFastMath {
 	 *            A double value.
 	 * @return Value cubic root.
 	 */
-	public static double cbrt(double value) {
-		if (USE_JDK_MATH) { return Math.cbrt(value); }
+	public static double cbrt(final double v) {
+		if (USE_JDK_MATH) { return Math.cbrt(v); }
+		double value = v;
 		double h;
 		if (value < 0.0) {
 			if (value == Double.NEGATIVE_INFINITY) { return Double.NEGATIVE_INFINITY; }
@@ -1630,8 +1639,11 @@ public final class FastMath extends CmnFastMath {
 	/**
 	 * @return sqrt(x^2+y^2) without intermediate overflow or underflow.
 	 */
-	public static double hypot(double x, double y) {
-		if (USE_JDK_MATH) { return Math.hypot(x, y); }
+	public static double hypot(final double xx, final double yy) {
+
+		if (USE_JDK_MATH) { return Math.hypot(xx, yy); }
+		double x = xx;
+		double y = yy;
 		x = Math.abs(x);
 		y = Math.abs(y);
 		// Ensuring x <= y.
@@ -1668,7 +1680,10 @@ public final class FastMath extends CmnFastMath {
 	/**
 	 * @return sqrt(x^2+y^2+z^2) without intermediate overflow or underflow.
 	 */
-	public static double hypot(double x, double y, double z) {
+	public static double hypot(final double xx, final double yy, final double zz) {
+		double x = xx;
+		double y = yy;
+		double z = zz;
 		if (USE_JDK_MATH) {
 			// No simple JDK equivalent.
 		}
@@ -2521,7 +2536,9 @@ public final class FastMath extends CmnFastMath {
 	 *            An int value.
 	 * @return value * 2^scaleFactor, or a value equivalent to the specified one if it is NaN, +-Infinity or +-0.0.
 	 */
-	public static double scalb(double value, int scaleFactor) {
+	public static double scalb(final double v, final int sf) {
+		double value = v;
+		int scaleFactor = sf;
 		if (scaleFactor > -MAX_DOUBLE_EXPONENT && scaleFactor <= MAX_DOUBLE_EXPONENT) {
 			// Quick case (as done in apache FastMath).
 			return value * twoPowNormal(scaleFactor);

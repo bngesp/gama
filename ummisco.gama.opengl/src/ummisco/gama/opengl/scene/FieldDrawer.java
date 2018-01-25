@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 import java.util.Locale;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.common.primitives.Doubles;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -212,7 +211,7 @@ public class FieldDrawer extends ObjectDrawer<FieldObject> {
 
 	protected void drawFromImage(final FieldObject demObj) {
 		int rows, cols;
-		final double vx, vy;
+		//		final double vx, vy;
 		double ts, tt, tw, th;
 		// Not y-flipped
 		final BufferedImage dem = demObj.getDirectImage(1);

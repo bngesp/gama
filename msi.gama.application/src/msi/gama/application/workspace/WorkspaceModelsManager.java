@@ -47,7 +47,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.internal.app.CommandLineArgs;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -74,7 +74,7 @@ public class WorkspaceModelsManager {
 	public final static String BUILTIN_NATURE = "msi.gama.application.builtinNature";
 
 	public static final QualifiedName BUILTIN_PROPERTY = new QualifiedName("gama.builtin", "models");
-	public static String BUILTIN_VERSION = null;
+	private static String BUILTIN_VERSION = null;
 
 	public final static WorkspaceModelsManager instance = new WorkspaceModelsManager();
 
@@ -100,7 +100,6 @@ public class WorkspaceModelsManager {
 		}
 		final IFile file = findAndLoadIFile(filePath);
 		if ( file != null ) {
-			final String fp = filePath;
 			final String en = expName;
 			final Runnable run = () -> {
 				try {
@@ -524,17 +523,14 @@ public class WorkspaceModelsManager {
 
 			@Override
 			protected void execute(final IProgressMonitor monitor) throws CoreException {
-				monitor.beginTask("Creating or updating " + name, 2000);
+				final SubMonitor m = SubMonitor.convert(monitor, "Creating or updating " + name, 2000);
 				final IProject project = ws.getRoot().getProject(name);
-				// IProjectDescription desc = null;
 				if ( !project.exists() ) {
-					// desc = project.getDescription();
-					// } else {
 					final IProjectDescription desc = ws.newProjectDescription(name);
-					project.create(desc, new SubProgressMonitor(monitor, 1000));
+					project.create(desc, m.split(1000));
 				}
 				if ( monitor.isCanceled() ) { throw new OperationCanceledException(); }
-				project.open(IResource.BACKGROUND_REFRESH, new SubProgressMonitor(monitor, 1000));
+				project.open(IResource.BACKGROUND_REFRESH, m.split(1000));
 				projectHandle[0] = project;
 				setValuesProjectDescription(project, false, false, false, null);
 			}

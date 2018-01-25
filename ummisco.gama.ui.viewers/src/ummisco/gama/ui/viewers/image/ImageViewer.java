@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.MultiRule;
@@ -507,11 +507,11 @@ implements IReusableEditor, IToolbarDecoratedView.Zoomable, IToolbarDecoratedVie
 			final IProgressMonitor monitor) throws CoreException, InterruptedException, IOException {
 		// do an indeterminate progress monitor so that something shows, since
 		// the generation of the image data doesn't report progress
-		monitor.beginTask(dest.getFullPath().toPortableString(), IProgressMonitor.UNKNOWN/* taskSize */);
+		final SubMonitor m = SubMonitor.convert(monitor, dest.getFullPath().toPortableString(), IProgressMonitor.UNKNOWN/* taskSize */);
 		try {
 			if (!dest.getParent().exists()) {
 				final ContainerGenerator gen = new ContainerGenerator(dest.getFullPath().removeLastSegments(1));
-				gen.generateContainer(new SubProgressMonitor(monitor, 500));
+				gen.generateContainer(m.split(500));
 				if (monitor.isCanceled()) { throw new InterruptedException(); }
 			}
 			final ImageLoader loader = new ImageLoader();
@@ -566,9 +566,9 @@ implements IReusableEditor, IToolbarDecoratedView.Zoomable, IToolbarDecoratedVie
 				if (first != -1) {
 					in.reset();
 					if (dest.exists()) {
-						dest.setContents(in, true, true, new SubProgressMonitor(monitor, 500));
+						dest.setContents(in, true, true, m.split(500));
 					} else {
-						dest.create(in, true, new SubProgressMonitor(monitor, 500));
+						dest.create(in, true, m.split(500));
 					}
 				}
 			} 

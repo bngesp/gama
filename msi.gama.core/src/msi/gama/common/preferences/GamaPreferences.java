@@ -535,8 +535,9 @@ public class GamaPreferences {
 	}
 
 	public static <T> Pref<T> create(final String key, final String title, final T value, final int type) {
-		if (key.contains(".") || key.contains(" "))
+		if (key.contains(".") || key.contains(" ")) {
 			System.out.println("WARNING. Preference " + key + " cannot be used as a variable");
+		}
 		final Pref<T> e = new Pref<T>(key, type).named(title).in(Interface.NAME, "").init(value);
 		register(e);
 		return e;
@@ -555,8 +556,9 @@ public class GamaPreferences {
 				if (storeKeys.contains(key)) {
 					final String val = store.get(key, GamaStringType.staticCast(scope, value, false));
 					gp.setValue(scope, GamaPointType.staticCast(scope, val, false));
-				} else
+				} else {
 					store.put(key, GamaStringType.staticCast(scope, value, false));
+				}
 				break;
 			case IType.INT:
 				if (storeKeys.contains(key)) {
@@ -686,8 +688,9 @@ public class GamaPreferences {
 	public static Map<String, Map<String, List<Pref>>> organizePrefs() {
 		final Map<String, Map<String, List<Pref>>> result = new TOrderedHashMap();
 		for (final Pref e : prefs.values()) {
-			if (e.isHidden())
+			if (e.isHidden()) {
 				continue;
+			}
 			final String tab = e.tab;
 			Map<String, List<Pref>> groups = result.get(tab);
 			if (groups == null) {
@@ -746,10 +749,8 @@ public class GamaPreferences {
 
 	public static void applyPreferencesFrom(final String path, final Map<String, Object> modelValues) {
 		// System.out.println("Apply preferences from " + path);
-		try {
-			final FileInputStream is = new FileInputStream(path);
+		try (final FileInputStream is = new FileInputStream(path);) {
 			store.importPreferences(is);
-			is.close();
 			reloadPreferences(modelValues);
 		} catch (final IOException | InvalidPreferencesFormatException e) {
 			e.printStackTrace();
