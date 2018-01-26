@@ -58,7 +58,8 @@ public class WorkspacePreferences {
 
 			final long time = modelsRep.lastModified();
 			gamaStamp = ".built_in_models_" + time;
-			System.out.println(">GAMA version " + WorkspaceModelsManager.GET_BUILT_IN_GAMA_VERSION() + " loading...");
+			System.out.println(
+				">GAMA version " + Platform.getProduct().getDefiningBundle().getVersion().toString() + " loading...");
 			System.out.println(">GAMA models library version: " + gamaStamp);
 		} catch (final IOException | URISyntaxException e) {
 			e.printStackTrace();

@@ -116,7 +116,7 @@ public class WorkspaceModelsManager {
 					try {
 						Thread.sleep(100);
 						System.out
-						.println(Thread.currentThread().getName() + ": waiting for the GUI to become available");
+							.println(Thread.currentThread().getName() + ": waiting for the GUI to become available");
 					} catch (final InterruptedException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
@@ -236,7 +236,7 @@ public class WorkspaceModelsManager {
 										"Existing project",
 										"A project with the same name already exists in the workspace. The model '" +
 											modelFile.getAbsolutePath() +
-										" will be imported as part of the 'Unclassified models' project.");
+											" will be imported as part of the 'Unclassified models' project.");
 									createUnclassifiedModelsProjectAndAdd(originalPath);
 									return;
 								}
@@ -353,7 +353,7 @@ public class WorkspaceModelsManager {
 			e.printStackTrace();
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Error in creation",
 				"The file " + (iFile == null ? location.lastSegment() : iFile.getFullPath().lastSegment()) +
-				" cannot be created because of the following exception " + e.getMessage());
+					" cannot be created because of the following exception " + e.getMessage());
 			return null;
 		}
 	}
@@ -545,12 +545,12 @@ public class WorkspaceModelsManager {
 		return projectHandle[0];
 	}
 
-	static public String GET_BUILT_IN_GAMA_VERSION() {
-		if (BUILTIN_VERSION == null) {
-			BUILTIN_VERSION =  Platform.getProduct().getDefiningBundle().getVersion().toString();
-		}
-		return BUILTIN_VERSION;
-	}
+	// static public String GET_BUILT_IN_GAMA_VERSION() {
+	// if (BUILTIN_VERSION == null) {
+	// BUILTIN_VERSION = Platform.getProduct().getDefiningBundle().getVersion().toString();
+	// }
+	// return BUILTIN_VERSION;
+	// }
 
 	static public void setValuesProjectDescription(final IProject proj, final boolean builtin, final boolean inPlugin,
 		final boolean inTests, final Bundle bundle) {
@@ -584,7 +584,8 @@ public class WorkspaceModelsManager {
 			proj.setDescription(desc, IResource.FORCE, null);
 			// Addition of a special persistent property to indicate that the project is built-in
 			if ( builtin ) {
-				proj.setPersistentProperty(BUILTIN_PROPERTY, GET_BUILT_IN_GAMA_VERSION());
+				proj.setPersistentProperty(BUILTIN_PROPERTY,
+					Platform.getProduct().getDefiningBundle().getVersion().toString());
 			}
 		} catch (final CoreException e) {
 			e.printStackTrace();
