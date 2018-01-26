@@ -1,7 +1,8 @@
 /*********************************************************************************************
  *
- * 'GamlResourceDocumenter.java, in plugin msi.gama.lang.gaml, is part of the source code of the GAMA modeling and
- * simulation platform. (c) 2007-2016 UMI 209 UMMISCO IRD/UPMC & Partners
+ * 'GamlResourceDocumenter.java, in plugin msi.gama.lang.gaml, is part of the source code of the
+ * GAMA modeling and simulation platform.
+ * (c) 2007-2016 UMI 209 UMMISCO IRD/UPMC & Partners
  *
  * Visit https://github.com/gama-platform/gama for license information and developers contact.
  * 
@@ -40,7 +41,7 @@ import msi.gaml.descriptions.ModelDescription;
  * @since 13 avr. 2014
  *
  */
-@SuppressWarnings ({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class GamlResourceDocumenter implements IDocManager {
 
 	private final ConcurrentLinkedQueue<ModelDescription> cleanupTasks = new ConcurrentLinkedQueue();
@@ -85,25 +86,25 @@ public class GamlResourceDocumenter implements IDocManager {
 	static enum StringCompressor {
 		;
 		public static byte[] compress(final String text) {
-
-			try (final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					final OutputStream out = new DeflaterOutputStream(baos);) {
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try {
+				final OutputStream out = new DeflaterOutputStream(baos);
 				out.write(text.getBytes("ISO-8859-1"));
-				return baos.toByteArray();
+				out.close();
 			} catch (final IOException e) {
 				throw new AssertionError(e);
 			}
-
+			return baos.toByteArray();
 		}
 
 		public static String decompress(final byte[] bytes) {
-			try (final InputStream in = new InflaterInputStream(new ByteArrayInputStream(bytes));
-					final ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
+			final InputStream in = new InflaterInputStream(new ByteArrayInputStream(bytes));
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try {
 				final byte[] buffer = new byte[8192];
 				int len;
-				while ((len = in.read(buffer)) > 0) {
+				while ((len = in.read(buffer)) > 0)
 					baos.write(buffer, 0, len);
-				}
 				return new String(baos.toByteArray(), "ISO-8859-1");
 			} catch (final IOException e) {
 				throw new AssertionError(e);
@@ -113,22 +114,28 @@ public class GamlResourceDocumenter implements IDocManager {
 
 	@Override
 	public void setGamlDocumentation(final EObject object, final IGamlDescription description, final boolean replace) {
-		if (!shouldDocument(object)) { return; }
+		if (!shouldDocument(object))
+			return;
 		documentationQueue.add(new DocumentationTask(object, description, this));
 		documentationJob.schedule(50);
 	}
 
 	THashMap<EObject, IGamlDescription> getDocumentationCache(final Resource resource) {
-		if (resource == null) { return null; }
+		if (resource == null)
+			return null;
 		return GamlResourceServices.getDocumentationCache(resource);
 	}
 
 	// To be called once the validation has been done
 	@Override
 	public void document(final IDescription desc) {
-		if (desc == null) { return; }
+		if (desc == null) {
+			return;
+		}
 		final EObject e = desc.getUnderlyingElement(null);
-		if (e == null) { return; }
+		if (e == null) {
+			return;
+		}
 		setGamlDocumentation(e, desc, true);
 		desc.visitOwnChildren(documentingVisitor);
 
@@ -136,7 +143,9 @@ public class GamlResourceDocumenter implements IDocManager {
 
 	@Override
 	public IGamlDescription getGamlDocumentation(final IGamlDescription o) {
-		if (o == null) { return null; }
+		if (o == null) {
+			return null;
+		}
 		try {
 			return new DocumentationNode(o);
 		} catch (final IOException e) {
@@ -146,17 +155,23 @@ public class GamlResourceDocumenter implements IDocManager {
 
 	@Override
 	public IGamlDescription getGamlDocumentation(final EObject object) {
-		if (object == null) { return null; }
+		if (object == null) {
+			return null;
+		}
 		final THashMap<EObject, IGamlDescription> map = getDocumentationCache(object.eResource());
-		if (map == null) { return null; }
+		if (map == null)
+			return null;
 		return map.get(object);
 	}
 
 	private static boolean shouldDocument(final EObject object) {
-		if (object == null) { return false; }
+		if (object == null)
+			return false;
 		final Resource r = object.eResource();
-		if (r == null) { return false; }
-		if (!GamlResourceServices.isEdited(r)) { return false; }
+		if (r == null)
+			return false;
+		if (!GamlResourceServices.isEdited(r))
+			return false;
 		return true;
 	}
 

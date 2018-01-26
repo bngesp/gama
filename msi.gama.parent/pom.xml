@@ -98,8 +98,18 @@
 			<url>http://buchen.github.io/maven-repo</url>
 		</repository>
 		<repository>
-			<id>eclipse-mars</id>
-			<url>http://download.eclipse.org/releases/mars</url>
+			<id>eclipse-oxygenepp</id>
+			<url>http://download.eclipse.org/technology/epp/packages/oxygen/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>eclipse-oxygen</id>
+			<url>http://download.eclipse.org/releases/oxygen/201712201001/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>xtext</id>
+			<url>http://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.13.0/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
