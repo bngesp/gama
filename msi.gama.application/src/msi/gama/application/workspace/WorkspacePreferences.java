@@ -34,7 +34,7 @@ public class WorkspacePreferences {
 	static String selectedWorkspaceRootLocation;
 	static boolean applyPrefs;
 	public static final String WS_IDENTIFIER = ".gama_application_workspace";
-	public static final String MODEL_IDENTIFIER = getCurrentGamaStampString();
+	private static String MODEL_IDENTIFIER = null;
 
 	public static String getSelectedWorkspaceRootLocation() {
 		return selectedWorkspaceRootLocation;
@@ -99,7 +99,7 @@ public class WorkspacePreferences {
 		final IPreferencesService service = Platform.getPreferencesService();
 		IExportedPreferences prefs;
 
-		try (FileInputStream input = new FileInputStream(new File(targetDirectory + "/.gama.epf"))){
+		try (FileInputStream input = new FileInputStream(new File(targetDirectory + "/.gama.epf"))) {
 			prefs = service.readPreferences(input);
 			service.applyPreferences(prefs, WorkspacePreferences.getPreferenceFilters());
 		} catch (final IOException e) {} catch (final CoreException e) {}
@@ -129,18 +129,16 @@ public class WorkspacePreferences {
 		if ( !f.exists() ) {
 			if ( askCreate ) {
 				final boolean create =
-					MessageDialog
-					.openQuestion(Display.getDefault().getActiveShell(), "New Directory",
-						workspaceLocation +
-						" does not exist. Would you like to create a new workspace here" + (cloning
-							? ", copy the projects and preferences of an existing workspace into it, " : "") +
-						" and proceeed ?");
+					MessageDialog.openQuestion(Display.getDefault().getActiveShell(), "New Directory",
+						workspaceLocation + " does not exist. Would you like to create a new workspace here" +
+							(cloning ? ", copy the projects and preferences of an existing workspace into it, " : "") +
+							" and proceeed ?");
 				if ( create ) {
 					try {
 						f.mkdirs();
 						final File wsDot = new File(workspaceLocation + File.separator + WS_IDENTIFIER);
 						wsDot.createNewFile();
-						final File dotFile = new File(workspaceLocation + File.separator + MODEL_IDENTIFIER);
+						final File dotFile = new File(workspaceLocation + File.separator + getModelIdentifier());
 						dotFile.createNewFile();
 					} catch (final RuntimeException err) {
 						err.printStackTrace();
@@ -174,7 +172,7 @@ public class WorkspacePreferences {
 			if ( !wsTest.exists() ) {
 				final boolean create = MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "New Workspace",
 					"The directory '" + wsTest.getAbsolutePath() +
-					"' exists but is not identified as a GAMA workspace. \n\nWould you like to use it anyway ?");
+						"' exists but is not identified as a GAMA workspace. \n\nWould you like to use it anyway ?");
 				if ( create ) {
 					try {
 						f.mkdirs();
@@ -194,7 +192,7 @@ public class WorkspacePreferences {
 		} else {
 			if ( !wsTest.exists() ) { return "The selected directory is not a workspace directory"; }
 		}
-		final File dotFile = new File(workspaceLocation + File.separator + MODEL_IDENTIFIER);
+		final File dotFile = new File(workspaceLocation + File.separator + getModelIdentifier());
 		if ( !dotFile.exists() ) {
 			if ( fromDialog ) {
 				final boolean create = MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
@@ -217,6 +215,13 @@ public class WorkspacePreferences {
 			if ( !b ) { return ""; }
 		}
 		return null;
+	}
+
+	public static String getModelIdentifier() {
+		if ( MODEL_IDENTIFIER == null ) {
+			MODEL_IDENTIFIER = getCurrentGamaStampString();
+		}
+		return MODEL_IDENTIFIER;
 	}
 
 }
