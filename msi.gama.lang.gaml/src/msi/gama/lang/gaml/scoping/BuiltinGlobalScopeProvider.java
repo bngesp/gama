@@ -410,9 +410,7 @@ public class BuiltinGlobalScopeProvider extends ImportUriGlobalScopeProvider imp
 	}
 
 	public TerminalMapBasedScope getGlobalScope(final EClass eClass) {
-		if (GLOBAL_SCOPES.contains(eClass)) {
-			return GLOBAL_SCOPES.get(eClass);
-		}
+		if (GLOBAL_SCOPES.contains(eClass)) { return GLOBAL_SCOPES.get(eClass); }
 		THashMap<QualifiedName, IEObjectDescription> descriptions = getEObjectDescriptions(eClass);
 		if (descriptions == null) {
 			descriptions = EMPTY_MAP;
@@ -492,9 +490,7 @@ public class BuiltinGlobalScopeProvider extends ImportUriGlobalScopeProvider imp
 			final Predicate<IEObjectDescription> filter) {
 		IScope scope = getGlobalScope(type);
 		final Collection<URI> uniqueImportURIs = getAllImportedURIs(resource, resource.getResourceSet()).keySet();
-		if (uniqueImportURIs.size() == 1) {
-			return scope;
-		}
+		if (uniqueImportURIs.size() == 1) { return scope; }
 		final List<URI> urisAsList = Lists.newArrayList(uniqueImportURIs);
 		urisAsList.remove(resource.getURI());
 		Collections.reverse(urisAsList);
@@ -505,7 +501,7 @@ public class BuiltinGlobalScopeProvider extends ImportUriGlobalScopeProvider imp
 	}
 
 	public static IEObjectDescription getVar(final String name) {
-		return descriptions.get(eVar).get( QualifiedName.create(name));
+		return descriptions.get(eVar).get(QualifiedName.create(name));
 	}
 
 }
