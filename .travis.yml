@@ -23,7 +23,7 @@ script:
 - bash ./compile.sh		
 after_success:
 - bash ./validate_and_test.sh	
-- bash ./github-release.sh "$TRAVIS_COMMIT" 
+- bash ./githubReleaseOxygen.sh "$TRAVIS_COMMIT" 
 branches:
   only:
     - master
