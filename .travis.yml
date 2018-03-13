@@ -23,8 +23,9 @@ script:
 - bash ./compile.sh		
 after_success:
 - bash ./validate_and_test.sh	
-- bash ./githubReleaseOxygen.sh "$TRAVIS_COMMIT" 
+- echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- export SSHPASS=$USER_PWD 
+- bash ./publish.sh
 branches:
   only:
-    - master
     - oxygen
