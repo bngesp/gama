@@ -20,15 +20,15 @@ Visit http://gama-platform.org
    </configIni>
 
    <launcherArgs>
-      <programArgs>-nl ${target.nl} 
+      <programArgs>-clean
+-nl ${target.nl} 
 -data @noDefault 
 --launcher.defaultAction
 openFile
       </programArgs>
       <programArgsLin>--launcher.GTK_version 2
       </programArgsLin>
-      <vmArgs>-clean
--server
+      <vmArgs>-server
 -noverify
 -Xmn128m
 -Xss2m
@@ -78,7 +78,10 @@ openFile
    </launcher>
 
    <vm>
+      <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</linux>
+      <macos include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</macos>
       <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</solaris>
+      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
 
    <license>
