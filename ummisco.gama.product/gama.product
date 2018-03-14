@@ -27,7 +27,8 @@ openFile
       </programArgs>
       <programArgsLin>--launcher.GTK_version 2
       </programArgsLin>
-      <vmArgs>-server
+      <vmArgs>-clean
+-server
 -noverify
 -Xmn128m
 -Xss2m
@@ -63,7 +64,6 @@ openFile
    <launcher name="Gama">
       <linux icon="launcher_icons/icon.xpm"/>
       <macosx icon="launcher_icons/icon.icns"/>
-      <solaris/>
       <win useIco="true">
          <ico path="launcher_icons/icon.ico"/>
          <bmp
