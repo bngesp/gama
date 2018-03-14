@@ -12,40 +12,25 @@ package ummisco.gama.serializer.gamaType.reduced;
 
 import java.util.ArrayList;
 
+import msi.gama.common.interfaces.IKeyword;
 import msi.gama.runtime.IScope;
 import msi.gama.util.GamaList;
 import msi.gama.util.GamaListFactory;
-import msi.gama.util.IContainer;
 import msi.gaml.types.IType;
+import msi.gaml.types.Types;
 
 @SuppressWarnings({ "rawtypes" })
-public class GamaListReducer {
-	private final ArrayList<Object> valuesListReducer = new ArrayList<>();
-	private final IType contentTypeListReducer;
-
-	public GamaListReducer(final GamaList l) {
-		contentTypeListReducer = l.getType().getContentType();
-		
-		for (final Object p : l) {
-			valuesListReducer.add(p);
-		}
+public class GamaListReducerNetwork extends GamaListReducer{
+	
+	public GamaListReducerNetwork(final GamaList l)
+	{
+		super(l);
 	}
-
+	
 	public GamaList constructObject(final IScope scope) {
-		System.out.println("read "+contentTypeListReducer+ " "+valuesListReducer );
+	//	System.out.println("read "+contentTypeListReducer+ " "+valuesListReducer );
 	//	scope.getAgent().getPopulationFor(speciesName)
 	//	(microSpeciesName)getMicroSpecies(contentTypeListReducer);
-		return (GamaList) GamaListFactory.create(scope, contentTypeListReducer, valuesListReducer);
+		return (GamaList) GamaListFactory.create(scope, Types.NO_TYPE, this.getValuesListReducer());
 	}
-
-	public ArrayList<Object> getValuesListReducer() {
-		return valuesListReducer;
-	}
-
-	public IType getContentTypeListReducer() {
-		return contentTypeListReducer;
-	}
-	
-	
-	
 }

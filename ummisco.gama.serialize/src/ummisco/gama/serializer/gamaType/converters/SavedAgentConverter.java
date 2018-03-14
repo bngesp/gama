@@ -45,8 +45,8 @@ public class SavedAgentConverter implements Converter {
 		writer.setValue("" + savedAgt.getIndex());
 		writer.endNode();
 
-		final ArrayList<String> keys = new ArrayList<>();
-		final ArrayList<Object> datas = new ArrayList<>();
+		final ArrayList<String> keys = new ArrayList<String>();
+		final ArrayList<Object> datas = new ArrayList<Object>();
 
 		for (final String ky : savedAgt.getKeys()) {
 			keys.add(ky);
@@ -75,6 +75,8 @@ public class SavedAgentConverter implements Converter {
 
 	@Override
 	public Object unmarshal(final HierarchicalStreamReader reader, final UnmarshallingContext arg1) {
+		
+		System.out.println("read saved agent");
 		reader.moveDown();
 		final String indexStr = reader.getValue();
 		final Integer index = Integer.parseInt(indexStr);
@@ -87,11 +89,11 @@ public class SavedAgentConverter implements Converter {
 		final ArrayList<Object> datas = (ArrayList<Object>) arg1.convertAnother(null, ArrayList.class);
 		reader.moveUp();
 		reader.moveUp();
-		final Map<String, Object> localData = new HashMap<>();
+		final Map<String, Object> localData = new HashMap<String, Object>();
 		for (int ii = 0; ii < keys.size(); ii++) {
 			localData.put(keys.get(ii), datas.get(ii));
 		}
-
+		
 		reader.moveDown();
 		Map<String, List<SavedAgent>> inPop = null;
 		if (reader.getNodeName().equals("innerPopulations")) {
@@ -99,7 +101,7 @@ public class SavedAgentConverter implements Converter {
 			reader.moveUp();
 			reader.moveDown();
 		}
-		//		final Boolean isIMacroAgent = (Boolean) arg1.convertAnother(null, Boolean.class);
+		final Boolean isIMacroAgent = (Boolean) arg1.convertAnother(null, Boolean.class);
 		reader.moveUp();
 
 		final SavedAgent agtToReturn = new SavedAgent(index, localData, inPop);

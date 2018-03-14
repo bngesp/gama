@@ -64,6 +64,18 @@ import msi.gaml.types.Types;
 				type = IType.BOOL,
 				init = "false"),
 		@var (
+				name = SimpleBdiArchitecture.USE_NORMS,
+				type = IType.BOOL,
+				init = "false"),
+		@var (
+				name = SimpleBdiArchitecture.USE_PERSISTENCE,
+				type = IType.BOOL,
+				init = "false"),
+		@var (
+				name = SimpleBdiArchitecture.OBEDIENCE,
+				type = IType.FLOAT,
+				init = "1.0"),
+		@var (
 				name = SimpleBdiArchitecture.CHARISMA,
 				type = IType.FLOAT,
 				init = "1.0"),
@@ -84,7 +96,7 @@ import msi.gaml.types.Types;
 				type = IType.FLOAT,
 				init = "0.5"),
 		@var (
-				name = SimpleBdiArchitecture.AMICABILITY,
+				name = SimpleBdiArchitecture.AGREEABLENESS,
 				type = IType.FLOAT,
 				init = "0.5"),
 		@var (
@@ -116,6 +128,11 @@ import msi.gaml.types.Types;
 				of = MentalStateType.id,
 				init = "[]"),
 		@var (
+				name = SimpleBdiArchitecture.OBLIGATION_BASE,
+				type = IType.LIST,
+				of = MentalStateType.id,
+				init = "[]"),
+		@var (
 				name = SimpleBdiArchitecture.UNCERTAINTY_BASE,
 				type = IType.LIST,
 				of = MentalStateType.id,
@@ -126,9 +143,24 @@ import msi.gaml.types.Types;
 				of = MentalStateType.id,
 				init = "[]"),
 		@var (
+				name = SimpleBdiArchitecture.LAW_BASE,
+				type = IType.LIST,
+				of = IType.NONE,
+				init = "[]"),
+		@var (
 				name = SimpleBdiArchitecture.PLAN_BASE,
 				type = IType.LIST,
 				of = BDIPlanType.id,
+				init = "[]"),
+		@var (
+				name = SimpleBdiArchitecture.NORM_BASE,
+				type = IType.LIST,
+				of = NormType.id,
+				init = "[]"),
+		@var (
+				name = SimpleBdiArchitecture.SANCTION_BASE,
+				type = IType.LIST,
+				of = SanctionType.id,
 				init = "[]"),
 		@var (
 				name = SimpleBdiArchitecture.SOCIALLINK_BASE,
@@ -137,7 +169,10 @@ import msi.gaml.types.Types;
 				init = "[]"),
 		@var (
 				name = SimpleBdiArchitecture.CURRENT_PLAN,
-				type = IType.NONE) })
+				type = IType.NONE),
+		@var (
+				name = SimpleBdiArchitecture.CURRENT_NORM,
+				type = IType.NONE)})
 @skill (
 		name = SimpleBdiArchitecture.SIMPLE_BDI,
 		concept = { IConcept.BDI, IConcept.ARCHITECTURE })
@@ -153,12 +188,15 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 	public static final String USE_EMOTIONS_ARCHITECTURE = "use_emotions_architecture";
 	public static final String USE_SOCIAL_ARCHITECTURE = "use_social_architecture";
 	public static final String USE_PERSONALITY = "use_personality";
+	public static final String USE_PERSISTENCE = "use_persistence";
+	public static final String USE_NORMS = "use_norms";
+	public static final String OBEDIENCE = "obedience";
 	public static final String CHARISMA = "charisma";
 	public static final String RECEPTIVITY = "receptivity";
 	public static final String OPENNESS = "openness";
 	public static final String CONSCIENTIOUSNESS = "conscientiousness";
 	public static final String EXTRAVERSION = "extraversion";
-	public static final String AMICABILITY = "amicability";
+	public static final String AGREEABLENESS = "agreeableness";
 	public static final String NEUROTISM = "neurotism";
 
 	// TODO: Not implemented yet
@@ -185,13 +223,18 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 	public static final String IDEAL_BASE = "ideal_base";
 	public static final String REMOVE_DESIRE_AND_INTENTION = "desire_also";
 	public static final String DESIRE_BASE = "desire_base";
+	public static final String OBLIGATION_BASE = "obligation_base";
 	public static final String INTENTION_BASE = "intention_base";
 	public static final String EMOTION_BASE = "emotion_base";
 	public static final String SOCIALLINK_BASE = "social_link_base";
 	public static final String EVERY_VALUE = "every_possible_value";
 	public static final String PLAN_BASE = "plan_base";
+	public static final String NORM_BASE = "norm_base";
+	public static final String SANCTION_BASE = "sanction_base";
 	public static final String CURRENT_PLAN = "current_plan";
+	public static final String CURRENT_NORM = "current_norm";
 	public static final String UNCERTAINTY_BASE = "uncertainty_base";
+	public static final String LAW_BASE = "law_base";
 
 	// WARNING
 	// AD: These values depend on the scope (i.e. the agent)
@@ -201,11 +244,16 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 	protected final List<BDIPlan> _plans = new ArrayList<BDIPlan>();
 	protected final List<PerceiveStatement> _perceptions = new ArrayList<PerceiveStatement>();
 	protected final List<RuleStatement> _rules = new ArrayList<RuleStatement>();
+	protected final List<LawStatement> _laws = new ArrayList<LawStatement>();
+	protected final List<Norm> _norms = new ArrayList<Norm>();
+	protected final List<Sanction> _sanctions = new ArrayList<Sanction>();
 	protected int _plansNumber = 0;
 	protected int _perceptionNumber = 0;
 	protected boolean iscurrentplaninstantaneous = false;
-
+	protected int _lawsNumber = 0;
 	protected int _rulesNumber = 0;
+	protected int _normNumber = 0;
+	protected int _sanctionNumber = 0;
 
 	@Override
 	protected void clearBehaviors() {
@@ -213,6 +261,9 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		_plans.clear();
 		_rules.clear();
 		_perceptions.clear();
+		_laws.clear();
+		_norms.clear();
+		_sanctions.clear();
 	}
 
 	@Override
@@ -237,6 +288,18 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 			// final String statementKeyword = c.getDescription().getKeyword();
 			_rules.add((RuleStatement) c);
 			_rulesNumber++;
+		} else if (c instanceof LawStatement) {
+			// final String statementKeyword = c.getDescription().getKeyword();
+			_laws.add((LawStatement) c);
+			_lawsNumber++;
+		} else if (c instanceof NormStatement) {
+			// final String statementKeyword = c.getDescription().getKeyword();
+			_norms.add(new Norm((NormStatement) c));
+			_normNumber++;
+		} else if (c instanceof SanctionStatement) {
+			// final String statementKeyword = c.getDescription().getKeyword();
+			_sanctions.add(new Sanction((SanctionStatement) c));
+			_sanctionNumber++;
 		} else {
 			super.addBehavior(c);
 		}
@@ -253,10 +316,15 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 			Double expressivity = (Double) scope.getAgent().getAttribute(EXTRAVERSION);
 			Double neurotisme = (Double) scope.getAgent().getAttribute(NEUROTISM);
 			Double conscience = (Double) scope.getAgent().getAttribute(CONSCIENTIOUSNESS);
+			Double agreeableness = (Double) scope.getAgent().getAttribute(AGREEABLENESS);
 			scope.getAgent().setAttribute(CHARISMA, expressivity);
 			scope.getAgent().setAttribute(RECEPTIVITY, 1-neurotisme);
-			scope.getAgent().setAttribute(PERSISTENCE_COEFFICIENT_PLANS, conscience);
-			scope.getAgent().setAttribute(PERSISTENCE_COEFFICIENT_INTENTIONS, conscience);
+			scope.getAgent().setAttribute(PERSISTENCE_COEFFICIENT_PLANS, Maths.sqrt(scope, conscience));
+			scope.getAgent().setAttribute(PERSISTENCE_COEFFICIENT_INTENTIONS, Maths.sqrt(scope, conscience));
+			scope.getAgent().setAttribute(OBEDIENCE, Maths.sqrt(scope, (conscience+agreeableness)*0.5));
+		}
+		if(_sanctionNumber>0){
+			scope.getAgent().setAttribute(SANCTION_BASE, _sanctions);
 		}
 		if (_perceptionNumber > 0) {
 			for (int i = 0; i < _perceptionNumber; i++) {
@@ -270,9 +338,21 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 				if (agent.dead()) { return null; }
 			}
 		}
+//		cleanObligation(scope);
+		if (_lawsNumber > 0) {
+			for (int i = 0; i < _lawsNumber; i++) {
+				_laws.get(i).executeOn(scope);
+				if (agent.dead()) { return null; }
+			}
+		}
 		//computeEmotions(scope);
 		updateSocialLinks(scope);
 		Object result = executePlans(scope);
+		//Activer la violation des normes
+		updateNormViolation(scope);
+		//Mettre à jour le temps de vie des normes
+		updateNormLifetime(scope);
+		
 //		if (!agent.dead()) {
 			// Part that manage the lifetime of predicates
 		if(result!=null){
@@ -284,22 +364,31 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 
 	protected final Object executePlans(final IScope scope) {
 		Object result = null;
-		if (_plansNumber > 0) {
+		if (_plansNumber > 0 || _normNumber>0) {
 			boolean loop_instantaneous_plans = true;
 			while (loop_instantaneous_plans) {
 				loop_instantaneous_plans = false;
 				final IAgent agent = getCurrentAgent(scope);
+				agent.setAttribute(LAW_BASE, _laws);
 				agent.setAttribute(PLAN_BASE, _plans);
+				agent.setAttribute(NORM_BASE, _norms);
+				agent.setAttribute(SANCTION_BASE, _sanctions);
+				final Boolean usingPersistence = (Boolean) agent.getAttribute(USE_PERSISTENCE);
 				final GamaList<MentalState> intentionBase = (GamaList<MentalState>) (scope.hasArg(INTENTION_BASE)
 						? scope.getListArg(INTENTION_BASE) : (GamaList<MentalState>) agent.getAttribute(INTENTION_BASE));
-				final Double persistenceCoefficientPlans =
+				Double persistenceCoefficientPlans = 1.0;
+				Double persistenceCoefficientintention = 1.0;
+				if(usingPersistence){
+				persistenceCoefficientPlans =
 						scope.hasArg(PERSISTENCE_COEFFICIENT_PLANS) ? scope.getFloatArg(PERSISTENCE_COEFFICIENT_PLANS)
 								: (Double) agent.getAttribute(PERSISTENCE_COEFFICIENT_PLANS);
-				final Double persistenceCoefficientintention = scope.hasArg(PERSISTENCE_COEFFICIENT_INTENTIONS)
+				persistenceCoefficientintention = scope.hasArg(PERSISTENCE_COEFFICIENT_INTENTIONS)
 						? scope.getFloatArg(PERSISTENCE_COEFFICIENT_INTENTIONS)
 						: (Double) agent.getAttribute(PERSISTENCE_COEFFICIENT_INTENTIONS);
 
+				}
 				SimpleBdiPlanStatement _persistentTask = (SimpleBdiPlanStatement) agent.getAttribute(CURRENT_PLAN);
+				NormStatement _persistentNorm = (NormStatement) agent.getAttribute(CURRENT_NORM);
 				// RANDOMLY REMOVE (last)INTENTION
 				Boolean flipResultintention = msi.gaml.operators.Random.opFlip(scope, persistenceCoefficientintention);
 				while (!flipResultintention && intentionBase.size() > 0) {
@@ -312,24 +401,30 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 						addThoughts(scope, think);
 						_persistentTask = null;
 						agent.setAttribute(CURRENT_PLAN, _persistentTask);
+						_persistentNorm = null;
+						agent.setAttribute(CURRENT_NORM, _persistentNorm);
 					}
 				}
-				// If current intention has no plan or is on hold, choose a new
-				// Desire
+				// If current intention has no plan/norm or is on hold, choose a new
+				// Desire/Obligation
 				MentalState intentionTemp;
 				if(currentIntention(scope)!=null){
 					intentionTemp= new MentalState("Intention",currentIntention(scope).getPredicate());
 				}else{
 					intentionTemp= new MentalState("Intention",currentIntention(scope));
 				}
-				if (testOnHold(scope, intentionTemp) || listExecutablePlans(scope).isEmpty()) {
-					selectDesireWithHighestPriority(scope);
+				if (testOnHold(scope, intentionTemp) || currentIntention(scope)==null || currentIntention(scope).getPredicate()==null || (listExecutablePlans(scope).isEmpty() && listExecutableNorms(scope).isEmpty())) {
+					if(!selectObligationWithHighestPriority(scope)){
+						selectDesireWithHighestPriority(scope);
+					}
 					_persistentTask = null;
 					agent.setAttribute(CURRENT_PLAN, _persistentTask);
-
+					_persistentNorm = null;
+					agent.setAttribute(CURRENT_NORM, _persistentNorm);
 				}
 
 				_persistentTask = (SimpleBdiPlanStatement) agent.getAttribute(CURRENT_PLAN);
+				_persistentNorm = (NormStatement) agent.getAttribute(CURRENT_NORM);
 				// if((currentIntention(scope)!=null) && (_persistentTask!=null)
 				// &&
 				// !(_persistentTask._intention.value(scope).equals(currentIntention(scope)))){
@@ -350,9 +445,33 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 					}
 
 				}
-
+				if(currentIntention(scope)==null){
+					addThoughts(scope, "I want nothing...");
+					// update the lifetime of beliefs
+					updateLifeTimePredicates(scope);
+					updateEmotionsIntensity(scope);
+					return null;
+				}
+				//check and choose a norm to apply to the current intention
+				if(_persistentNorm == null && currentIntention(scope)!=null && currentIntention(scope).getPredicate() == null){
+					if(!selectObligationWithHighestPriority(scope)){
+						selectDesireWithHighestPriority(scope);
+					}
+					if (currentIntention(scope)!=null && currentIntention(scope).getPredicate() == null) {
+						addThoughts(scope, "I want nothing...");
+						// update the lifetime of beliefs
+						updateLifeTimePredicates(scope);
+						updateEmotionsIntensity(scope);
+						return null;
+					}
+					_persistentNorm = selectExecutableNormWithHighestPriority(scope);
+					agent.setAttribute(CURRENT_NORM, _persistentNorm);
+					if (currentIntention(scope)!=null && _persistentTask != null)
+						addThoughts(scope, "ok, new intention: " + currentIntention(scope).getPredicate() + " with norm "
+								+ _persistentNorm.getName());
+				}
 				// choose a plan for the current intention
-				if (_persistentTask == null && currentIntention(scope)!=null && currentIntention(scope).getPredicate() == null) {
+				if (_persistentNorm == null && _persistentTask == null && currentIntention(scope)!=null && currentIntention(scope).getPredicate() == null) {
 					selectDesireWithHighestPriority(scope);
 					if (currentIntention(scope)!=null && currentIntention(scope).getPredicate() == null) {
 						addThoughts(scope, "I want nothing...");
@@ -360,7 +479,6 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 						updateLifeTimePredicates(scope);
 						updateEmotionsIntensity(scope);
 						return null;
-
 					}
 					_persistentTask = selectExecutablePlanWithHighestPriority(scope);
 					agent.setAttribute(CURRENT_PLAN, _persistentTask);
@@ -369,10 +487,38 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 								+ _persistentTask.getName());
 				}
 				if (currentIntention(scope)!=null && _persistentTask == null && currentIntention(scope).getPredicate() != null) {
-					_persistentTask = selectExecutablePlanWithHighestPriority(scope);
-					agent.setAttribute(CURRENT_PLAN, _persistentTask);
+					_persistentNorm = selectExecutableNormWithHighestPriority(scope);
+					agent.setAttribute(CURRENT_NORM, _persistentNorm);
+					if(_persistentNorm==null){
+						_persistentTask = selectExecutablePlanWithHighestPriority(scope);
+						agent.setAttribute(CURRENT_PLAN, _persistentTask);
+					} else {
+						_persistentTask = null;
+						agent.setAttribute(CURRENT_PLAN, _persistentTask);
+					}
+					if (_persistentNorm != null) {
+						addThoughts(scope, "use norm : " + _persistentNorm.getName());
+					}
 					if (_persistentTask != null) {
 						addThoughts(scope, "use plan : " + _persistentTask.getName());
+					}
+				}
+				if(_persistentNorm !=null){
+					if (!agent.dead()) {
+						result = _persistentNorm.executeOn(scope);
+						boolean isExecuted = false;
+						if (_persistentNorm.getExecutedExpression() != null) {
+							isExecuted = msi.gaml.operators.Cast.asBool(scope,
+									_persistentNorm.getExecutedExpression().value(scope));
+						}
+						if (this.iscurrentplaninstantaneous) {
+							loop_instantaneous_plans = true;
+						}
+						if (isExecuted) {
+							_persistentNorm = null;
+							agent.setAttribute(CURRENT_NORM, _persistentNorm);
+
+						}
 					}
 				}
 				if (_persistentTask != null) {
@@ -405,11 +551,22 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		final Boolean is_probabilistic_choice = scope.hasArg(PROBABILISTIC_CHOICE)
 				? scope.getBoolArg(PROBABILISTIC_CHOICE) : (Boolean) agent.getAttribute(PROBABILISTIC_CHOICE);
 		final List<BDIPlan> listPlans = getPlans(scope);
+		final List<Norm> listNorm = getNorms(scope);
+		
 		if (is_probabilistic_choice) {
 			final List<MentalState> desireBaseTest = GamaListFactory.create();/*= getBase(scope, DESIRE_BASE)*/;
 			for(MentalState tempDesire : getBase(scope, DESIRE_BASE)){
-				for(BDIPlan tempPlan : listPlans){
-					SimpleBdiPlanStatement tempPlanStatement = tempPlan.getPlanStatement();
+				if(listPlans!=null){
+					for(BDIPlan tempPlan : listPlans){
+						SimpleBdiPlanStatement tempPlanStatement = tempPlan.getPlanStatement();
+						if(((Predicate) tempPlanStatement.getIntentionExpression().value(scope))
+								.equalsIntentionPlan(tempDesire.getPredicate())){
+							desireBaseTest.add(tempDesire);
+						}
+					}
+				}
+				for(Norm tempNorm : listNorm){
+					NormStatement tempPlanStatement = tempNorm.getNormStatement();
 					if(((Predicate) tempPlanStatement.getIntentionExpression().value(scope))
 							.equalsIntentionPlan(tempDesire.getPredicate())){
 						desireBaseTest.add(tempDesire);
@@ -467,15 +624,24 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 			final List<MentalState> desireBaseTest = GamaListFactory.create();
 			for(MentalState tempDesire : (GamaList<MentalState>) scope.getSimulation().getRandomGenerator()
 					.shuffle(getBase(scope, DESIRE_BASE))){
-				for(BDIPlan tempPlan : listPlans){
-					if (tempPlan == null) continue;
-					SimpleBdiPlanStatement tempPlanStatement = tempPlan.getPlanStatement();
-					if (tempPlan.getPlanStatement() == null) continue;
-					if ((tempPlan.getPlanStatement().getIntentionExpression() == null) || (tempPlan.getPlanStatement().getIntentionExpression().value(scope) == null)){
-						desireBaseTest.add(tempDesire);
-						continue;
+				if(listPlans!=null){
+					for(BDIPlan tempPlan : listPlans){
+						if (tempPlan == null) continue;
+						SimpleBdiPlanStatement tempPlanStatement = tempPlan.getPlanStatement();
+						if (tempPlan.getPlanStatement() == null) continue;
+						if ((tempPlan.getPlanStatement().getIntentionExpression() == null) || (tempPlan.getPlanStatement().getIntentionExpression().value(scope) == null)){
+							desireBaseTest.add(tempDesire);
+							continue;
+						}
+						if(((Predicate) tempPlanStatement.getIntentionExpression().value(scope))
+								.equalsIntentionPlan(tempDesire.getPredicate())){
+							desireBaseTest.add(tempDesire);
+						}
 					}
-					if(((Predicate) tempPlanStatement.getIntentionExpression().value(scope))
+				}
+				for(Norm tempNorm : listNorm){
+					NormStatement tempPlanStatement = tempNorm.getNormStatement();
+					if(tempPlanStatement.getIntentionExpression()!=null && ((Predicate) tempPlanStatement.getIntentionExpression().value(scope))
 							.equalsIntentionPlan(tempDesire.getPredicate())){
 						desireBaseTest.add(tempDesire);
 					}
@@ -525,9 +691,141 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 				}
 			}
 		}
+		
 		return false;
 	}
 
+	protected final Boolean selectObligationWithHighestPriority(final IScope scope) {
+		final IAgent agent = getCurrentAgent(scope);
+		final Boolean is_probabilistic_choice = scope.hasArg(PROBABILISTIC_CHOICE)
+				? scope.getBoolArg(PROBABILISTIC_CHOICE) : (Boolean) agent.getAttribute(PROBABILISTIC_CHOICE);
+		final List<Norm> listNorm = getNorms(scope);
+		if(listNorm!=null){
+		if (is_probabilistic_choice) {
+			final List<MentalState> obligationBaseTest = GamaListFactory.create();/*= getBase(scope, DESIRE_BASE)*/;
+			for(MentalState tempObligation : getBase(scope, OBLIGATION_BASE)){
+				for(Norm tempNorm : listNorm){
+					NormStatement tempPlanStatement = tempNorm.getNormStatement();
+					if(((Predicate) tempPlanStatement.getObligationExpression().value(scope))
+							.equalsIntentionPlan(tempObligation.getPredicate())){
+						obligationBaseTest.add(tempObligation);
+					}
+				}
+			}
+			final GamaList<MentalState> obligationBase = getBase(scope, OBLIGATION_BASE);
+			final GamaList<MentalState> intentionBase = getBase(scope, INTENTION_BASE);
+			if (obligationBase.size() > 0) {
+				MentalState newIntention = obligationBase.get(0)/*.anyValue(scope)*/;
+				double newIntStrength;
+				final double priority_list[] = new double[obligationBaseTest.size()/*.length(scope)*/];
+				for (int i = 0; i < obligationBaseTest.size()/*.length(scope)*/; i++) {
+					priority_list[i] = obligationBaseTest.get(i).getStrength();
+				}
+				final IList priorities = GamaListFactory.create(scope, Types.FLOAT, priority_list);
+				final int index_choice = msi.gaml.operators.Random.opRndChoice(scope, priorities);
+				newIntention = obligationBaseTest.get(index_choice);
+				newIntStrength = obligationBaseTest.get(index_choice).getStrength();
+				if (obligationBaseTest.size() > intentionBase.size()) {
+					while (intentionBase.contains(newIntention)) {
+						final int index_choice2 = msi.gaml.operators.Random.opRndChoice(scope, priorities);
+						newIntention = obligationBaseTest.get(index_choice2);
+						newIntStrength = obligationBaseTest.get(index_choice2).getStrength();
+					}
+				}
+				MentalState newIntentionState = null;
+				if(newIntention.getPredicate()!=null){
+					newIntentionState = new MentalState("Intention", newIntention.getPredicate(), newIntStrength, newIntention.getLifeTime(),scope.getAgent());
+				}
+				if(newIntention.getMentalState()!=null){
+					newIntentionState = new MentalState("Intention", newIntention.getMentalState(), newIntStrength, newIntention.getLifeTime(),scope.getAgent());
+				}
+				if (newIntention.getPredicate()!=null && newIntention.getPredicate().getSubintentions() == null) {
+					if (!intentionBase.contains(newIntentionState)) {
+						intentionBase.addValue(scope, newIntentionState);
+						return true;
+					}
+				} else {
+					if(newIntention.getPredicate()!=null){
+						for (int i = 0; i < newIntention.getPredicate().getSubintentions().size(); i++) {
+							if (!obligationBase.contains(newIntention.getPredicate().getSubintentions().get(i))) {
+								obligationBase.addValue(scope, newIntention.getPredicate().getSubintentions().get(i));
+							}
+						}
+						newIntention.getPredicate().setOnHoldUntil(newIntention.getPredicate().getSubintentions());
+						if (!intentionBase.contains(newIntentionState)) {
+							intentionBase.addValue(scope, newIntentionState);
+							return true;
+						}
+					}
+				}
+			}
+		} else {
+			final List<MentalState> obligationBaseTest = GamaListFactory.create();
+			for(MentalState tempObligation : (GamaList<MentalState>) scope.getSimulation().getRandomGenerator()
+					.shuffle(getBase(scope, OBLIGATION_BASE))){
+				for(Norm tempNorm : listNorm){
+					if (tempNorm == null) continue;
+					NormStatement tempNormStatement = tempNorm.getNormStatement();
+					if (tempNorm.getNormStatement() == null) continue;
+					if ((tempNorm.getNormStatement().getIntentionExpression() == null) || (tempNorm.getNormStatement().getIntentionExpression().value(scope) == null)){
+						obligationBaseTest.add(tempObligation);
+						continue;
+					}
+					if(tempNormStatement.getObligationExpression()!=null && ((Predicate) tempNormStatement.getObligationExpression().value(scope))
+							.equalsIntentionPlan(tempObligation.getPredicate())){
+						obligationBaseTest.add(tempObligation);
+					}
+				}
+			}
+			final GamaList<MentalState> obligationBase = getBase(scope, OBLIGATION_BASE);
+			final GamaList<MentalState> intentionBase = getBase(scope, INTENTION_BASE);
+			double maxpriority = Double.MIN_VALUE;
+			if (obligationBaseTest.size() > 0 && intentionBase != null) {
+				MentalState newIntention = null;// desireBase.anyValue(scope);
+				for (final MentalState oblig : obligationBaseTest) {
+
+					if (oblig.getStrength() > maxpriority) {
+						if (!intentionBase.contains(oblig)) {
+							maxpriority = oblig.getStrength();
+							newIntention = oblig;
+						}
+					}
+				}
+				if(newIntention!=null){
+				MentalState newIntentionState = null;
+				if(newIntention.getPredicate()!=null){
+					newIntentionState = new MentalState("Intention", newIntention.getPredicate(), maxpriority, newIntention.getLifeTime(),scope.getAgent());
+				}
+				if(newIntention.getMentalState()!=null){
+					newIntentionState = new MentalState("Intention", newIntention.getMentalState(), maxpriority, newIntention.getLifeTime(),scope.getAgent());
+				}
+				if (newIntention.getPredicate()!=null && newIntention.getPredicate().getSubintentions() == null) {
+					if (!intentionBase.contains(newIntentionState)) {
+						intentionBase.addValue(scope, newIntentionState);
+						return true;
+					}
+				} else {
+					if(newIntention.getPredicate()!=null){
+						for (int i = 0; i < newIntention.getPredicate().getSubintentions().size(); i++) {
+							if (!obligationBase.contains(newIntention.getPredicate().getSubintentions().get(i))) {
+								obligationBase.addValue(scope, newIntention.getPredicate().getSubintentions().get(i));
+							}
+						}
+						newIntention.getPredicate().setOnHoldUntil(newIntention.getPredicate().getSubintentions());
+						if (!intentionBase.contains(newIntentionState)) {
+							intentionBase.addValue(scope, newIntentionState);
+							return true;
+						}
+					}
+				}
+				}
+			}
+		}
+		}
+		return false;
+	}
+	
+	//Faire la même chose pour choisir la norm à appliquer, en l'appelant avant.
 	protected final SimpleBdiPlanStatement selectExecutablePlanWithHighestPriority(final IScope scope) {
 		final IAgent agent = getCurrentAgent(scope);
 		final Boolean is_probabilistic_choice = scope.hasArg(PROBABILISTIC_CHOICE)
@@ -596,6 +894,111 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		return resultStatement;
 	}
 
+	protected final NormStatement selectExecutableNormWithHighestPriority(final IScope scope) {
+		//Doit sélectionner une norme sociale ou une norme obligatoire
+		final IAgent agent = getCurrentAgent(scope);
+		Double obedienceValue = (Double) scope.getAgent().getAttribute("obedience");
+		final Boolean is_probabilistic_choice = scope.hasArg(PROBABILISTIC_CHOICE)
+				? scope.getBoolArg(PROBABILISTIC_CHOICE) : (Boolean) agent.getAttribute(PROBABILISTIC_CHOICE);
+
+		NormStatement resultStatement = null;
+
+		double highestPriority = Double.MIN_VALUE;
+		final List<NormStatement> temp_norm = new ArrayList<NormStatement>();
+		final IList priorities = GamaListFactory.create(Types.FLOAT);
+		for(Norm tempNorm : getNorms(scope)){
+				tempNorm.setSanctioned(false);;
+		}
+		
+		for (final Object Normstatement : scope.getSimulation().getRandomGenerator()
+				.shuffle(new ArrayList(_norms))) {
+			final NormStatement statement = ((Norm) Normstatement).getNormStatement();
+			final boolean isContextConditionSatisfied = statement.getContextExpression() == null
+					|| msi.gaml.operators.Cast.asBool(scope, statement.getContextExpression().value(scope));
+			boolean isIntentionConditionSatisfied = false;
+			if(statement.getIntentionExpression() != null && statement.getIntentionExpression().value(scope)!= null){
+				isIntentionConditionSatisfied = ((Predicate) statement.getIntentionExpression().value(scope))			
+							.equalsIntentionPlan(currentIntention(scope).getPredicate());
+			}
+			boolean isObligationConditionSatisfied = false;
+			if(statement.getObligationExpression() != null && statement.getObligationExpression().value(scope) != null){
+					isObligationConditionSatisfied = ((Predicate) statement.getObligationExpression().value(scope))
+							.equalsIntentionPlan(currentIntention(scope).getPredicate());
+			}
+			final boolean thresholdSatisfied = statement.getThreshold() == null
+					|| obedienceValue >= (Double) statement.getThreshold().value(scope);
+			
+			if(isContextConditionSatisfied && isObligationConditionSatisfied  && thresholdSatisfied){
+				if (is_probabilistic_choice) {
+					temp_norm.add(statement);
+				} else {
+					double currentPriority = 1.0;
+					if (statement.getFacet(SimpleBdiArchitecture.PRIORITY) != null) {
+						currentPriority =
+								msi.gaml.operators.Cast.asFloat(scope, statement.getPriorityExpression().value(scope));
+					}
+
+					if (highestPriority < currentPriority) {
+						highestPriority = currentPriority;
+						resultStatement = statement;
+					}
+//					Norm normToChange = null;
+//					for(Norm tempNorm : getNorms(scope)){
+//						if(tempNorm.getNormStatement()!=null && tempNorm.getNormStatement().equals(statement)){
+//							normToChange=tempNorm;
+//						}
+//					}
+//					if(normToChange!=null){
+//						normToChange.setSanctioned(false);
+//						removeFromBase(scope,normToChange);
+//						addToBase(scope,normToChange);
+//					}
+				}
+			}
+					
+			if (isContextConditionSatisfied && isIntentionConditionSatisfied && thresholdSatisfied) {
+				if (is_probabilistic_choice) {
+					temp_norm.add(statement);
+				} else {
+					double currentPriority = 1.0;
+					if (statement.getFacet(SimpleBdiArchitecture.PRIORITY) != null) {
+						currentPriority =
+								msi.gaml.operators.Cast.asFloat(scope, statement.getPriorityExpression().value(scope));
+					}
+
+					if (highestPriority < currentPriority) {
+						highestPriority = currentPriority;
+						resultStatement = statement;
+					}
+				}
+			}
+		}
+		if (is_probabilistic_choice) {
+			if (!temp_norm.isEmpty()) {
+				for (final Object statement : temp_norm) {
+					if (((NormStatement) statement).hasFacet(PRIORITY)) {
+						priorities.add(msi.gaml.operators.Cast.asFloat(scope,
+								((SimpleBdiPlanStatement) statement).getPriorityExpression().value(scope)));
+					} else {
+						priorities.add(1.0);
+					}
+				}
+				final int index_plan = msi.gaml.operators.Random.opRndChoice(scope, priorities);
+				resultStatement = temp_norm.get(index_plan);
+			}
+		}
+
+		iscurrentplaninstantaneous = false;
+		if (resultStatement != null) {
+			if (resultStatement.getFacet(SimpleBdiArchitecture.INSTANTANEAOUS) != null) {
+				iscurrentplaninstantaneous = msi.gaml.operators.Cast.asBool(scope,
+						resultStatement.getInstantaneousExpression().value(scope));
+			}
+		}
+
+		return resultStatement;
+	}
+	
 	protected void updateLifeTimePredicates(final IScope scope) {
 		for (final MentalState mental : getBase(scope, BELIEF_BASE)) {
 			mental.isUpdated = false;
@@ -607,6 +1010,9 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 			mental.isUpdated = false;
 		}
 		for (final MentalState mental : getBase(scope, UNCERTAINTY_BASE)) {
+			mental.isUpdated = false;
+		}
+		for (final MentalState mental : getBase(scope, OBLIGATION_BASE)) {
 			mental.isUpdated = false;
 		}
 		for (final MentalState mental : getBase(scope, BELIEF_BASE)) {
@@ -632,6 +1038,12 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		}
 		for (final MentalState mental : listUncertaintyLifeTimeNull(scope)) {
 			removeUncertainty(scope, mental);
+		}
+		for (final MentalState mental : getBase(scope, OBLIGATION_BASE)) {
+			mental.updateLifetime();
+		}
+		for (final MentalState mental : listObligationLifeTimeNull(scope)) {
+			removeObligation(scope, mental);
 		}
 	}
 
@@ -674,9 +1086,18 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		}
 		return tempPred;
 	}
+	
+	private List<MentalState> listObligationLifeTimeNull(final IScope scope) {
+		final List<MentalState> tempPred = new ArrayList<MentalState>();
+		for (final MentalState mental : getBase(scope, OBLIGATION_BASE)) {
+			if (mental.getLifeTime() == 0) {
+				tempPred.add(mental);
+			}
+		}
+		return tempPred;
+	}
 
 	protected final List<SimpleBdiPlanStatement> listExecutablePlans(final IScope scope) {
-		final IAgent agent = getCurrentAgent(scope);
 		final List<SimpleBdiPlanStatement> plans = new ArrayList<SimpleBdiPlanStatement>();
 		for (final Object BDIPlanstatement : scope.getRandom().shuffle(new ArrayList(_plans))) {
 			final SimpleBdiPlanStatement statement = ((BDIPlan) BDIPlanstatement).getPlanStatement();
@@ -685,17 +1106,56 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 					&& !msi.gaml.operators.Cast.asBool(scope, statement.getContextExpression().value(scope))) {
 				continue;
 			}
-			if(currentIntention(scope)!=null){
-				if (statement.getIntentionExpression() == null || ((Predicate) statement.getIntentionExpression().value(scope)) == null
-						|| ((Predicate) statement.getIntentionExpression().value(scope))
-								.equalsIntentionPlan(currentIntention(scope).getPredicate())) {
-					plans.add(statement);
+				if(currentIntention(scope)!=null){
+					if (statement.getIntentionExpression() == null || ((Predicate) statement.getIntentionExpression().value(scope)) == null
+							|| ((Predicate) statement.getIntentionExpression().value(scope))
+									.equalsIntentionPlan(currentIntention(scope).getPredicate())) {
+						plans.add(statement);
+					}
 				}
-			}
+//			}
 		}
 		return plans;
 	}
 
+	protected final List<NormStatement> listExecutableNorms(final IScope scope) {
+		final List<NormStatement> norms = new ArrayList<NormStatement>();
+		for (final Object Normstatement : scope.getRandom().shuffle(new ArrayList(_norms))) {
+			final NormStatement statement = ((Norm) Normstatement).getNormStatement();
+
+			if (statement.getContextExpression() != null
+					&& !msi.gaml.operators.Cast.asBool(scope, statement.getContextExpression().value(scope))) {
+				continue;
+			}
+				if(currentIntention(scope)!=null){
+					if (statement.getIntentionExpression() != null && ((Predicate) statement.getIntentionExpression().value(scope)) != null
+							&& ((Predicate) statement.getIntentionExpression().value(scope))
+									.equalsIntentionPlan(currentIntention(scope).getPredicate())) {
+						norms.add(statement);
+					}
+					if (statement.getObligationExpression() != null && ((Predicate) statement.getObligationExpression().value(scope)) != null
+							&& ((Predicate) statement.getObligationExpression().value(scope))
+									.equalsIntentionPlan(currentIntention(scope).getPredicate())) {
+						norms.add(statement);
+					}
+				}
+			}
+		
+		return norms;
+	}
+	
+	private void cleanObligation(IScope scope){
+		final List<MentalState> tempPred = new ArrayList<MentalState>();
+		for (final MentalState mental : getBase(scope, OBLIGATION_BASE)) {
+			if (mental.getLifeTime() <= 0) {
+				tempPred.add(mental);
+			}
+		}
+		for (final MentalState mental : tempPred) {
+			removeObligation(scope, mental);
+		}
+	}
+	
 	public GamaList<String> getThoughts(final IScope scope) {
 		final IAgent agent = getCurrentAgent(scope);
 		final GamaList<String> thoughts = (GamaList<String>) agent.getAttribute(LAST_THOUGHTS);
@@ -873,6 +1333,24 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		return result;
 	}
 
+	public static List<LawStatement> getLaws(final IScope scope) {
+		final IAgent agent = scope.getAgent();
+		return (List<LawStatement>) (scope.hasArg(LAW_BASE) ? scope.getListArg(LAW_BASE)
+				: (List<LawStatement>) agent.getAttribute(LAW_BASE));
+	}
+	
+	public static List<Norm> getNorms(final IScope scope) {
+		final IAgent agent = scope.getAgent();
+		return (List<Norm>) (scope.hasArg(NORM_BASE) ? scope.getListArg(NORM_BASE)
+				: (List<Norm>) agent.getAttribute(NORM_BASE));
+	}
+	
+	public static List<Sanction> getSanctions(final IScope scope) {
+		final IAgent agent = scope.getAgent();
+		return (List<Sanction>) (scope.hasArg(SANCTION_BASE) ? scope.getListArg(SANCTION_BASE)
+				: (List<Norm>) agent.getAttribute(SANCTION_BASE));
+	}
+	
 	public static GamaList<MentalState> getBase(final IScope scope, final String basename) {
 		final IAgent agent = scope.getAgent();
 		return (GamaList<MentalState>) (scope.hasArg(basename) ? scope.getListArg(basename)
@@ -905,6 +1383,11 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		final GamaList<SocialLink> factBase = getSocialBase(scope, factBaseName);
 		return factBase.remove(socialItem);
 	}
+	
+	public static boolean removeFromBase(final IScope scope, final Norm normItem){
+		final List<Norm> factBase = getNorms(scope);
+		return factBase.remove(normItem);
+	}
 
 	public static boolean addToBase(final IScope scope, final MentalState mentalItem, final String factBaseName) {
 		return addToBase(scope, mentalItem, getBase(scope, factBaseName));
@@ -918,24 +1401,37 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		return addToBase(scope, socialItem, getSocialBase(scope, factBaseName));
 	}
 
+	public static boolean addToBase(final IScope scope, final Norm normItem){
+		final List<Norm> factBase = getNorms(scope);
+		return factBase.add(normItem);
+	}
+	
 	public static boolean addToBase(final IScope scope, final MentalState mentalItem,
 			final GamaList<MentalState> factBase) {
-
-		factBase.remove(mentalItem);
+		if(!factBase.contains(mentalItem)){
+//		factBase.remove(mentalItem);
 
 //		mentalItem.setDate(scope.getClock().getTimeElapsedInSeconds());
 		return factBase.add(mentalItem);
+		}
+		return false;
 	}
 
 	public static boolean addToBase(final IScope scope, final Emotion predicateItem, final GamaList<Emotion> factBase) {
 		factBase.remove(predicateItem);
-		return factBase.add(predicateItem);
+//		if(!factBase.contains(predicateItem)){
+			return factBase.add(predicateItem);
+//		}
+//		return false;
 	}
 
 	public static boolean addToBase(final IScope scope, final SocialLink socialItem,
 			final GamaList<SocialLink> factBase) {
 		factBase.remove(socialItem);
-		return factBase.add(socialItem);
+//		if(!factBase.contains(socialItem)){
+			return factBase.add(socialItem);
+//		}
+//		return false;
 	}
 
 	//le add belief crée les émotion joie, sadness, satisfaction, disapointment, relief, fear_confirmed, pride, shame, admiration, reproach
@@ -961,9 +1457,14 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 			if (getBase(scope, SimpleBdiArchitecture.INTENTION_BASE).contains(predicateDirect)) {
 				removeFromBase(scope, predicateDirect, DESIRE_BASE);
 				removeFromBase(scope, predicateDirect, INTENTION_BASE);
+				scope.getAgent().setAttribute(CURRENT_PLAN, null);
+				scope.getAgent().setAttribute(CURRENT_NORM, null);
 			}
 			if (getBase(scope, SimpleBdiArchitecture.UNCERTAINTY_BASE).contains(predicateDirect)) {
 				removeFromBase(scope, predicateDirect, UNCERTAINTY_BASE);
+			}
+			if (getBase(scope, SimpleBdiArchitecture.OBLIGATION_BASE).contains(predicateDirect)) {
+				removeFromBase(scope, predicateDirect, OBLIGATION_BASE);
 			}
 			for (final MentalState predTest : getBase(scope, SimpleBdiArchitecture.UNCERTAINTY_BASE)) {
 				if (predTest.getPredicate()!=null && predicateDirect.getPredicate()!=null && predTest.getPredicate().equalsButNotTruth(predicateDirect.getPredicate())) {
@@ -2360,9 +2861,11 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 			getBase(scope, INTENTION_BASE).remove(temp);
 			if (dodesire) {
 				getBase(scope, DESIRE_BASE).remove(temp);
+				getBase(scope, OBLIGATION_BASE).remove(temp);
 			}
 			if (predicateDirect.equals(currentIntention(scope)))
 				scope.getAgent().setAttribute(CURRENT_PLAN, null);
+				scope.getAgent().setAttribute(CURRENT_NORM, null);
 			for (final Object statement : getBase(scope, SimpleBdiArchitecture.INTENTION_BASE)) {
 				if(((MentalState) statement).getPredicate()!=null){
 					final List<MentalState> statementSubintention = ((MentalState) statement).getPredicate().getSubintentions();
@@ -2455,6 +2958,12 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		return true;
 	}
 
+	public static Boolean clearIntention(final IScope scope) {
+		getBase(scope, INTENTION_BASE).clear();
+		scope.getAgent().setAttribute(CURRENT_PLAN, null);
+		return true;
+	}
+	
 	@action (
 			name = "remove_all_beliefs",
 			args = { @arg (
@@ -3234,7 +3743,7 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 										Double decay = 0.0;
 										if(use_personality){
 											Double neurotisme = (Double) scope.getAgent().getAttribute(NEUROTISM);
-											Double amicability = (Double) scope.getAgent().getAttribute(AMICABILITY);
+											Double amicability = (Double) scope.getAgent().getAttribute(AGREEABLENESS);
 											intensity = emo.getIntensity() * temp.getLiking() * (1-(0.5-amicability));
 											if(intensity>1.0){
 												intensity=1.0;
@@ -3254,7 +3763,7 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 										Double decay = 0.0;
 										if(use_personality){
 											Double neurotisme = (Double) scope.getAgent().getAttribute(NEUROTISM);
-											Double amicability = (Double) scope.getAgent().getAttribute(AMICABILITY);
+											Double amicability = (Double) scope.getAgent().getAttribute(AGREEABLENESS);
 											intensity = emo.getIntensity() * -temp.getLiking() * (1+(0.5-amicability));
 											if(intensity>1.0){
 												intensity=1.0;
@@ -3283,7 +3792,7 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 										Double decay = 0.0;
 										if(use_personality){
 											Double neurotisme = (Double) scope.getAgent().getAttribute(NEUROTISM);
-											Double amicability = (Double) scope.getAgent().getAttribute(AMICABILITY);
+											Double amicability = (Double) scope.getAgent().getAttribute(AGREEABLENESS);
 											intensity = emo.getIntensity() * temp.getLiking() * (1-(0.5-amicability));
 											if(intensity>1.0){
 												intensity=1.0;
@@ -3303,7 +3812,7 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 										Double decay = 0.0;
 										if(use_personality){
 											Double neurotisme = (Double) scope.getAgent().getAttribute(NEUROTISM);
-											Double amicability = (Double) scope.getAgent().getAttribute(AMICABILITY);
+											Double amicability = (Double) scope.getAgent().getAttribute(AGREEABLENESS);
 											intensity = emo.getIntensity() * -temp.getLiking() * (1+(0.5-amicability));
 											if(intensity>1.0){
 												intensity=1.0;
@@ -4205,7 +4714,7 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 						optional = true,
 						doc = @doc ("predicate to add as an ideal")) ,
 					@arg (
-						name = "praiseworthyness",
+						name = "praiseworthiness",
 						type = IType.FLOAT,
 						optional = true,
 						doc = @doc ("the praiseworthiness value of the ideal")),
@@ -4248,7 +4757,7 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 						optional = true,
 						doc = @doc ("mental state to add as an ideal")),
 					@arg (
-						name = "praiseworthyness",
+						name = "praiseworthiness",
 						type = IType.FLOAT,
 						optional = true,
 						doc = @doc ("the praiseworthiness value of the ideal")),
@@ -4291,7 +4800,7 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 						optional = true,
 						doc = @doc ("emotion to add as an ideal")),
 					@arg (
-						name = "praiseworthyness",
+						name = "praiseworthiness",
 						type = IType.FLOAT,
 						optional = true,
 						doc = @doc ("the praiseworthiness value of the ideal")),
@@ -4465,6 +4974,138 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		return true;
 	}
 	
+	public static Boolean addObligation(final IScope scope, final MentalState predicate) {
+		predicate.setOwner(scope.getAgent());
+		clearIntention(scope);
+		final IAgent agent = scope.getAgent();
+		agent.setAttribute(SimpleBdiArchitecture.CURRENT_PLAN, null);
+		return addToBase(scope, predicate, OBLIGATION_BASE);
+	}
+
+	@action (
+			name = "add_obligation",
+			args = { @arg (
+						name = PREDICATE,
+						type = PredicateType.id,
+						optional = true,
+						doc = @doc ("predicate to add as an obligation")) ,
+					@arg (
+						name = "strength",
+						type = IType.FLOAT,
+						optional = true,
+						doc = @doc ("the strength value of the obligation")),
+					@arg (
+							name = "lifetime",
+							type = IType.INT,
+							optional = true,
+							doc = @doc ("the lifetime of the obligation"))},
+			doc = @doc (
+					value = "add a predicate in the ideal base.",
+					returns = "true it works.",
+					examples = { @example ("") }))
+	public Boolean primAddObligation(final IScope scope) throws GamaRuntimeException {
+		final Predicate predicateDirect =
+				(Predicate) (scope.hasArg(PREDICATE) ? scope.getArg(PREDICATE, PredicateType.id) : null);
+		final Double stre =
+				(Double) (scope.hasArg("strength") ? scope.getArg("strength", IType.FLOAT) : null);
+		final int life = (int) (scope.hasArg("lifetime") ? scope.getArg("lifetime", IType.INT) : -1);
+		MentalState temp;
+		if(predicateDirect!=null){
+			temp = new MentalState("Obligation",predicateDirect);
+		} else {
+			temp = new MentalState();
+		}
+		if(stre!=null){
+			temp.setStrength(stre);
+		}
+		if(life>0){
+			temp.setLifeTime(life);
+		}
+		temp.setOwner(scope.getAgent());
+		return addObligation(scope, temp);
+	}
+	
+	@action (
+			name = "get_obligation",
+			args = { @arg (
+					name = PREDICATE,
+					type = PredicateType.id,
+					optional = false,
+					doc = @doc ("predicate to return")) },
+			doc = @doc (
+					value = "get the predicates in the obligation base (if several, returns the first one).",
+					returns = "the obligation if it is in the base.",
+					examples = { @example ("get_obligation(new_predicate(\"has_water\", true))") }))
+	public MentalState getObligation(final IScope scope) throws GamaRuntimeException {
+		final Predicate predicateDirect =
+				(Predicate) (scope.hasArg(PREDICATE) ? scope.getArg(PREDICATE, PredicateType.id) : null);
+		if (predicateDirect != null) {
+			for (final MentalState pred : getBase(scope, OBLIGATION_BASE)) {
+				if (pred.getPredicate() != null && predicateDirect.equals(pred.getPredicate())) { return pred; }
+			}
+		}
+		return null;
+	}
+	
+
+	public static Boolean hasObligation(final IScope scope, final MentalState predicateDirect) {
+		return getBase(scope, OBLIGATION_BASE).contains(predicateDirect);
+	}
+
+	@action (
+			name = "has_obligation",
+			args = { @arg (
+					name = PREDICATE,
+					type = PredicateType.id,
+					optional = true,
+					doc = @doc ("predicate to check")) },
+			doc = @doc (
+					value = "check if the predicates is in the obligation base.",
+					returns = "true if it is in the base.",
+					examples = { @example ("") }))
+	public Boolean primTestObligation(final IScope scope) throws GamaRuntimeException {
+		final Predicate predicateDirect =
+				(Predicate) (scope.hasArg(PREDICATE) ? scope.getArg(PREDICATE, PredicateType.id) : null);
+		MentalState temp = new MentalState("Obligation",predicateDirect);
+		if (predicateDirect != null) { return hasObligation(scope, temp); }
+		return false;
+	}
+
+	public static Boolean removeObligation(final IScope scope, final MentalState pred) {
+		return getBase(scope, OBLIGATION_BASE).remove(pred);
+	}
+
+	@action (
+			name = "remove_obligation",
+			args = { @arg (
+					name = PREDICATE,
+					type = PredicateType.id,
+					optional = true,
+					doc = @doc ("predicate to remove")) },
+			doc = @doc (
+					value = "removes the predicates from the obligation base.",
+					returns = "true if it is in the base.",
+					examples = { @example ("") }))
+	public Boolean primRemoveObligation(final IScope scope) throws GamaRuntimeException {
+		final Predicate predicateDirect =
+				(Predicate) (scope.hasArg(PREDICATE) ? scope.getArg(PREDICATE, PredicateType.id) : null);
+		MentalState temp = new MentalState("Obligation",predicateDirect);
+		if (predicateDirect != null) { return removeObligation(scope, temp); }
+		return false;
+	}
+	
+	
+	@action (
+			name = "clear_obligations",
+			doc = @doc (
+					value = "clear the obligation base",
+					returns = "true if the base is cleared correctly",
+					examples = { @example ("") }))
+	public Boolean primClearObligation(final IScope scope) {
+		getBase(scope, OBLIGATION_BASE).clear();
+		return true;
+	}
+	
 	@action (
 			name = "add_social_link",
 			args = { @arg (
@@ -4503,13 +5144,31 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 					optional = false,
 					doc = @doc ("social link to check")) },
 			doc = @doc (
-					value = "get the social linke (if several, returns the first one).",
+					value = "get the social link (if several, returns the first one).",
 					returns = "the social link if it is in the base.",
 					examples = { @example ("get_social_link(new_social_link(agentA))") }))
 	public SocialLink getSocialLink(final IScope scope) throws GamaRuntimeException {
 		final SocialLink socialDirect =
 				(SocialLink) (scope.hasArg(SOCIALLINK) ? scope.getArg(SOCIALLINK, SocialLinkType.id) : null);
 		if (socialDirect != null) { return getSocialLink(scope, socialDirect); }
+		return null;
+	}
+	
+	@action (
+			name = "get_social_link_with_agent",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = false,
+					doc = @doc ("an agent with who I get a social link")) },
+			doc = @doc (
+					value = "get the social link with the agent concerned (if several, returns the first one).",
+					returns = "the social link if it is in the base.",
+					examples = { @example ("get_social_link_with_agent(agentA)") }))
+	public SocialLink getSocialLinkWithAgent(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		if (agentDirect != null) { return getSocialLink(scope,new SocialLink(agentDirect)); }
 		return null;
 	}
 
@@ -4536,13 +5195,31 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 					value = "check if the social link base.",
 					returns = "true if it is in the base.",
 					examples = { @example ("") }))
-	public Boolean primTestSocial(final IScope scope) throws GamaRuntimeException {
+	public Boolean primTestSocialWithAgent(final IScope scope) throws GamaRuntimeException {
 		final SocialLink socialDirect =
 				(SocialLink) (scope.hasArg(SOCIALLINK) ? scope.getArg(SOCIALLINK, SocialLinkType.id) : null);
 		if (socialDirect != null) { return hasSocialLink(scope, socialDirect); }
 		return false;
 	}
 
+	@action (
+			name = "has_social_link_with_agent",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = true,
+					doc = @doc ("an agent with who I want to check if I have a social link")) },
+			doc = @doc (
+					value = "check if the social link base.",
+					returns = "true if it is in the base.",
+					examples = { @example ("") }))
+	public Boolean primTestSocial(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		if (agentDirect != null) { return hasSocialLink(scope, new SocialLink(agentDirect)); }
+		return false;
+	}
+	
 	public static Boolean removeSocialLink(final IScope scope, final SocialLink socialDirect) {
 		return getSocialBase(scope, SOCIALLINK_BASE).remove(socialDirect);
 	}
@@ -4558,10 +5235,28 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 					value = "removes the social link from the social relation base.",
 					returns = "true if it is in the base.",
 					examples = { @example ("") }))
-	public Boolean primRemoveSocialLink(final IScope scope) throws GamaRuntimeException {
+	public Boolean primRemoveSocialLinkWithAgent(final IScope scope) throws GamaRuntimeException {
 		final SocialLink socialDirect =
 				(SocialLink) (scope.hasArg(SOCIALLINK) ? scope.getArg(SOCIALLINK, SocialLinkType.id) : null);
 		if (socialDirect != null) { return removeSocialLink(scope, socialDirect); }
+		return false;
+	}
+	
+	@action (
+			name = "remove_social_link_with_agent",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = true,
+					doc = @doc ("an agent with who I get the social link to remove")) },
+			doc = @doc (
+					value = "removes the social link from the social relation base.",
+					returns = "true if it is in the base.",
+					examples = { @example ("") }))
+	public Boolean primRemoveSocialLink(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		if (agentDirect != null) { return removeSocialLink(scope, new SocialLink(agentDirect)); }
 		return false;
 	}
 	
@@ -4576,6 +5271,186 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		return true;
 	}
 	
+	
+	@action (
+			name = "change_liking",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = true,
+					doc = @doc ("an agent with who I get a social link")),
+					@arg (
+							name = "liking",
+							type = IType.FLOAT,
+							optional = true,
+							doc = @doc ("a value to change the liking value"))},
+					doc = @doc (
+							value = "changes the liking value of the social relation with the agent specified.",
+							returns = "true if it worked.",
+							examples = { @example ("") })
+			)
+	public Boolean primChangeLiking(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		final Double likingDirect =
+				(Double) (scope.hasArg("liking") ? scope.getArg("liking", IType.FLOAT) : 0.0);
+		if (agentDirect != null) { 
+			SocialLink tempSocial = getSocialLink(scope,new SocialLink(agentDirect));
+			tempSocial.setLiking(tempSocial.getLiking()+likingDirect);
+			if(tempSocial.getLiking()>1.0){
+				tempSocial.setLiking(1.0);
+			}
+			if(tempSocial.getLiking()<-1.0){
+				tempSocial.setLiking(-1.0);
+			}
+			return true;
+			}
+		return false;
+	}
+	
+	@action (
+			name = "change_dominance",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = true,
+					doc = @doc ("an agent with who I get a social link")),
+					@arg (
+							name = "dominance",
+							type = IType.FLOAT,
+							optional = true,
+							doc = @doc ("a value to change the dominance value"))},
+					doc = @doc (
+							value = "changes the dominance value of the social relation with the agent specified.",
+							returns = "true if it worked.",
+							examples = { @example ("") })
+			)
+	public Boolean primChangeDominance(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		final Double dominanceDirect =
+				(Double) (scope.hasArg("dominance") ? scope.getArg("dominance", IType.FLOAT) : 0.0);
+		if (agentDirect != null) { 
+			SocialLink tempSocial = getSocialLink(scope,new SocialLink(agentDirect));
+			tempSocial.setDominance(tempSocial.getDominance()+dominanceDirect);
+			if(tempSocial.getDominance()>1.0){
+				tempSocial.setDominance(1.0);
+			}
+			if(tempSocial.getDominance()<-1.0){
+				tempSocial.setDominance(-1.0);
+			}
+			return true;
+			}
+		return false;
+	}
+	
+	@action (
+			name = "change_solidarity",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = true,
+					doc = @doc ("an agent with who I get a social link")),
+					@arg (
+							name = "solidarity",
+							type = IType.FLOAT,
+							optional = true,
+							doc = @doc ("a value to change the solidarity value"))},
+					doc = @doc (
+							value = "changes the solidarity value of the social relation with the agent specified.",
+							returns = "true if it worked.",
+							examples = { @example ("") })
+			)
+	public Boolean primChangeSolidarity(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		final Double solidarityDirect =
+				(Double) (scope.hasArg("solidarity") ? scope.getArg("solidarity", IType.FLOAT) : 0.0);
+		if (agentDirect != null) { 
+			SocialLink tempSocial = getSocialLink(scope,new SocialLink(agentDirect));
+			tempSocial.setSolidarity(tempSocial.getSolidarity()+solidarityDirect);
+			if(tempSocial.getSolidarity()>1.0){
+				tempSocial.setSolidarity(1.0);
+			}
+			if(tempSocial.getSolidarity()<0.0){
+				tempSocial.setSolidarity(-1.0);
+			}
+			return true;
+			}
+		return false;
+	}
+	
+	@action (
+			name = "change_familiarity",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = true,
+					doc = @doc ("an agent with who I get a social link")),
+					@arg (
+							name = "familiarity",
+							type = IType.FLOAT,
+							optional = true,
+							doc = @doc ("a value to change the familiarity value"))},
+					doc = @doc (
+							value = "changes the familiarity value of the social relation with the agent specified.",
+							returns = "true if it worked.",
+							examples = { @example ("") })
+			)
+	public Boolean primChangeFamiliarity(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		final Double familiarityDirect =
+				(Double) (scope.hasArg("familiarity") ? scope.getArg("familiarity", IType.FLOAT) : 0.0);
+		if (agentDirect != null) { 
+			SocialLink tempSocial = getSocialLink(scope,new SocialLink(agentDirect));
+			tempSocial.setFamiliarity(tempSocial.getFamiliarity()+familiarityDirect);
+			if(tempSocial.getFamiliarity()>1.0){
+				tempSocial.setFamiliarity(1.0);
+			}
+			if(tempSocial.getFamiliarity()<0.0){
+				tempSocial.setFamiliarity(0.0);
+			}
+			return true;
+			}
+		return false;
+	}
+	
+	@action (
+			name = "change_trust",
+			args = { @arg (
+					name = "agent",
+					type = IType.AGENT,
+					optional = true,
+					doc = @doc ("an agent with who I get a social link")),
+					@arg (
+							name = "trust",
+							type = IType.FLOAT,
+							optional = true,
+							doc = @doc ("a value to change the trust value"))},
+					doc = @doc (
+							value = "changes the trust value of the social relation with the agent specified.",
+							returns = "true if it worked.",
+							examples = { @example ("") })
+			)
+	public Boolean primChangeTrust(final IScope scope) throws GamaRuntimeException {
+		final IAgent agentDirect =
+				(IAgent) (scope.hasArg("agent") ? scope.getArg("agent", IType.AGENT) : null);
+		final Double trustDirect =
+				(Double) (scope.hasArg("trust") ? scope.getArg("trust", IType.FLOAT) : 0.0);
+		if (agentDirect != null) { 
+			SocialLink tempSocial = getSocialLink(scope,new SocialLink(agentDirect));
+			tempSocial.setTrust(tempSocial.getTrust()+trustDirect);
+			if(tempSocial.getTrust()>1.0){
+				tempSocial.setLiking(1.0);
+			}
+			if(tempSocial.getTrust()<-1.0){
+				tempSocial.setLiking(-1.0);
+			}
+			return true;
+			}
+		return false;
+	}
 	
 	private List<SocialLink> listSocialAgentDead(final IScope scope) {
 		final List<SocialLink> tempPred = new ArrayList<SocialLink>();
@@ -4832,6 +5707,49 @@ public class SimpleBdiArchitecture extends ReflexArchitecture {
 		social.setFamiliarity(familiarityModif);
 	}
 
+	private void updateNormViolation(IScope scope){
+		final IAgent agent = getCurrentAgent(scope);
+		NormStatement _persistentNorm = (NormStatement) agent.getAttribute(CURRENT_NORM);
+//		Double obedienceValue = (Double) scope.getAgent().getAttribute("obedience");
+		
+		for(Norm tempNorm : getNorms(scope)){
+			// si la norme est activable mais n'est pas activée, alors elle est violée (non prise en compte des obligations)
+			final NormStatement statement = tempNorm.getNormStatement();
+			if(statement!=null){
+				final boolean isContextConditionSatisfied = statement.getContextExpression() == null
+						|| msi.gaml.operators.Cast.asBool(scope, statement.getContextExpression().value(scope));
+				boolean isIntentionConditionSatisfied = false;
+				if(currentIntention(scope)==null || statement.getIntentionExpression() == null
+						|| statement.getIntentionExpression().value(scope) == null || ((Predicate) statement.getIntentionExpression().value(scope))
+								.equalsIntentionPlan(currentIntention(scope).getPredicate())){
+					isIntentionConditionSatisfied = true;
+				}
+				boolean isObligationConditionSatisfied = false;
+				if(currentIntention(scope)!=null && statement.getObligationExpression() != null && statement.getObligationExpression().value(scope) != null){
+						isObligationConditionSatisfied = ((Predicate) statement.getObligationExpression().value(scope))
+								.equalsIntentionPlan(currentIntention(scope).getPredicate());
+				}
+	//			final boolean thresholdSatisfied = statement.getThreshold() == null
+	//					|| obedienceValue >= (Double) statement.getThreshold().value(scope);
+				if ((isContextConditionSatisfied && isIntentionConditionSatisfied) || (isContextConditionSatisfied && isObligationConditionSatisfied) /* && thresholdSatisfied*/) {
+					if(_persistentNorm==null || !statement.equals(_persistentNorm)){
+						tempNorm.violated(scope);
+					} else if(statement.equals(_persistentNorm)){
+						tempNorm.applied(scope);
+					}
+				}
+			}
+		}
+	}
+	
+	private void updateNormLifetime(IScope scope){
+		for(Norm tempNorm : getNorms(scope)){
+			if(tempNorm!=null){
+				tempNorm.updateLifeime();
+			}
+		}
+	}
+	
 	@Override
 	public boolean init(final IScope scope) throws GamaRuntimeException {
 		super.init(scope);

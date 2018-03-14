@@ -883,6 +883,87 @@ public abstract class Spatial {
 			if (P0 == null || P1 == null || P2 == null || P3 == null) { return null; }
 			return GamaGeometryType.buildPolyline(cubicBezierCurve(P0, P1, P2, P3, 10));
 		}
+		
+		@operator (
+				value = { "curve" },
+				expected_content_type = { IType.POINT, IType.GEOMETRY, IType.AGENT },
+				category = { IOperatorCategory.SPATIAL, IOperatorCategory.SHAPE },
+				concept = {})
+		@doc (
+				value = "A cubic Bezier curve geometry built from the two given points with the given coefficient for the radius and composed of 10 points.",
+				usages = { @usage (
+						value = "if the operand is nil, returns nil") },
+				examples = { @example (
+						value = "curve({0,0},{10,10}, 0.5)",
+						equals = "a cubic Bezier curve geometry composed of 10 points from p0 to p1.",
+						test = false) },
+				see = { "around", "circle", "cone", "link", "norm", "point", "polygone", "rectangle", "square",
+						"triangle", "line" })
+		public static IShape BezierCurve(final IScope scope, final GamaPoint P0, final GamaPoint P1, final Double coefficient) {
+			return  BezierCurve(scope, P0, P1,coefficient, true, 10, 0.5);
+		}
+		
+		@operator (
+				value = { "curve" },
+				expected_content_type = { IType.POINT, IType.GEOMETRY, IType.AGENT },
+				category = { IOperatorCategory.SPATIAL, IOperatorCategory.SHAPE },
+				concept = {})
+		@doc (
+				value = "A cubic Bezier curve geometry built from the two given points with the given coefficient for the radius and composed of 10 points - the last boolean is used to specified if it is the right side.",
+				usages = { @usage (
+						value = "if the operand is nil, returns nil") },
+				examples = { @example (
+						value = "curve({0,0},{10,10}, 0.5, false)",
+						equals = "a cubic Bezier curve geometry composed of 10 points from p0 to p1 at the left side.",
+						test = false) },
+				see = { "around", "circle", "cone", "link", "norm", "point", "polygone", "rectangle", "square",
+						"triangle", "line" })
+		public static IShape BezierCurve(final IScope scope, final GamaPoint P0, final GamaPoint P1, final Double coefficient, final boolean right) {
+			return  BezierCurve(scope, P0, P1,coefficient, right, 10, 0.5);
+		}
+		
+		@operator (
+				value = { "curve" },
+				expected_content_type = { IType.POINT, IType.GEOMETRY, IType.AGENT },
+				category = { IOperatorCategory.SPATIAL, IOperatorCategory.SHAPE },
+				concept = {})
+		@doc (
+				value = "A cubic Bezier curve geometry built from the two given points with the given coefficient for the radius and composed of the given number of points - the boolean is used to specified if it is the right side.",
+				usages = { @usage (
+						value = "if the operand is nil, returns nil") },
+				examples = { @example (
+						value = "curve({0,0},{10,10}, 0.5, false, 100)",
+						equals = "a cubic Bezier curve geometry composed of 100 points from p0 to p1 at the right side.",
+						test = false) },
+				see = { "around", "circle", "cone", "link", "norm", "point", "polygone", "rectangle", "square",
+						"triangle", "line" })
+	public static IShape BezierCurve(final IScope scope, final GamaPoint P0, final GamaPoint P1, final Double coefficient, final boolean right, final int nbPoints) {
+			return  BezierCurve(scope, P0, P1,coefficient, right, nbPoints, 0.5);
+		}
+
+		@operator (
+				value = { "curve" },
+				expected_content_type = { IType.POINT, IType.GEOMETRY, IType.AGENT },
+				category = { IOperatorCategory.SPATIAL, IOperatorCategory.SHAPE },
+				concept = {})
+		@doc (
+				value = "A cubic Bezier curve geometry built from the two given points with the given coefficient for the radius and composed of the given number of points - the boolean is used to specified if it is the right side and the last value to indicate where is the inflection point (between 0.0 and 1.0 - default 0.5).",
+				usages = { @usage (
+						value = "if the operand is nil, returns nil") },
+				examples = { @example (
+						value = "curve({0,0},{10,10}, 0.5, false, 100, 0.8)",
+						equals = "a cubic Bezier curve geometry composed of 100 points from p0 to p1 at the right side.",
+						test = false) },
+				see = { "around", "circle", "cone", "link", "norm", "point", "polygone", "rectangle", "square",
+						"triangle", "line" })
+	public static IShape BezierCurve(final IScope scope, final GamaPoint P0, final GamaPoint P1, final Double coefficient, final boolean right, final int nbPoints, final double proportion) {
+			if (P0 == null || P1 == null ) { return null; }
+			GamaPoint P01 = new GamaPoint(P0.x + (P1.x - P0.x)*proportion,P0.y + (P1.y - P0.y)*proportion,P0.z + (P1.z - P0.z)*proportion);
+			double val = coefficient * P0.euclidianDistanceTo(P1);
+			int heading = Relations.towards(scope, P0, P1) ;
+			P01 = new GamaPoint(P01.x + Maths.cos(heading + 90 * (right ? 1.0 : -1.0)) * val, P01.y + Maths.sin(heading + 90 * (right ? 1.0 : -1.0)) * val, P01.z);
+			return BezierCurve(scope,P0,P01,P1,nbPoints);
+		}
 
 		@operator (
 				value = { "curve" },
@@ -3816,7 +3897,6 @@ public abstract class Spatial {
 
 		@operator (
 				value = { "hierarchical_clustering" },
-				content_type = ITypeProvider.FIRST_TYPE,
 				category = { IOperatorCategory.SPATIAL, IOperatorCategory.SP_STATISTICAL,
 						IOperatorCategory.STATISTICAL },
 				concept = { IConcept.GEOMETRY, IConcept.SPATIAL_COMPUTATION, IConcept.AGENT_LOCATION,
@@ -3832,7 +3912,7 @@ public abstract class Spatial {
 		public static IList hierarchicalClusteringe(final IScope scope, final IContainer<?, IAgent> agents,
 				final Double distance) {
 			final int nb = agents.length(scope);
-			final IList<IList> groups = GamaListFactory.create(Types.LIST.of(Types.LIST));
+			final IList<IList> groups = GamaListFactory.create();
 
 			if (nb == 0) {
 				// scope.setStatus(ExecutionStatus.failure);
@@ -3871,7 +3951,9 @@ public abstract class Spatial {
 				}
 			}
 			while (distMin <= distance) {
-				IList<IList> fusionL = GamaListFactory.create(scope, Types.LIST.of(Types.LIST), minFusion);
+				
+				IList<IList> fusionL = GamaListFactory.create();
+				fusionL.addAll(minFusion);
 				final IList<IAgent> g1 = fusionL.get(0);
 				final IList<IAgent> g2 = fusionL.get(1);
 				distances.remove(minFusion);
