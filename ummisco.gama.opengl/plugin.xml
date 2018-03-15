@@ -15,6 +15,15 @@
              name="3D"
              restorable="false">
        </view>
+    </extension>    
+    <extension
+          point="org.eclipse.ui.services">
+       <serviceFactory
+             factoryClass="ummisco.gama.opengl.OpenGLInitializer">
+          <service
+                serviceClass="ummisco.gama.ui.interfaces.IOpenGLInitializer">
+          </service>
+       </serviceFactory>
     </extension>
     <extension
           point="gama.display">

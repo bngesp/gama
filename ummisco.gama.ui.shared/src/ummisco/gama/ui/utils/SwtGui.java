@@ -64,6 +64,7 @@ import msi.gaml.types.IType;
 import ummisco.gama.ui.dialogs.Messages;
 import ummisco.gama.ui.interfaces.IDisplayLayoutManager;
 import ummisco.gama.ui.interfaces.IModelRunner;
+import ummisco.gama.ui.interfaces.IOpenGLInitializer;
 import ummisco.gama.ui.interfaces.IRefreshHandler;
 import ummisco.gama.ui.interfaces.ISpeedDisplayer;
 import ummisco.gama.ui.interfaces.IUserDialogFactory;
@@ -420,10 +421,10 @@ public class SwtGui implements IGui {
 	@Override
 	public void prepareForExperiment(final IScope scope, final IExperimentPlan exp) {
 		if (exp.isGui()) {
-			//			final IOpenGLInitializer initializer = WorkbenchHelper.getService(IOpenGLInitializer.class);
-			//			if (initializer != null && !initializer.isDone()) {
-			//				initializer.run();
-			//			}
+			final IOpenGLInitializer initializer = WorkbenchHelper.getService(IOpenGLInitializer.class);
+			if (initializer != null && !initializer.isDone()) {
+				initializer.run();
+			}
 			WorkbenchHelper.setWorkbenchWindowTitle(exp.getName() + " - " + exp.getModel().getFilePath());
 			updateParameterView(scope, exp);
 			getConsole(scope).showConsoleView(exp.getAgent());
