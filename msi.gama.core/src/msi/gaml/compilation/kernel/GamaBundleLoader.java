@@ -204,14 +204,14 @@ public class GamaBundleLoader {
 	}
 
 	private static void performStaticInitializations() {
-		new Thread(() -> {
+//		new Thread(() -> {
 			// final long start = System.currentTimeMillis();
 			IExpressionCompiler.OPERATORS.forEachValue(object -> {
 				object.compact();
 				return true;
 			});
 			IExpressionCompiler.OPERATORS.compact();
-		}).start();
+//		}).start();
 
 	}
 
