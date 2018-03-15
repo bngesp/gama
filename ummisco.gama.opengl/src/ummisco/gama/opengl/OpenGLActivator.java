@@ -36,24 +36,34 @@ public class OpenGLActivator extends AbstractUIPlugin {
 
 		// Necessary to initialize very early because initializing it
 		// while opening a Java2D view before leads to a deadlock
-		final Job job = new Job("OpenGL Initialization") {
-
-			@Override
-			protected IStatus run(final IProgressMonitor monitor) {
+//		final Job job = new Job("OpenGL Initialization") {
+//
+//			@Override
+//			protected IStatus run(final IProgressMonitor monitor) {
+//				System.out.println(">GAMA Initializing OpenGL subsystem");
+//				GLProfile.initSingleton();	
+//				while (!GLProfile.isInitialized()) {
+//					try {
+//						System.out.println(">GAMA Initializing OpenGL subsystem");
+//						Thread.sleep(100);
+//					} catch (final InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.schedule();
+		System.out.println(">GAMA Initializing OpenGL subsystem");
+		GLProfile.initSingleton();	
+		while (!GLProfile.isInitialized()) {
+			try {
 				System.out.println(">GAMA Initializing OpenGL subsystem");
-				GLProfile.initSingleton();	
-				while (!GLProfile.isInitialized()) {
-					try {
-						System.out.println(">GAMA Initializing OpenGL subsystem");
-						Thread.sleep(100);
-					} catch (final InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				return Status.OK_STATUS;
+				Thread.sleep(100);
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
 			}
-		};
-		job.schedule();
+		}
 
 	}
 
