@@ -36,9 +36,10 @@ public class Activator implements BundleActivator {
 		// applications such as OpenMOLE.
 
 		final String os = System.getProperty("os.name");
-		if (!os.startsWith("Mac")) {
+//		if (!os.startsWith("Mac")) {
 				javax.media.jai.JAI.getDefaultInstance().getOperationRegistry().getRegistryModes();
-		}
+//		}
+				System.out.println("JAI activated");
 	}
 
 	/*
