@@ -80,6 +80,10 @@ public class AgentDB extends GamlAgent {
 		} catch (final SQLException e) {
 			// e.printStackTrace();
 			throw GamaRuntimeException.error("AgentDB.close error:" + e.toString(), scope);
+		} catch (final NullPointerException npe) {
+			if(conn == null) {
+				throw GamaRuntimeException.error("AgentDB.close error: cannot close a database connection that does not exist." , scope);				
+			}
 		}
 		return null;
 
@@ -209,7 +213,6 @@ public class AgentDB extends GamlAgent {
 			// repRequest); }
 			return repRequest;
 		} catch (final Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw GamaRuntimeException.error("AgentDB.select: " + e.toString(), scope);
 		}
@@ -259,7 +262,6 @@ public class AgentDB extends GamlAgent {
 			}
 
 		} catch (final Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw GamaRuntimeException.error("AgentDB.executeUpdate: " + e.toString(), scope);
 		}
