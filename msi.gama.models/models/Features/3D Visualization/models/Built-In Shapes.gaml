@@ -104,7 +104,7 @@ species TexturedGeometry3D{
 }
 
 experiment "3D Shapes"  type: gui {
-	parameter "Are geometries empty?" var: emptyness ;
+	parameter "Are geometries empty?" var: emptiness ;
 	
 	output {
 		display View1 type:opengl background:rgb(10,40,55)   {
