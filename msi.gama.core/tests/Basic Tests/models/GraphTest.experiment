@@ -72,7 +72,7 @@ experiment GraphTest type: test autorun: true {
 		write(the_graph in_degree_of (node_agent[2]));
 		write(the_graph out_degree_of (node_agent[2]));
 		write(the_graph degree_of (node_agent[2]));
-		assert the_graph out_degree_of (node_agent[2])=2;
+		assert the_graph out_degree_of (node_agent[2])=6;
 		//out_edges_of
 		write(the_graph out_edges_of (node_agent[2]));
 		write(the_graph in_edges_of (node_agent[2]));
