@@ -29,7 +29,7 @@ global {
 		
 		create DB_accessor;
 		ask DB_accessor {
-			do executeUpdate params: PARAMS updateComm: "DROP TABLE IF EXISTS `result_DB`";		
+			do executeUpdate params: PARAMS updateComm: "DROP TABLE IF EXISTS `result_DB`";
 			do executeUpdate params: PARAMS updateComm: "CREATE TABLE `result_DB` (
 										  `idPoint` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
 										  `valRnd` float NOT NULL DEFAULT '0',
@@ -38,9 +38,9 @@ global {
 		}
 
 		write first(DB_accessor) select [params::PARAMS, select::SQLquery_idPoint];
-		
+
 		create idPoint from: first(DB_accessor) select [params::PARAMS, select::SQLquery_idPoint] 
-				with: [name:: "idPointgrille", RRmm::"RR", Tmin::"Tmin", Tmax::"Tmax", Rglot::"Rglot", ETPmm::"ETPmm"];	
+		with: [name:: "idPointgrille", RRmm::"RR", Tmin::"Tmin", Tmax::"Tmax", Rglot::"Rglot", ETPmm::"ETPmm"];
 	}
 
 	reflex endSimu when: (cycle = 10) {
@@ -78,6 +78,7 @@ species idPoint {
 
 species DB_accessor skills: [SQLSKILL] {
 	list listRes <- [];
+	
 	init {
 		// Test of the connection to the database
 		if (not (self testConnection [params::PARAMS])) {

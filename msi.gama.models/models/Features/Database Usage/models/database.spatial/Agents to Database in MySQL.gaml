@@ -7,7 +7,7 @@
 * 
 * transform= true because you need to transform geometry data from Absolute(GAMA) to Gis
 * 
-* NOTE: You should have created the database 'spatial_DB_GAMA' into the MySQL server 
+* NOTE: You should have created a database 'spatial_DB_GAMA' into the MySQL server 
 *  in order that the model can run properly.
 * Tags: database
 */
@@ -25,7 +25,7 @@ global {
 
 	init {
 		write "This model will work only if the corresponding database is installed" color: #red;
-		write "The model \"Create Spatial Table in MySQL.gaml\" can be run previously to create the table.";		
+		write "The model \"Create Spatial Table in MySQL.gaml\" can be run previously to create the table.";
 		
 		create buildings from: buildingsShp with: [type::string(read ('NATURE'))];
 		create bounds from: boundsShp;
@@ -53,7 +53,7 @@ species bounds {
 					  columns: ["geom"]
 					  values: [myself.shape];
 		}
-	    write "finished save of :"+ name;
+	    write "finished save of: "+ name;
 	}		
 }
 

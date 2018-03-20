@@ -30,9 +30,9 @@ global {
 	init {
 		write "This model will work only if the corresponding database is installed and contains proper data." color: #red;
 		write "To this purpose, the following models can run first: ";
-		write "     - \"Agents to Database in MySQL.gaml\" to create the database,";
-		write "     - \"Create Spatial Table in MySQL.gaml\" to insert data inthe database.";
-		write "";		
+		write "     - \"Create Spatial Table in MySQL.gaml\" to create the database,";
+		write "     - \"Agents to Database in MySQL.gaml\" to insert data in the database.";
+		write "";
 		
 		create DB_accessor {
 			create buildings from: (self select [params:: PARAMS, select:: QUERY]) 
