@@ -209,7 +209,7 @@ public class LayerObject {
 		gl.scaleBy(width, height, 1);
 		gl.setCurrentColor(((OverlayLayer) layer).getBackground());
 		gl.setCurrentObjectAlpha(((OverlayLayer) layer).getDefinition().getTransparency());
-		gl.drawCachedGeometry(IShape.Type.ROUNDED, null);
+		gl.drawCachedGeometry(IShape.Type.ROUNDED, true, null);
 		gl.popMatrix();
 		gl.translateBy(offset.x, -offset.y, 0);
 	}

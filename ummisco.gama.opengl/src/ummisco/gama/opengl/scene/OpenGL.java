@@ -989,19 +989,22 @@ public class OpenGL {
 		}
 	}
 
-	public void drawCachedGeometry(final IShape.Type id, final Color border) {
+	public void drawCachedGeometry(final IShape.Type id, final boolean solid, final Color border) {
 		if (geometryCache == null) { return; }
 		if (id == null) { return; }
 		final BuiltInGeometry object = geometryCache.get(this, id);
-		if (object != null) {
-			object.draw(this);
-			if (border != null && !isWireframe()) {
-				final Color old = swapCurrentColor(border);
+		if (object != null) {	
+			if(solid && !isWireframe()) {
+				object.draw(this);								
+			}
+			
+			if(!solid || isWireframe() || border != null){
+				final Color old = swapCurrentColor(border!=null?border:getCurrentColor());
 				getGL().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 				object.draw(this);
 				setCurrentColor(old);
-				getGL().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-			}
+				getGL().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);				
+			} 
 		}
 	}
 

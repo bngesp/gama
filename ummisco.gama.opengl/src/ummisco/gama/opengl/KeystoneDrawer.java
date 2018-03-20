@@ -112,7 +112,7 @@ public class KeystoneDrawer implements IKeystoneState {
 		openGL.translateBy(center);
 		openGL.setCurrentColor(fill);
 		openGL.scaleBy(Scaling3D.of(width, height, 1));
-		openGL.drawCachedGeometry(IShape.Type.SQUARE, null);
+		openGL.drawCachedGeometry(IShape.Type.SQUARE, true, null);
 		openGL.popMatrix();
 	}
 

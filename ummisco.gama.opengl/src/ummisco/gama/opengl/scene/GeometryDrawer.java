@@ -310,15 +310,12 @@ public class GeometryDrawer extends ObjectDrawer<GeometryObject> {
 	}
 
 	private void drawCachedGeometry(final IShape.Type type, final boolean solid, final Color border) {
-		boolean previousWireframeState = gl.isWireframe();
 		gl.pushMatrix();
 		gl.translateBy(_center);
 		gl.rotateBy(_rot.rotateToHorizontal(_normal, _tangent, false).revertInPlace());
 		gl.scaleBy(_scale);
-		gl.setWireframe(!solid);
-		gl.drawCachedGeometry(type, border);
+		gl.drawCachedGeometry(type, solid, border);
 		gl.popMatrix();
-		gl.setWireframe( previousWireframeState);
 		
 	}
 
