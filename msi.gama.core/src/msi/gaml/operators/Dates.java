@@ -154,7 +154,7 @@ public class Dates {
 			usages = @usage (
 					value = "if both operands are dates, returns the duration in seconds between date2 and date1. To obtain a more precise duration, in milliseconds, use milliseconds_between(date1, date2)",
 					examples = { @example (
-							value = "date('2000-01-01') - date('2010-01-02')",
+							value = "date('2000-01-02') - date('2000-01-01')",
 							equals = "86400") }))
 	public static double minusDate(final IScope scope, final GamaDate date1, final GamaDate date2)
 			throws GamaRuntimeException {
@@ -388,8 +388,8 @@ public class Dates {
 			usages = @usage (
 					value = "if one of the operands is a date and the other a number, returns a date corresponding to the date plus the given number as duration (in seconds)",
 					examples = { @example (
-							value = "date('2000-01-01') + 200",
-							equals = "date('2000-01-01')") }))
+							value = "date('2000-01-01') + 86400",
+							equals = "date('2000-01-02')") }))
 	public static GamaDate plusDuration(final IScope scope, final GamaDate date1, final int duration)
 			throws GamaRuntimeException {
 		return date1.plus(duration, SECONDS);
@@ -415,8 +415,8 @@ public class Dates {
 			usages = @usage (
 					value = "if one of the operands is a date and the other a number, returns a date corresponding to the date minus the given number as duration (in seconds)",
 					examples = { @example (
-							value = "date('2000-01-01') - 200",
-							equals = "date('2000-01-01')") }))
+							value = "date('2000-01-01') - 86400",
+							equals = "date('1999-12-31')") }))
 	public static GamaDate minusDuration(final IScope scope, final GamaDate date1, final int duration)
 			throws GamaRuntimeException {
 		return date1.plus(-duration, SECONDS);
