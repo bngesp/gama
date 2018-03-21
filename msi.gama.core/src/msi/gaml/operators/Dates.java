@@ -47,6 +47,7 @@ import msi.gama.common.util.StringUtils;
 import msi.gama.precompiler.GamlAnnotations.doc;
 import msi.gama.precompiler.GamlAnnotations.example;
 import msi.gama.precompiler.GamlAnnotations.operator;
+import msi.gama.precompiler.GamlAnnotations.test;
 import msi.gama.precompiler.GamlAnnotations.usage;
 import msi.gama.precompiler.IConcept;
 import msi.gama.precompiler.IOperatorCategory;
@@ -488,7 +489,8 @@ public class Dates {
 			value = "Add a given number of weeks to a date",
 			examples = { @example (
 					value = "date('2000-01-01') plus_weeks 15",
-					equals = "date('2000-15-01')") })
+					equals = "date('2000-04-15')") })
+	@test("is_error(date('2000-15-01'))")
 	public static GamaDate addWeeks(final IScope scope, final GamaDate date1, final int nbWeeks)
 			throws GamaRuntimeException {
 		return date1.plus(nbWeeks, WEEKS);

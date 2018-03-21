@@ -18,7 +18,7 @@ experiment TestOne type: test autorun: true {
 	test "My First Test" {
 	/** Insert here any assertion you need to test */
 		assert 0 = 0;
-		assert 0 = 1 warning: true;
+		assert 0 != 1;
 		/**Comparison*/
 		assert (4.0>4) = false;
 		assert (4<4.0) = false;
