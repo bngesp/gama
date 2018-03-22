@@ -63,8 +63,8 @@ species Participant skills: [fipa] {
 		write name + ' with conversations: ' + (string(conversations)) + '; messages: ' + (string(mailbox));
 	}
 
-	reflex reply_messages when: (!empty(mailbox)) {
-		message requestFromInitiator <- (mailbox at 0);
+	reflex reply_messages when: (!empty(requests)) {
+		message requestFromInitiator <- (requests at 0);
 		write 'agree message';
 		do agree with: [ message :: requestFromInitiator, contents :: ['I will'] ];
 		

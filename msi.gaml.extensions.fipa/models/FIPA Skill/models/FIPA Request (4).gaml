@@ -54,12 +54,12 @@ species Participant skills: [fipa] {
 		write name + ' with conversations: ' + (string(conversations)) + '; messages: ' + (string(mailbox));
 	}
 
-	reflex reply_messages when: (!empty(mailbox)) {
+	reflex reply_messages when: (!empty(requests)) {
 		write name + ' sends an inform message';
 		
 		
 		write 'A GamaRuntimeException is raised to inform that the message\'s performative doesn\'t respect the \'request\' interaction protocol\' specification';
-		do inform with: [ message :: (mailbox at 0), contents :: ['I don\'t want'] ]; // Attention: note that GAMA will raise an exception because an 'inform' message is not appropriate here.
+		do inform with: [ message :: (requests at 0), contents :: ['I don\'t want'] ]; // Attention: note that GAMA will raise an exception because an 'inform' message is not appropriate here.
 	}
 }
 

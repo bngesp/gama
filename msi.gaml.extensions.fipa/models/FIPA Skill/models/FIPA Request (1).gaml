@@ -51,9 +51,9 @@ species Participant skills: [fipa] {
 		write name + ' with conversations: ' + (string(conversations)) + '; messages: ' + (string(mailbox));
 	}
 
-	reflex reply_messages when: (!empty(mailbox)) {
+	reflex reply_messages when: (!empty(requests)) {
 		write name + ' sends a refuse message';
-		do refuse with: [ message :: (mailbox at 0), contents :: ['I don\'t want'] ];
+		do refuse with: [ message :: (requests at 0), contents :: ['I don\'t want'] ];
 	}
 }
 
