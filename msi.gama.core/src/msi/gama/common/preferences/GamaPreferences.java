@@ -423,7 +423,7 @@ public class GamaPreferences {
 			(System.getProperty("os.name").startsWith("Linux") ? "libjri.so" : "jri.dll"); 
 
 		public static final Pref<? extends IGamaFile> LIB_R =
-				create("pref_lib_r", "Path to RScript library ($R_HOME/library/rJava/jri/"+jriFile+") (http://www.r-project.org)",
+				create("pref_lib_r", "Path to JRI library ($R_HOME/library/rJava/jri/"+jriFile+") (http://www.r-project.org)",
 						new GenericFile(getDefaultRPath(), false), IType.FILE).in(NAME, PATHS);
 		/**
 		 * GeoTools
