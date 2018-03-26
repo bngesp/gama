@@ -7,9 +7,12 @@
 			class="msi.gama.lang.gaml.ui.GamlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
 			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
 			default="true"
-			extensions="gaml"
+			extensions="gaml,experiment"
 			id="msi.gama.lang.gaml.Gaml"
 			name="Gaml Editor">
+     <contentTypeBinding
+           contentTypeId="msi.gama.gui.gaml.type">
+     </contentTypeBinding>
 		</editor>
 	</extension>
 	<extension
@@ -440,7 +443,7 @@
 	<extension point="org.eclipse.ui.editors.documentProviders">
 		<provider id="msi.gama.lang.gaml.Gaml.editors.documentProviders"
 			class="msi.gama.lang.gaml.ui.GamlExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
-			extensions="gaml">
+			extensions="gaml,experiment">
 		</provider>
 	</extension>
 	<extension point="org.eclipse.team.core.fileTypes">
