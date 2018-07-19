@@ -26,18 +26,6 @@ openFile
       </programArgs>
       <programArgsLin>--launcher.GTK_version 2
       </programArgsLin>
-      <vmArgs>-server
--Dosgi.locking=none
--noverify
--Xmn128m
--Xss2m
--XX:+UseParallelGC
--XX:+UseAdaptiveSizePolicy
--XX:+OptimizeStringConcat
--Dorg.eclipse.ecf.provider.filetransfer.retrieve.retryAttempts=10
--Dorg.eclipse.ecf.provider.filetransfer.retrieve.closeTimeout=6000
--Dorg.eclipse.ecf.provider.filetransfer.retrieve.readTimeout=6000
-      </vmArgs>
       <vmArgsLin>
          <argsX86>-Xms256m -Xmx1024m</argsX86>
          <argsX86_64>-Xms256m -Xmx2048m</argsX86_64>
@@ -75,7 +63,6 @@ openFile
             winExtraLargeHigh="./icons/launcher_icons/icon256_32b.bmp"/>
       </win>
    </launcher>
-
 
    <vm>
       <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</linux>
