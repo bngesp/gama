@@ -5,14 +5,25 @@ Bundle-SymbolicName: msi.gama.processor;singleton:=true
 Bundle-Version: 1.4.0.qualifier
 Bundle-Vendor: MSI
 Export-Package: msi.gama.precompiler;
-  uses:="org.w3c.dom,
-   javax.lang.model.util,
+  uses:="javax.lang.model.util,
    javax.lang.model,
    javax.tools,
    javax.lang.model.type,
    javax.xml.parsers,
-   javax.xml.transform,
    javax.annotation.processing,
-   javax.lang.model.element"
+   javax.lang.model.element",
+ msi.gama.precompiler.doc;
+  uses:="javax.annotation.processing,
+   org.w3c.dom,
+   msi.gama.precompiler.doc.utils,
+   msi.gama.precompiler,
+   javax.lang.model.element",
+ msi.gama.precompiler.tests;
+  uses:="org.w3c.dom,
+   msi.gama.precompiler.doc.utils,
+   msi.gama.precompiler,
+   javax.lang.model.element,
+   javax.xml.transform"
 Require-Bundle: ummisco.gama.annotations;bundle-version="1.7.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-ClassPath: .

@@ -91,7 +91,7 @@ public class GamaProcessor extends AbstractProcessor implements Constants {
 			context.emit(Kind.NOTE, "GAML Processor: Java sources produced for " + context.currentPlugin + " in "
 					+ (System.currentTimeMillis() - begin) + "ms", (Element) null);
 			begin = System.currentTimeMillis();
-			generateTests();
+//			generateTests();
 			context.emit(Kind.NOTE, "GAML Processor: GAMA tests produced for " + context.currentPlugin + " in "
 					+ (System.currentTimeMillis() - begin) + "ms", (Element) null);
 			context.emit(Kind.NOTE, "GAML Processor: Complete processing of " + context.currentPlugin + " in "

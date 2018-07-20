@@ -941,4 +941,4 @@ Bundle-ClassPath: .,
  jgrapht 1.0.1/jgrapht-core-1.0.1.jar,
  jgrapht 1.0.1/jgrapht-ext-1.0.1.jar,
  kml/jars/JavaAPIforKml-2.2.1.jar
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-10

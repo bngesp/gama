@@ -12,12 +12,9 @@ package msi.gama.outputs.layers.charts;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 import msi.gama.common.interfaces.IKeyword;
 import msi.gama.common.util.FileUtils;

@@ -69,10 +69,9 @@ if [[ "$TRAVIS_EVENT_TYPE" == "cron" ]] || [[ $MSG == *"ci cron"* ]]; then
 	if [[ ${change} == *"msi.gama.ext"* ]]; then
 			MSG+=" ci ext "
 	fi
-	deploy
-	JDKrelease 
-	commit_wiki_files
-	commit_io_website_files
+	
+	release 
+	
 else
 	if  [[ ${MESSAGE} == *"ci deploy"* ]] || [[ $MSG == *"ci deploy"* ]]; then		
 		if  [[ ${MESSAGE} == *"ci clean"* ]] || [[ $MSG == *"ci clean"* ]]; then

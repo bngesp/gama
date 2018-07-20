@@ -1,7 +1,7 @@
 sudo: required
 language: java
 jdk:
-  - oraclejdk8
+  - oraclejdk10
 before_install:
 - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
 - echo "MAVEN_OPTS='-Dorg.slf4j.simpleLogger.defaultLogLevel=warn -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -Xmx2048m'" >> ~/.mavenrc
@@ -29,4 +29,4 @@ after_success:
 - bash ./travis/publish.sh
 branches:
   only:
-    - master
+    - photon

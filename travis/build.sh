@@ -1,9 +1,9 @@
 cd ummisco.gama.annotations
-mvn -q clean install
-cd - 
+mvn clean install -T64C
+cd .. 
 cd msi.gama.processor 
-mvn -q clean install
-cd - 
+mvn clean install -T64C
+cd .. 
 cd msi.gama.parent 
-mvn -q clean install
-cd -
+mvn clean install -T64C
+cd ..

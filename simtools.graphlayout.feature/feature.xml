@@ -32,7 +32,7 @@
    </requires>
 
    <plugin
-         id="simtools.graphanalysis"
+         id="simtools.graphanalysis.fr"
          download-size="0"
          install-size="0"
          version="0.0.0"

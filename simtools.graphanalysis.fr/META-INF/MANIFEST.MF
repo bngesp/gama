@@ -1,10 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GraphLayoutOperators
-Bundle-SymbolicName: simtools.graphanalysis;singleton:=true
+Bundle-SymbolicName: simtools.graphanalysis.fr;singleton:=true
 Bundle-Version: 1.7.0.qualifier
 Require-Bundle: msi.gama.core;bundle-version="1.7.0",
- msi.gama.ext;bundle-version="1.0.0"
+ msi.gama.ext;bundle-version="1.7.0"
 Bundle-ClassPath: .,
  lib/gephi-toolkit.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: yifanhu
