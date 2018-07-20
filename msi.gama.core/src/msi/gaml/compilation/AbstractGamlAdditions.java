@@ -41,7 +41,7 @@ import msi.gama.common.interfaces.IGui;
 import msi.gama.common.interfaces.ISkill;
 import msi.gama.common.util.JavaUtils;
 import msi.gama.precompiler.GamlAnnotations.doc;
-import msi.gama.precompiler.GamlAnnotations.var;
+import msi.gama.precompiler.GamlAnnotations.variable;
 import msi.gama.precompiler.GamlAnnotations.vars;
 import msi.gama.precompiler.ISymbolKind;
 import msi.gama.precompiler.ITypeProvider;
@@ -275,7 +275,7 @@ public abstract class AbstractGamlAdditions implements IGamlAdditions {
 
 	private String getVarDoc(final String name, final Class<?> clazz) {
 		final vars vars = clazz.getAnnotationsByType(vars.class)[0];
-		for (final var v : vars.value()) {
+		for (final variable v : vars.value()) {
 			if (v.name().equals(name)) {
 				final doc[] docs = v.doc();
 				final String d = "";

@@ -19,7 +19,7 @@ import msi.gama.precompiler.GamlAnnotations.doc;
 import msi.gama.precompiler.GamlAnnotations.getter;
 import msi.gama.precompiler.GamlAnnotations.setter;
 import msi.gama.precompiler.GamlAnnotations.skill;
-import msi.gama.precompiler.GamlAnnotations.var;
+import msi.gama.precompiler.GamlAnnotations.variable;
 import msi.gama.precompiler.GamlAnnotations.vars;
 import msi.gama.precompiler.IConcept;
 import msi.gama.runtime.IScope;
@@ -38,8 +38,8 @@ import msi.gaml.types.Types;
  * @todo Description
  *
  */
-@vars({ @var(name = IKeyword.STATE, type = IType.STRING, doc = @doc("Returns the current state in which the agent is")),
-		@var(name = IKeyword.STATES, type = IType.LIST, constant = true, doc = @doc("Returns the list of all possible states the agents can be in")) })
+@vars({ @variable(name = IKeyword.STATE, type = IType.STRING, doc = @doc("Returns the current state in which the agent is")),
+		@variable(name = IKeyword.STATES, type = IType.LIST, constant = true, doc = @doc("Returns the list of all possible states the agents can be in")) })
 @skill(name = IKeyword.FSM, concept = { IConcept.BEHAVIOR,
 		IConcept.ARCHITECTURE }, doc = @doc("The Finite State Machine architecture, that allows to program agents using a finite set of states and conditional transitions between them"))
 public class FsmArchitecture extends ReflexArchitecture {
