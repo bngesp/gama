@@ -31,4 +31,4 @@ after_success:
 - bash ./travis/publish.sh
 branches:
   only:
-    - master
+    - v18rc2
