@@ -3,7 +3,7 @@ set -e
 COMMIT=$@
 
 REPO="gama-platform/gama"
-RELEASE="latest"
+RELEASE="v1.8-rc2"
 thePATH="/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/Gama1.7"
 
 
@@ -31,19 +31,19 @@ echo $SUFFIX
 
 n=0
 RELEASEFILES[$n]="$thePATH-linux.gtk.x86.zip"
-NEWFILES[$n]='GAMA1.8_Linux_32'$SUFFIX
+NEWFILES[$n]='GAMA1.8_Linux_32_RC2'
 n=1
 RELEASEFILES[$n]="$thePATH-linux.gtk.x86_64.zip"
-NEWFILES[$n]='GAMA1.8_Linux_64'$SUFFIX
+NEWFILES[$n]='GAMA1.8_Linux_64_RC2'
 n=2
 RELEASEFILES[$n]="$thePATH-macosx.cocoa.x86_64.zip"
-NEWFILES[$n]='GAMA1.8_Mac_64'$SUFFIX
+NEWFILES[$n]='GAMA1.8_Mac_64_RC2'
 n=3
 RELEASEFILES[$n]="$thePATH-win32.win32.x86.zip"
-NEWFILES[$n]='GAMA1.8_Win_32'$SUFFIX
+NEWFILES[$n]='GAMA1.8_Win_32_RC2'
 n=4
 RELEASEFILES[$n]="$thePATH-win32.win32.x86_64.zip" 
-NEWFILES[$n]='GAMA1.8_Win_64'$SUFFIX
+NEWFILES[$n]='GAMA1.8_Win_64_RC2'
 
 i=0
 for (( i=0; i<5; i++ ))
