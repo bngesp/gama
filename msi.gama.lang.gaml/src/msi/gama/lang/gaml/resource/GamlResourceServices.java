@@ -154,7 +154,7 @@ public class GamlResourceServices {
 	public static ValidationContext getValidationContext(final GamlResource r) {
 		final URI newURI = properlyEncodedURI(r.getURI());
 		if (!resourceErrors.containsKey(newURI)) {
-			System.out.println("add resourceErrors "+newURI);
+//			System.out.println("add resourceErrors "+newURI);
 			resourceErrors.put(newURI, new ValidationContext(newURI, r.hasErrors(), getResourceDocumenter()));
 		}
 		final ValidationContext result = resourceErrors.get(newURI);

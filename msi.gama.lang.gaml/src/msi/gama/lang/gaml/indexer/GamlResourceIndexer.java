@@ -234,7 +234,7 @@ public class GamlResourceIndexer {
 	}
 
 	public static LinkedHashMultimap<String, GamlResource> validateImportsOf(final GamlResource resource) {
-		System.out.println("valiadteimportof "+resource);
+//		System.out.println("valiadteimportof "+resource);
 		final TOrderedHashMap<URI, String> uris = allLabeledImportsOf(resource);
 		uris.remove(GamlResourceServices.properlyEncodedURI(resource.getURI()));
 		if (!uris.isEmpty()) {
