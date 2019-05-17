@@ -18,7 +18,6 @@ mkdir .sprefs
 mkdir .uprefs
 #GAMA=Gamaq
 java -cp $GAMA -Xms1024m -Xmx$memory  -Djava.awt.headless=true org.eclipse.core.launcher.Main  -application msi.gama.headless.id4 -data $passWork -validate 
-java -cp $GAMA -Xms1024m -Xmx$memory  -Djava.awt.headless=true org.eclipse.core.launcher.Main  -application msi.gama.headless.id4 -data $passWork -validate 
 	
 
 comment(){

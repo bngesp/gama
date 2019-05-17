@@ -68,12 +68,12 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 		GamlModelBuilder.loadURLs(allURLs);
 
 		System.out.println("loadURLs");
-		try {
-			Thread.sleep(15000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(15000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 //		Files.find(Paths.get(
 //				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi"),
 //				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile()).forEach(System.out::println);
@@ -116,7 +116,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {
 //		GamlModelBuilder.loadURL(pathToModel);
-		if(pathToModel.getFile().contains("OBJ file drawing")) {
+		if(pathToModel.getFile().contains("Model 13")) {
 			System.out.println();
 			System.out.println();
 			System.out.println();
