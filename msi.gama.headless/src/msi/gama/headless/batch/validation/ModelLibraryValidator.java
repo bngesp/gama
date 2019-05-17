@@ -65,7 +65,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 					}
 			}
 		}
-//		GamlModelBuilder.loadURLs(allURLs);
+		GamlModelBuilder.loadURLs(allURLs);
 
 		System.out.println("loadURLs");
 //		Files.find(Paths.get(
@@ -78,39 +78,50 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 		System.out.println("" + count[0] + " GAMA models compiled in built-in library and plugins. " + code[0]
 				+ " compilation errors found");
 
-		code[1] = code[0];
-		code[0] = 0;
-		count[0] = 0;
-		final Multimap<Bundle, String> tests = GamaBundleLoader.getPluginsWithTests();
-
-		allURLs = new ArrayList<>();
-		for (final Bundle bundle : tests.keySet()) {
-			for (final String entry : tests.get(bundle)) {
-				final Enumeration<URL> urls = bundle.findEntries(entry, "*", true);
-				if (urls != null)
-					while (urls.hasMoreElements()) {
-						final URL url = urls.nextElement();
-						if (isModel(url)) {
-							final URL resolvedFileURL = FileLocator.toFileURL(url);
-							allURLs.add(resolvedFileURL);
-						}
-					}
-			}
-		}
-		GamlModelBuilder.loadURLs(allURLs);
-
-		allURLs.forEach(u -> validate(count, code, u));
-
-		System.out.println("" + count[0] + " GAMA tests compiled in built-in library and plugins. " + code[0]
-				+ " compilation errors found");
-		System.out.println(code[0] + code[1]);
+//		code[1] = code[0];
+//		code[0] = 0;
+//		count[0] = 0;
+//		final Multimap<Bundle, String> tests = GamaBundleLoader.getPluginsWithTests();
+//
+//		allURLs = new ArrayList<>();
+//		for (final Bundle bundle : tests.keySet()) {
+//			for (final String entry : tests.get(bundle)) {
+//				final Enumeration<URL> urls = bundle.findEntries(entry, "*", true);
+//				if (urls != null)
+//					while (urls.hasMoreElements()) {
+//						final URL url = urls.nextElement();
+//						if (isModel(url)) {
+//							final URL resolvedFileURL = FileLocator.toFileURL(url);
+//							allURLs.add(resolvedFileURL);
+//						}
+//					}
+//			}
+//		}
+//		GamlModelBuilder.loadURLs(allURLs);
+//
+//		allURLs.forEach(u -> validate(count, code, u));
+//
+//		System.out.println("" + count[0] + " GAMA tests compiled in built-in library and plugins. " + code[0]
+//				+ " compilation errors found");
+//		System.out.println(code[0] + code[1]);
 //		return code[0] + code[1];
 		return 0;
 	}
 
 	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {
 //		GamlModelBuilder.loadURL(pathToModel);
-//		if(!pathToModel.getFile().contains("Model 13")) return;
+		if(pathToModel.getFile().contains("OBJ file drawing")) {
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+		}
 		final List<GamlCompilationError> errors = new ArrayList<>();
 //		log("Compiling " + pathToModel.getFile());
 //		System.out.println("Compiling " + pathToModel.getFile());
@@ -118,12 +129,12 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 //			GamlModelBuilder
 //			.compile(URI.createFileURI(Paths.get(pathToModel.toURI()).toFile().getAbsolutePath()), errors);
 
-			DEBUG.GLOBAL_OFF=true; 
+//			DEBUG.GLOBAL_OFF=true; 
 			final IModel model = GamlModelBuilder.compile(pathToModel, errors);
 
 			if (model == null) {
-				DEBUG.GLOBAL_OFF=false; 
-				GamlModelBuilder.compile(pathToModel, errors);
+//				DEBUG.GLOBAL_OFF=false; 
+//				GamlModelBuilder.compile(pathToModel, errors);
  
 			    // open the url stream, wrap it an a few "readers"
 //			    BufferedReader reader = new BufferedReader(new InputStreamReader(pathToModel.openStream()));

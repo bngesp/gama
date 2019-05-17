@@ -192,7 +192,9 @@ public class GamlExpressionFactory implements IExpressionFactory {
 			if (exp == null) { return false; }
 		}
 		// If the operator is not known, we have no match
-		if (!OPERATORS.containsKey(op)) { return false; }
+		if (!OPERATORS.containsKey(op)) { 
+			return false; 
+			}
 		final THashMap<Signature, OperatorProto> ops = OPERATORS.get(op);
 		final Signature sig = new Signature(args).simplified();
 		// Does any known operator signature match with the signatue of the expressions ?

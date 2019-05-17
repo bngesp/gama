@@ -567,7 +567,7 @@ public abstract class SymbolDescription implements IDescription {
 	public IDescription validate() {
 		if (validated) { return this; }
 		validated = true;
-		DEBUG.LOG("symbol validate "+this.serialize(true));
+//		DEBUG.LOG("symbol validate "+this.serialize(true));
 		if (isBuiltIn()) {
 			// We simply make sure that the facets are correctly compiled
 			validateFacets();
@@ -606,7 +606,7 @@ public abstract class SymbolDescription implements IDescription {
 
 		// If a custom validator has been defined, run it
 		if (proto.getValidator() != null) {
-			DEBUG.LOG("proto validate "+proto.serialize(true));
+//			DEBUG.LOG("proto validate "+proto.serialize(true));
 			final boolean semantic = proto.getValidator().validate(this, element);
 			if (!semantic) { return null; }
 		}
