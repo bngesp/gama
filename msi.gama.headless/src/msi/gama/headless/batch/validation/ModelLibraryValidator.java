@@ -28,6 +28,7 @@ import msi.gaml.compilation.GamlCompilationError;
 import msi.gaml.compilation.kernel.GamaBundleLoader;
 import msi.gaml.operators.Dates;
 import one.util.streamex.StreamEx;
+import ummisco.gama.dev.utils.DEBUG;
 
 public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
@@ -119,7 +120,10 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 			final IModel model = GamlModelBuilder.compile(pathToModel, errors);
 
 			if (model == null) {
-				 
+				DEBUG.GLOBAL_ON=true;
+				GamlModelBuilder.compile(pathToModel, errors);
+
+				DEBUG.GLOBAL_ON=false;
 			    // open the url stream, wrap it an a few "readers"
 //			    BufferedReader reader = new BufferedReader(new InputStreamReader(pathToModel.openStream()));
 //

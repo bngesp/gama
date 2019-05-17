@@ -24,6 +24,7 @@ import msi.gama.kernel.model.IModel;
 import msi.gama.lang.gaml.resource.GamlResource;
 import msi.gaml.compilation.GamlCompilationError;
 import msi.gaml.descriptions.ModelDescription;
+import ummisco.gama.dev.utils.DEBUG;
 
 /**
  * Class GamlResourceBuilder.
