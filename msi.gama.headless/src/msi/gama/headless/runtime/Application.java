@@ -185,7 +185,7 @@ public class Application implements IApplication {
 		System.out.println("xxxxxxxxxxxxxxx                xxx");
 		System.out.println("xxxxxxxxxxxxxxx                xxx");
 		System.out.println("xxxxxxxxxxxxxxx                xxx");
-		if (PlatformHelper.isLinux()) {
+//		if (PlatformHelper.isLinux()) {
 			System.setProperty("java.util.prefs.systemRoot", "/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless/.sprefs");
 			
 			System.setProperty("java.util.prefs.userRoot", "/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless/.uprefs");
@@ -193,7 +193,7 @@ public class Application implements IApplication {
 			System.out.println(System.getProperty("java.util.prefs.userRoot"));
 			
 			System.out.println(System.getProperty("java.util.prefs.systemRoot"));
-		}
+//		}
 //		Logger.getRootLogger().setLevel(Level.WARN); 
 		SystemLogger.removeDisplay();
 		
