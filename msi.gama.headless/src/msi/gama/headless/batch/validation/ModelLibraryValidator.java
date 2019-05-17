@@ -115,7 +115,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 			if (model == null) {
 				System.out.println("Model compiled with following indications: \n"
-						+ (errors == null ? "" : StreamEx.of(errors).joining("\n")));
+						+ (errors == null ? "" : StreamEx.of(errors).filter(e -> e.isError()).joining("\n")));
 				System.out.println("-----e----- ");
 			}
 
