@@ -52,7 +52,6 @@ import msi.gama.headless.xml.Reader;
 import msi.gama.headless.xml.XMLWriter;
 import msi.gama.runtime.GAMA;
 import ummisco.gama.dev.utils.DEBUG;
-import ummisco.gama.ui.utils.PlatformHelper;
 
 public class Application implements IApplication {
 
