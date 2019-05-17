@@ -40,20 +40,20 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 	@Override
 	public int start(final List<String> args) throws IOException {
-		new Thread() {
-
-			@Override
-			public void run() {
+//		new Thread() {
+//
+//			@Override
+//			public void run() {
 				HeadlessSimulationLoader.preloadGAMA();
-			}
-			
-		}.start();
-		try {
-			Thread.sleep(15000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//			}
+//			
+//		}.start();
+//		try {
+//			Thread.sleep(15000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		final int[] count = { 0 };
 		final int[] code = { 0, 0 };
 //		try {
