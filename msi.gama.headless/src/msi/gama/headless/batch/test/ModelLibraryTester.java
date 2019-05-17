@@ -39,7 +39,7 @@ public class ModelLibraryTester extends AbstractModelLibraryRunner {
 //	public static final Logger LOGGER = Logger.getLogger(ModelLibraryTester.class.getName());;
 
 	private ModelLibraryTester() {
-		SystemLogger.activeDisplay();
+//		SystemLogger.activeDisplay();
 	}
 
 	@Override

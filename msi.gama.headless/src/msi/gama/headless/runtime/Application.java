@@ -194,7 +194,7 @@ public class Application implements IApplication {
 			System.out.println(System.getProperty("java.util.prefs.systemRoot"));
 //		}
 //		Logger.getRootLogger().setLevel(Level.WARN); 
-		SystemLogger.removeDisplay();
+//		SystemLogger.removeDisplay();
 		
 		
 		final Map<String, String[]> mm = context.getArguments();

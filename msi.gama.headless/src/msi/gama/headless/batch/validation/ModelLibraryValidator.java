@@ -34,7 +34,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 	private static ModelLibraryValidator instance;
 
 	private ModelLibraryValidator() {
-		SystemLogger.activeDisplay();
+//		SystemLogger.activeDisplay();
 	}
 
 	@Override
@@ -71,6 +71,10 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi/15/0/.cp/models/Tutorials/Predator Prey"),
 				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile()).forEach(System.out::println);
 
+		allURLs.forEach(u -> validate(count, code, u));
+
+		code[0] = 0;
+		count[0] = 0;
 		allURLs.forEach(u -> validate(count, code, u));
 
 		System.out.println("" + count[0] + " GAMA models compiled in built-in library and plugins. " + code[0]
