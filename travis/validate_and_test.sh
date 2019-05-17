@@ -23,12 +23,12 @@ res=$?
 if [[ $res -gt 0 ]]; then	
 	rm -rf $passWork
 	
-echo "after first launch"
-cd /home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi
-find . | grep "\.gaml$"
+	echo "after first launch"
+	cd /home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi
+	find . | grep "\.gaml$"
 
 
-cd /home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless
+	cd /home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless
 
 
 	exit $res
