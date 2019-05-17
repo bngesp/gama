@@ -181,18 +181,18 @@ public class Application implements IApplication {
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
 
+		System.out.println("xxxxxxxxxxxxxxx                xxx");
+		System.out.println("xxxxxxxxxxxxxxx                xxx");
+		System.out.println("xxxxxxxxxxxxxxx                xxx");
+		System.out.println("xxxxxxxxxxxxxxx                xxx");
 		if (PlatformHelper.isLinux()) {
-			System.err.println("xxxxxxxxxxxxxxx                xxx");
-			System.err.println("xxxxxxxxxxxxxxx                xxx");
-			System.err.println("xxxxxxxxxxxxxxx                xxx");
-			System.err.println("xxxxxxxxxxxxxxx                xxx");
 			System.setProperty("java.util.prefs.systemRoot", "/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless/.sprefs");
 			
 			System.setProperty("java.util.prefs.userRoot", "/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless/.uprefs");
 			
-			System.err.println(System.getProperty("java.util.prefs.userRoot"));
+			System.out.println(System.getProperty("java.util.prefs.userRoot"));
 			
-			System.err.println(System.getProperty("java.util.prefs.systemRoot"));
+			System.out.println(System.getProperty("java.util.prefs.systemRoot"));
 		}
 //		Logger.getRootLogger().setLevel(Level.WARN); 
 		SystemLogger.removeDisplay();
