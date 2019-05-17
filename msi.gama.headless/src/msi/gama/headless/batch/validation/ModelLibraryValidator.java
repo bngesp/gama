@@ -110,7 +110,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 //		System.out.println("Compiling " + pathToModel.getFile());
 		try {
 //			GamlModelBuilder.compile(pathToModel, errors);
-			GamlModelBuilder.compile(URI.createFileURI(pathToModel.getPath()+"/"+pathToModel.getFile()), errors);
+			GamlModelBuilder.compile(URI.createFileURI(Paths.get(pathToModel.toURI()).toFile().getAbsolutePath()), errors);
 
 		} catch (final Exception ex) {
 			System.out.println(ex.getMessage());
