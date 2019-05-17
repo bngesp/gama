@@ -40,7 +40,20 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 	@Override
 	public int start(final List<String> args) throws IOException {
-		HeadlessSimulationLoader.preloadGAMA();
+		new Thread() {
+
+			@Override
+			public void run() {
+				HeadlessSimulationLoader.preloadGAMA();
+			}
+			
+		}.start();
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		final int[] count = { 0 };
 		final int[] code = { 0, 0 };
 //		try {
@@ -110,12 +123,13 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 //		System.out.println("" + count[0] + " GAMA tests compiled in built-in library and plugins. " + code[0]
 //				+ " compilation errors found");
 //		System.out.println(code[0] + code[1]);
-//		return code[0] + code[1];
-		return 0;
+		return code[0] + code[1];
+//		return 0;
 	}
 
 	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {
 //		GamlModelBuilder.loadURL(pathToModel);
+		DEBUG.GLOBAL_OFF=true;
 		if(pathToModel.getFile().contains("Model 13")) {
 			System.out.println();
 			System.out.println();
@@ -127,12 +141,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 			System.out.println();
 			System.out.println();
 			System.out.println();
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			DEBUG.GLOBAL_OFF=false;
 		}
 		final List<GamlCompilationError> errors = new ArrayList<>();
 //		log("Compiling " + pathToModel.getFile());
