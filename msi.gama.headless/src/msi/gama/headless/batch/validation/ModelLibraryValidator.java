@@ -117,13 +117,16 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 		try {
 //			GamlModelBuilder
 //			.compile(URI.createFileURI(Paths.get(pathToModel.toURI()).toFile().getAbsolutePath()), errors);
+
+			DEBUG.GLOBAL_ON=false;
+			DEBUG.OFF();
 			final IModel model = GamlModelBuilder.compile(pathToModel, errors);
 
 			if (model == null) {
 				DEBUG.GLOBAL_ON=true;
+				DEBUG.ON();
 				GamlModelBuilder.compile(pathToModel, errors);
-
-				DEBUG.GLOBAL_ON=false;
+ 
 			    // open the url stream, wrap it an a few "readers"
 //			    BufferedReader reader = new BufferedReader(new InputStreamReader(pathToModel.openStream()));
 //
