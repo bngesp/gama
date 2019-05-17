@@ -52,6 +52,7 @@ import msi.gama.headless.xml.Reader;
 import msi.gama.headless.xml.XMLWriter;
 import msi.gama.runtime.GAMA;
 import ummisco.gama.dev.utils.DEBUG;
+import ummisco.gama.ui.utils.PlatformHelper;
 
 public class Application implements IApplication {
 
@@ -180,6 +181,19 @@ public class Application implements IApplication {
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
 
+		if (PlatformHelper.isLinux()) {
+			System.err.println("xxxxxxxxxxxxxxx                xxx");
+			System.err.println("xxxxxxxxxxxxxxx                xxx");
+			System.err.println("xxxxxxxxxxxxxxx                xxx");
+			System.err.println("xxxxxxxxxxxxxxx                xxx");
+			System.setProperty("java.util.prefs.systemRoot", "/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless/.sprefs");
+			
+			System.setProperty("java.util.prefs.userRoot", "/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless/.uprefs");
+			
+			System.err.println(System.getProperty("java.util.prefs.userRoot"));
+			
+			System.err.println(System.getProperty("java.util.prefs.systemRoot"));
+		}
 //		Logger.getRootLogger().setLevel(Level.WARN); 
 		SystemLogger.removeDisplay();
 		
