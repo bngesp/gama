@@ -67,9 +67,9 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 //		GamlModelBuilder.loadURLs(allURLs);
 
 		System.out.println("loadURLs");
-		Files.find(Paths.get(
-				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi"),
-				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile()).forEach(System.out::println);
+//		Files.find(Paths.get(
+//				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi"),
+//				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile()).forEach(System.out::println);
 
 		allURLs.forEach(u -> validate(count, code, u));
 
