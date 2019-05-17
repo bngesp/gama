@@ -68,7 +68,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 		System.out.println("loadURLs");
 		Files.find(Paths.get(
-				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi"),
+				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi/15/0/.cp/models/Tutorials/Predator Prey"),
 				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile()).forEach(System.out::println);
 
 		allURLs.forEach(u -> validate(count, code, u));

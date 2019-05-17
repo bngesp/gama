@@ -4,10 +4,7 @@
 * Description: 13th part of the tutorial: Predator Prey
 * Tags: batch
 */
-
 model prey_predator
-
-
 global {
 	int nb_preys_init <- 200;
 	int nb_predators_init <- 20;
@@ -52,7 +49,6 @@ global {
 		do pause ;
 	} 
 }
-
 species generic_species {
 	float size <- 1.0;
 	rgb color  ;
@@ -104,7 +100,6 @@ species generic_species {
 		draw string(theFKenergy with_precision 2) size: 3 color: #black ;
 	}
 }
-
 species prey parent: generic_species {
 	rgb color <- #blue;
 	float max_energy <- prey_max_energy ;
@@ -161,7 +156,6 @@ grid vegetation_cell width: 50 height: 50 neighbors: 4 {
 	rgb color <- rgb(int(255 * (1 - food)), 255, int(255 * (1 - food))) update: rgb(int(255 * (1 - food)), 255, int(255 *(1 - food))) ;
 	list<vegetation_cell> neighbours  <- (self neighbors_at 2); 
 }
-
 experiment prey_predator type: gui {
 	parameter "Initial number of preys: " var: nb_preys_init  min: 0 max: 1000 category: "Prey" ;
 	parameter "Prey max energy: " var: prey_max_energy category: "Prey" ;
@@ -211,7 +205,6 @@ experiment prey_predator type: gui {
 		monitor "Number of predators" value: nb_predators;
 	}
 }
-
 experiment Optimization type: batch repeat: 2 keep_seed: true until: ( time > 200 ) {
 	parameter "Prey max transfert:" var: prey_max_transfert min: 0.05 max: 0.5 step: 0.05 ;
 	parameter "Prey energy reproduce:" var: prey_energy_reproduce min: 0.05 max: 0.75 step: 0.05;
