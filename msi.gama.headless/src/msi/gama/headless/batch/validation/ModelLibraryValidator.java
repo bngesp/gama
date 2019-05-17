@@ -16,6 +16,7 @@ import org.osgi.framework.Bundle;
 import com.google.common.collect.Multimap;
 
 import msi.gama.headless.batch.AbstractModelLibraryRunner;
+import msi.gama.headless.core.GamaHeadlessException;
 import msi.gama.headless.core.HeadlessSimulationLoader;
 import msi.gama.headless.runtime.SystemLogger;
 import msi.gama.kernel.model.IModel;
@@ -24,6 +25,7 @@ import msi.gama.runtime.concurrent.GamaExecutorService;
 import msi.gaml.compilation.GamlCompilationError;
 import msi.gaml.compilation.kernel.GamaBundleLoader;
 import msi.gaml.operators.Dates;
+import one.util.streamex.StreamEx;
 
 public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
@@ -46,7 +48,6 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 		}
 		final Multimap<Bundle, String> plugins = GamaBundleLoader.getPluginsWithModels();
 
-
 		List<URL> allURLs = new ArrayList<>();
 		for (final Bundle bundle : plugins.keySet()) {
 			for (final String entry : plugins.get(bundle)) {
@@ -66,9 +67,8 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 		System.out.println("loadURLs");
 		Files.find(Paths.get(
 				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi"),
-				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile())
-				.forEach(System.out::println);
-		
+				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile()).forEach(System.out::println);
+
 		allURLs.forEach(u -> validate(count, code, u));
 
 		System.out.println("" + count[0] + " GAMA models compiled in built-in library and plugins. " + code[0]
@@ -78,7 +78,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 		code[0] = 0;
 		count[0] = 0;
 		final Multimap<Bundle, String> tests = GamaBundleLoader.getPluginsWithTests();
-		 
+
 		allURLs = new ArrayList<>();
 		for (final Bundle bundle : tests.keySet()) {
 			for (final String entry : tests.get(bundle)) {
@@ -104,13 +104,18 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 		return 0;
 	}
 
-	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {		
+	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {
 		final List<GamlCompilationError> errors = new ArrayList<>();
 		log("Compiling " + pathToModel.getFile());
 //		System.out.println("Compiling " + pathToModel.getFile());
 		try {
 //			GamlModelBuilder.compile(pathToModel, errors);
-			GamlModelBuilder.compile(URI.createFileURI(Paths.get(pathToModel.toURI()).toFile().getAbsolutePath()), errors);
+			final IModel model = GamlModelBuilder
+					.compile(URI.createFileURI(Paths.get(pathToModel.toURI()).toFile().getAbsolutePath()), errors);
+			if (model == null) {
+				System.out.println("Model compiled with following indications: \n"
+						+ (errors == null ? "" : StreamEx.of(errors).joining("\n")));
+			}
 
 		} catch (final Exception ex) {
 			System.out.println(ex.getMessage());
