@@ -26,6 +26,7 @@ exec java -cp $GAMA -Xms512m -Xmx$memory  -Djava.awt.headless=true org.eclipse.c
 exec java -cp $GAMA -Xms512m -Xmx$memory  -Djava.awt.headless=true org.eclipse.core.launcher.Main  -application msi.gama.headless.id4 -data $passWork -validate 
 
 
+comment(){
 res=$?
 		
 if [[ $res -gt 0 ]]; then	
@@ -41,3 +42,4 @@ if [[ $res -gt 0 ]]; then
 	rm -rf $passWork
 	exit $res
 fi
+}
