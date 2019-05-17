@@ -40,11 +40,11 @@ global {
 	
 	reflex save_result when: (nb_preys > 0) and (nb_predators > 0){
 		save ("cycle: "+ cycle + "; nbPreys: " + nb_preys
-			+ "; minEnergyPreys: " + ((prey as list) min_of each.energy)
-			+ "; maxSizePreys: " + ((prey as list) max_of each.energy) 
+			+ "; minEnergyPreys: " + ((prey as list) min_of each.theFKenergy)
+			+ "; maxSizePreys: " + ((prey as list) max_of each.theFKenergy) 
 	   		+ "; nbPredators: " + nb_predators           
-	   		+ "; minEnergyPredators: " + ((predator as list) min_of each.energy)          
-	   		+ "; maxSizePredators: " + ((predator as list) max_of each.energy)) 
+	   		+ "; minEnergyPredators: " + ((predator as list) min_of each.theFKenergy)          
+	   		+ "; maxSizePredators: " + ((predator as list) max_of each.theFKenergy)) 
 	   		to: "results.txt" type: "text" ;
 	}
 	
@@ -64,7 +64,7 @@ species generic_species {
 	float energy_reproduce;
 	image_file my_icon;
 	vegetation_cell myCell <- one_of (vegetation_cell) ;
-	float energy <- (rnd(1000) / 1000) * max_energy  update: energy - energy_consum max: max_energy ;
+	float theFKenergy <- (rnd(1000) / 1000) * max_energy  update: theFKenergy - energy_consum max: max_energy ;
 	
 	init {
 		location <- myCell.location;
@@ -79,18 +79,18 @@ species generic_species {
 		return nil;
 	}
 		
-	reflex die when: energy <= 0 {
+	reflex die when: theFKenergy <= 0 {
 		do die ;
 	}
 	
-	reflex reproduce when: (energy >= energy_reproduce) and (flip(proba_reproduce)) {
+	reflex reproduce when: (theFKenergy >= energy_reproduce) and (flip(proba_reproduce)) {
 			int nb_offsprings <- int(1 + rnd(nb_max_offsprings -1));
 			create species(self) number: nb_offsprings {
 				myCell <- myself.myCell ;
 				location <- myCell.location ;
-				energy <- myself.energy / nb_offsprings ;
+				theFKenergy <- myself.theFKenergy / nb_offsprings ;
 			}
-			energy <- energy / nb_offsprings ;
+			theFKenergy <- theFKenergy / nb_offsprings ;
 		}
 	
 	aspect base {
@@ -101,7 +101,7 @@ species generic_species {
 	}
 	aspect info {
 		draw square(size) color: color ;
-		draw string(energy with_precision 2) size: 3 color: #black ;
+		draw string(theFKenergy with_precision 2) size: 3 color: #black ;
 	}
 }
 
@@ -118,7 +118,7 @@ species prey parent: generic_species {
 	reflex eat when: myCell.food > 0 {
 		float energy_transfert <- min([max_transfert, myCell.food]) ;
 		myCell.food <- myCell.food - energy_transfert ;
-		energy <- energy + energy_transfert ;
+		theFKenergy <- theFKenergy + energy_transfert ;
 	}
 	
 	vegetation_cell choose_cell {
@@ -141,7 +141,7 @@ species predator parent: generic_species {
 		ask one_of (reachable_preys) {
 			do die ;
 		}
-		energy <- energy + energy_transfert ;
+		theFKenergy <- theFKenergy + energy_transfert ;
 	}
 	
 	vegetation_cell choose_cell {
@@ -195,16 +195,16 @@ experiment prey_predator type: gui {
 				data "number_of_predator" value: nb_predators color: #red ;
 			}
 			chart "Prey Energy Distribution" type: histogram background: #lightgray size: {0.5,0.5} position: {0, 0.5} {
-				data "]0;0.25]" value: prey count (each.energy <= 0.25) color:#blue;
-				data "]0.25;0.5]" value: prey count ((each.energy > 0.25) and (each.energy <= 0.5)) color:#blue;
-				data "]0.5;0.75]" value: prey count ((each.energy > 0.5) and (each.energy <= 0.75)) color:#blue;
-				data "]0.75;1]" value: prey count (each.energy > 0.75) color:#blue;
+				data "]0;0.25]" value: prey count (each.theFKenergy <= 0.25) color:#blue;
+				data "]0.25;0.5]" value: prey count ((each.theFKenergy > 0.25) and (each.theFKenergy <= 0.5)) color:#blue;
+				data "]0.5;0.75]" value: prey count ((each.theFKenergy > 0.5) and (each.theFKenergy <= 0.75)) color:#blue;
+				data "]0.75;1]" value: prey count (each.theFKenergy > 0.75) color:#blue;
 			}
 			chart "Predator Energy Distribution" type: histogram background: #lightgray size: {0.5,0.5} position: {0.5, 0.5} {
-				data "]0;0.25]" value: predator count (each.energy <= 0.25) color: #red ;
-				data "]0.25;0.5]" value: predator count ((each.energy > 0.25) and (each.energy <= 0.5)) color: #red ;
-				data "]0.5;0.75]" value: predator count ((each.energy > 0.5) and (each.energy <= 0.75)) color: #red ;
-				data "]0.75;1]" value: predator count (each.energy > 0.75) color: #red;
+				data "]0;0.25]" value: predator count (each.theFKenergy <= 0.25) color: #red ;
+				data "]0.25;0.5]" value: predator count ((each.theFKenergy > 0.25) and (each.theFKenergy <= 0.5)) color: #red ;
+				data "]0.5;0.75]" value: predator count ((each.theFKenergy > 0.5) and (each.theFKenergy <= 0.75)) color: #red ;
+				data "]0.75;1]" value: predator count (each.theFKenergy > 0.75) color: #red;
 			}
 		}
 		monitor "Number of preys" value: nb_preys;
