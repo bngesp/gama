@@ -17,7 +17,7 @@ public class DEBUG {
 	private static final ConcurrentHashMap<String, String> REGISTERED = new ConcurrentHashMap<>();
 	private static final ConcurrentHashMap<String, Integer> COUNTERS = new ConcurrentHashMap<>();
 	private static final ConcurrentHashMap<Class<?>, Function<Object, String>> TO_STRING = new ConcurrentHashMap<>();
-	private static final boolean GLOBAL_OFF = false;
+	public static boolean GLOBAL_OFF = false;
 	public static boolean GLOBAL_ON = false;
 
 	static {
