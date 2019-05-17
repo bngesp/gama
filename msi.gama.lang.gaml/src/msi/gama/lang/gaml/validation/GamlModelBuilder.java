@@ -102,7 +102,7 @@ public class GamlModelBuilder {
 			}
 		}
 	}
-	
+
 	public static void loadURLs(List<URL> URLs) {
 		for (URL url : URLs) {
 			java.net.URI uri;
@@ -115,6 +115,17 @@ public class GamlModelBuilder {
 				e.printStackTrace();
 			}
 		}
+	}
+	public static void loadURL(URL url) {
+			java.net.URI uri;
+			try {
+				uri = new java.net.URI(url.getProtocol(), url.getPath(), null).normalize();
+				final URI resolvedURI = URI.createURI(uri.toString());
+				final GamlResource r = (GamlResource) buildResourceSet.getResource(resolvedURI, true);
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	private static ModelDescription buildModelDescription(final GamlResource r,

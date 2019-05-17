@@ -68,11 +68,12 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 		System.out.println("loadURLs");
 		Files.find(Paths.get(
-				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi/15/0/.cp/models/Tutorials/Predator Prey"),
+				"/home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/configuration/org.eclipse.osgi"),
 				Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile()).forEach(System.out::println);
 
 		allURLs.forEach(u -> validate(count, code, u));
 
+//		GamlModelBuilder.loadURLs(allURLs);
 		code[0] = 0;
 		count[0] = 0;
 		allURLs.forEach(u -> validate(count, code, u));
@@ -99,7 +100,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 					}
 			}
 		}
-		GamlModelBuilder.loadURLs(allURLs);
+//		GamlModelBuilder.loadURLs(allURLs);
 
 		allURLs.forEach(u -> validate(count, code, u));
 
@@ -111,6 +112,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 	}
 
 	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {
+		GamlModelBuilder.loadURL(pathToModel);
 		final List<GamlCompilationError> errors = new ArrayList<>();
 		log("Compiling " + pathToModel.getFile());
 //		System.out.println("Compiling " + pathToModel.getFile());
