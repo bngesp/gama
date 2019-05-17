@@ -110,7 +110,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {
 //		GamlModelBuilder.loadURL(pathToModel);
-		if(!pathToModel.getFile().contains("Model 13")) return;
+//		if(!pathToModel.getFile().contains("Model 13")) return;
 		final List<GamlCompilationError> errors = new ArrayList<>();
 //		log("Compiling " + pathToModel.getFile());
 		System.out.println("Compiling " + pathToModel.getFile());
