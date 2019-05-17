@@ -1,6 +1,8 @@
 package msi.gama.headless.batch.validation;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -114,9 +116,19 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 			final IModel model = GamlModelBuilder.compile(pathToModel, errors);
 
 			if (model == null) {
-				System.out.println("Model compiled with following indications: \n"
-						+ (errors == null ? "" : StreamEx.of(errors).filter(e -> e.isError()).joining("\n")));
-				System.out.println("-----e----- ");
+				 
+			    // open the url stream, wrap it an a few "readers"
+			    BufferedReader reader = new BufferedReader(new InputStreamReader(pathToModel.openStream()));
+
+			    // write the output to stdout
+			    String line;
+			    while ((line = reader.readLine()) != null)
+			    {
+			      System.out.println(line);
+			    }
+
+			    // close our reader
+			    reader.close();
 			}
 
 		} catch (final Exception ex) {
