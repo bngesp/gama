@@ -567,6 +567,7 @@ public abstract class SymbolDescription implements IDescription {
 	public IDescription validate() {
 		if (validated) { return this; }
 		validated = true;
+		System.out.println("symbol validate "+this);
 		if (isBuiltIn()) {
 			// We simply make sure that the facets are correctly compiled
 			validateFacets();
@@ -605,6 +606,7 @@ public abstract class SymbolDescription implements IDescription {
 
 		// If a custom validator has been defined, run it
 		if (proto.getValidator() != null) {
+			System.out.println("Symbol validate "+proto);
 			final boolean semantic = proto.getValidator().validate(this, element);
 			if (!semantic) { return null; }
 		}

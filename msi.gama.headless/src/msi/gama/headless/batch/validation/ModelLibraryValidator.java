@@ -96,7 +96,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 					}
 			}
 		}
-//		GamlModelBuilder.loadURLs(allURLs);
+		GamlModelBuilder.loadURLs(allURLs);
 
 		allURLs.forEach(u -> validate(count, code, u));
 
@@ -108,10 +108,10 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 	}
 
 	private void validate(final int[] countOfModelsValidated, final int[] returnCode, final URL pathToModel) {
-		GamlModelBuilder.loadURL(pathToModel);
+//		GamlModelBuilder.loadURL(pathToModel);
 		final List<GamlCompilationError> errors = new ArrayList<>();
-		log("Compiling " + pathToModel.getFile());
-//		System.out.println("Compiling " + pathToModel.getFile());
+//		log("Compiling " + pathToModel.getFile());
+		System.out.println("Compiling " + pathToModel.getFile());
 		try {
 //			GamlModelBuilder
 //			.compile(URI.createFileURI(Paths.get(pathToModel.toURI()).toFile().getAbsolutePath()), errors);
@@ -120,17 +120,17 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 			if (model == null) {
 				 
 			    // open the url stream, wrap it an a few "readers"
-			    BufferedReader reader = new BufferedReader(new InputStreamReader(pathToModel.openStream()));
-
-			    // write the output to stdout
-			    String line;
-			    while ((line = reader.readLine()) != null)
-			    {
-			      System.out.println(line);
-			    }
-
-			    // close our reader
-			    reader.close();
+//			    BufferedReader reader = new BufferedReader(new InputStreamReader(pathToModel.openStream()));
+//
+//			    // write the output to stdout
+//			    String line;
+//			    while ((line = reader.readLine()) != null)
+//			    {
+//			      System.out.println(line);
+//			    }
+//
+//			    // close our reader
+//			    reader.close();
 			}
 
 		} catch (final Exception ex) {

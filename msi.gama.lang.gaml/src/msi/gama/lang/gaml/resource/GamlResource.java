@@ -97,6 +97,7 @@ public class GamlResource extends LazyLinkingResource {
 	private ModelDescription buildModelDescription(final LinkedHashMultimap<String, GamlResource> resources) {
 
 		// Initializations
+		System.out.println("buildModelDescription ");
 		GAML.getExpressionFactory().resetParser();
 		final ModelFactory f = GAML.getModelFactory();
 		final String modelPath = GamlResourceServices.getModelPathOf(this);
