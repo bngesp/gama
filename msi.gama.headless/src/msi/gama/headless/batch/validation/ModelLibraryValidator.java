@@ -64,7 +64,7 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 					}
 			}
 		}
-		GamlModelBuilder.loadURLs(allURLs);
+//		GamlModelBuilder.loadURLs(allURLs);
 
 		System.out.println("loadURLs");
 		Files.find(Paths.get(
@@ -73,10 +73,6 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 
 		allURLs.forEach(u -> validate(count, code, u));
 
-//		GamlModelBuilder.loadURLs(allURLs);
-		code[0] = 0;
-		count[0] = 0;
-		allURLs.forEach(u -> validate(count, code, u));
 
 		System.out.println("" + count[0] + " GAMA models compiled in built-in library and plugins. " + code[0]
 				+ " compilation errors found");
