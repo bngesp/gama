@@ -12,7 +12,7 @@ done
 
 passWork=.work 
 
-echo "GAMA is starting..."
+echo "GAMA is starting!!!!"
 #exec
 
 #GAMA=Gamaq
@@ -22,11 +22,11 @@ exec java -cp $GAMA -Xms512m -Xmx$memory  -Djava.awt.headless=true org.eclipse.c
 	find . | grep "\.gaml$"
 
 
+comment(){
 	cd /home/travis/build/gama-platform/gama/ummisco.gama.product/target/products/ummisco.gama.application.product/linux/gtk/x86_64/headless
 exec java -cp $GAMA -Xms512m -Xmx$memory  -Djava.awt.headless=true org.eclipse.core.launcher.Main  -application msi.gama.headless.id4 -data $passWork -validate 
 
 
-comment(){
 res=$?
 		
 if [[ $res -gt 0 ]]; then	
