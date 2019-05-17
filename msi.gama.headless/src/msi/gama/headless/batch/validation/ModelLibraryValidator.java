@@ -127,6 +127,12 @@ public class ModelLibraryValidator extends AbstractModelLibraryRunner {
 			System.out.println();
 			System.out.println();
 			System.out.println();
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		final List<GamlCompilationError> errors = new ArrayList<>();
 //		log("Compiling " + pathToModel.getFile());

@@ -3,7 +3,7 @@
 function mvn_install() {
 	echo "Building " $1
 	cd $1
-	if mvn clean install; then
+	if mvn clean install -o -q; then
 	   echo ok
 	else
 	   echo Something went wrong.
