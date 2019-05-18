@@ -179,9 +179,9 @@ public class DEBUG {
 	 * @param string
 	 */
 	public static final void ERR(final Object s) {
-		if (!GLOBAL_OFF) {
-			System.err.println(s);
-		}
+//		if (!GLOBAL_OFF) {
+//			System.err.println(s);
+//		}
 	}
 
 	/**
@@ -190,9 +190,9 @@ public class DEBUG {
 	 * @param string
 	 */
 	public static void LOG(final Object string) {
-		if (!GLOBAL_OFF) {
-			LOG(string, true);
-		}
+//		if (!GLOBAL_OFF) {
+//			LOG(string, true);
+//		}
 	}
 
 	/**
@@ -205,13 +205,13 @@ public class DEBUG {
 	 *            whether to pass a new line after or not
 	 */
 	public static void LOG(final Object object, final boolean newLine) {
-		if (!GLOBAL_OFF) {
-			if (newLine) {
-				System.out.println(TO_STRING(object));
-			} else {
-				System.out.print(TO_STRING(object));
-			}
-		}
+//		if (!GLOBAL_OFF) {
+//			if (newLine) {
+//				System.out.println(TO_STRING(object));
+//			} else {
+//				System.out.print(TO_STRING(object));
+//			}
+//		}
 	}
 
 	/**
@@ -254,10 +254,10 @@ public class DEBUG {
 	 *            the message to output
 	 */
 	public static final void OUT(final Object s) {
-		if (GLOBAL_OFF) { return; }
-		if (GLOBAL_ON || IS_ON(findCallingClassName())) {
-			LOG(s, true);
-		}
+//		if (GLOBAL_OFF) { return; }
+//		if (GLOBAL_ON || IS_ON(findCallingClassName())) {
+//			LOG(s, true);
+//		}
 	}
 
 	/**
@@ -269,10 +269,10 @@ public class DEBUG {
 	 *            whether or not to output a new line after the message
 	 */
 	public static final void OUT(final Object s, final boolean newLine) {
-		if (GLOBAL_OFF) { return; }
-		if (GLOBAL_ON || IS_ON(findCallingClassName())) {
-			LOG(s, newLine);
-		}
+//		if (GLOBAL_OFF) { return; }
+//		if (GLOBAL_ON || IS_ON(findCallingClassName())) {
+//			LOG(s, newLine);
+//		}
 	}
 
 	/**
@@ -286,11 +286,11 @@ public class DEBUG {
 	 *            another object on which TO_STRING() is applied
 	 */
 	public static final void OUT(final String title, final int pad, final Object other) {
-		if (GLOBAL_OFF) { return; }
-		if (title == null) { return; }
-		if (GLOBAL_ON || IS_ON(findCallingClassName())) {
-			LOG(PAD(title, pad) + TO_STRING(other));
-		}
+//		if (GLOBAL_OFF) { return; }
+//		if (title == null) { return; }
+//		if (GLOBAL_ON || IS_ON(findCallingClassName())) {
+//			LOG(PAD(title, pad) + TO_STRING(other));
+//		}
 	}
 
 	/**
