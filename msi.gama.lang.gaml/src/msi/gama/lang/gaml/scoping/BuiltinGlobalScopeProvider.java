@@ -269,11 +269,9 @@ public class BuiltinGlobalScopeProvider extends ImportUriGlobalScopeProvider imp
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
-		DEBUG.TIMER("> GAMA building GAML artefacts in ", () -> {
+		} 
 			IUnits.initialize();
-			createDescriptions();
-		});
+			createDescriptions(); 
 
 	}
 

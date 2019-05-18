@@ -82,8 +82,7 @@ public class GamaBundleLoader {
 	private static Multimap<Bundle, String> TEST_PLUGINS = ArrayListMultimap.create();
 	public static Set<String> HANDLED_FILE_EXTENSIONS = new HashSet<>();
 
-	public static void preBuildContributions() throws Exception {
-		DEBUG.TIMER("> GAMA total load time ", () -> {
+	public static void preBuildContributions() throws Exception { 
 			final IExtensionRegistry registry = Platform.getExtensionRegistry();
 			// We retrieve the elements declared as extensions to the GAML language,
 			// either with the new or the deprecated extension
@@ -211,8 +210,7 @@ public class GamaBundleLoader {
 			// We reinit the type hierarchy to gather additional types
 			Types.init();
 			performStaticInitializations();
-			//
-		});
+			// 
 	}
 
 	private static void performStaticInitializations() {
@@ -225,8 +223,7 @@ public class GamaBundleLoader {
 	}
 
 	@SuppressWarnings ("unchecked")
-	public static void preBuild(final Bundle bundle) throws Exception {
-		DEBUG.TIMER_WITH_EXCEPTIONS(DEBUG.PAD("> GAMA: " + bundle.getSymbolicName(), 45) + " loaded in ", () -> {
+	public static void preBuild(final Bundle bundle) throws Exception { 
 			GamaClassLoader.getInstance().addBundle(bundle);
 			Class<IGamlAdditions> gamlAdditions = null;
 			try {
@@ -256,8 +253,7 @@ public class GamaBundleLoader {
 				DEBUG.ERR(">> Impossible to instantiate additions from " + bundle);
 				throw e;
 			}
-
-		});
+ 
 	}
 
 	/**
