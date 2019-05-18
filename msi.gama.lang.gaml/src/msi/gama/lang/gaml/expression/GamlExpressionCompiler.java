@@ -545,7 +545,7 @@ public class GamlExpressionCompiler extends GamlSwitch<IExpression> implements I
 			// Special case for matrices
 			if (type.id() == IType.MATRIX && proto == null) { return binary(".", owner, fieldExpr); }
 			if (proto == null) {
-				System.out.println(owner); 
+				System.out.println(compile(leftExpr.eContainer().eContainer())); 
 				getContext().error("Unknown field '" + var + "' for type " + type, IGamlIssue.UNKNOWN_FIELD, leftExpr,
 						var, type.toString());
 				return null;

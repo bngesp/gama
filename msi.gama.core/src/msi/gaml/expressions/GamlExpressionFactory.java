@@ -212,6 +212,8 @@ public class GamlExpressionFactory implements IExpressionFactory {
 		if (!hasOperator(op, context, eObject, args)) {
 			final THashMap<Signature, OperatorProto> ops = OPERATORS.get(op);
 			final Signature userSignature = new Signature(args).simplified();
+			OPERATORS.entrySet().stream().forEach(o->{System.out.println(o.getKey());});
+			System.out.println(args);
 			String msg = "No operator found for applying '" + op + "' to " + userSignature;
 			if (ops != null) {
 				msg += " (operators available for " + Arrays.toString(ops.keySet().toArray()) + ")";
